@@ -13,7 +13,7 @@ dist-ssr
 *.local
 .env
 .eslintrc.cjs
-manifest.json
+public/manifest.json
 
 # Editor directories and files
 .vscode/*
