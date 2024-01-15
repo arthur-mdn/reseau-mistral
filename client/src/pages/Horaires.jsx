@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Routes, Route, Navigate, Link} from 'react-rout
 import axios from 'axios';
 import { useAuth } from '../AuthContext';
 import {useTopBar} from "../TopBarContext.jsx";
+import {FaSearch} from "react-icons/fa";
 
 function Horaires() {
     const { setTopBarState } = useTopBar();
@@ -28,19 +29,43 @@ function Horaires() {
     }, [setTopBarState]);
 
     return (
-        <div className={"fc g0-5 jc-fs"} style={{padding:'0.5rem', backgroundColor:"#ebebeb", height:'100%'}}>
-            {horairesData.map((item, index) => (
-                <div key={index} className={"fr ai-c g0-5"} style={{padding:'0.5rem', backgroundColor:"white", borderRadius:'0.5rem'}}>
-                    <div style={{backgroundColor: item.BulleColor, color:"white", fontWeight:'bold', borderRadius:"4rem", padding:'0.3rem 0.8rem'}}>
-                        {item.BulleId}
-                    </div>
-                    <div>
-                        <h4>{item.Titre}</h4>
-                        <p style={{color:"grey",fontSize:'0.8rem'}}>{item.Réseau}</p>
+        <>
+            <div className={"fr g1"} style={{backgroundColor:"#1E21A4",color:"lightgrey",textAlign:"center",padding:'0 0 0.5rem 0'}}>
+                <div style={{width:'100%'}}>
+                    Favoris
+                </div>
+                <div style={{width:'100%',color:"white", position:"relative"}}>
+                    Lignes
+                    <div style={{position:"absolute",width:'100%', height:'4px',backgroundColor:"white",bottom:'-0.5rem',left:0}}>
+
                     </div>
                 </div>
-            ))}
-        </div>
+                <div style={{width:'100%'}}>
+                    Arrêts
+                </div>
+                <div style={{width:'100%'}}>
+                    Gares
+                </div>
+            </div>
+            <div className={"fr ai-c g0-5"} style={{ padding:"0.5rem",margin:'0.5rem 0.5rem 0.5rem 0.5rem', borderRadius:"0.5rem", border:"1px solid lightgrey", outline:"none", backgroundColor:"white", color:"grey"}}>
+                <FaSearch/> Rechercher
+            </div>
+            <div className={"fc g0-5 jc-fs"} style={{padding:'0.5rem', backgroundColor:"#ebebeb", height:'100%'}}>
+
+                {horairesData.map((item, index) => (
+                    <div key={index} className={"fr ai-c g0-5"} style={{padding:'0.5rem', backgroundColor:"white", borderRadius:'0.5rem'}}>
+                        <div style={{backgroundColor: item.BulleColor, color:"white", fontWeight:'bold', borderRadius:"4rem", padding:'0.3rem 0.8rem'}}>
+                            {item.BulleId}
+                        </div>
+                        <div>
+                            <h4>{item.Titre}</h4>
+                            <p style={{color:"grey",fontSize:'0.8rem'}}>{item.Réseau}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </>
+
     );
 
 }

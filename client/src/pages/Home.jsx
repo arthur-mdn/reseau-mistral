@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import {useTopBar} from "../TopBarContext.jsx";
-import {FaHome} from "react-icons/fa";
-import {FaSuitcase} from "react-icons/fa6";
+import {FaHome, FaSearch} from "react-icons/fa";
+import {FaLocationArrow, FaSuitcase} from "react-icons/fa6";
 import {useCookies} from "react-cookie";
 import config from "../config.js";
+import Modal from "../components/Modal.jsx";
 
 function parseDuration(durationString) {
     const [amount, unit] = durationString.split(' ');
@@ -26,6 +27,7 @@ function Home() {
     const [profileSelected, setProfileSelected] = useState(null);
     const [cookies, setCookie, removeCookie] = useCookies(['selectedProfile']);
     const [ticketsEnCours, setTicketsEnCours] = useState([]);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     useEffect(() => {
         if (cookies.selectedProfile) {
@@ -72,13 +74,15 @@ function Home() {
                     <div style={{backgroundColor:"lightgrey", width:'30px', height:'4px',margin:"auto",borderRadius:'1rem',marginBottom:'1rem'}}>
 
                     </div>
-                    <input type={"text"} placeholder={"Rechercher un itinéraire"} style={{width:"100%", padding:"0.5rem", borderRadius:"0.5rem", border:"none", outline:"none", marginBottom:'1rem', backgroundColor:"#001269", color:"white"}} readOnly={true}/>
+                    <button type={"button"} style={{width:"100%", padding:"0.5rem", borderRadius:"0.5rem", border:"none", outline:"none", marginBottom:'1rem', backgroundColor:"#001269", color:"white",justifyContent:"flex-start"}} onClick={()=>{setIsSearchOpen(true)}}>
+                        <FaSearch/> Rechercher un itinéraire
+                    </button>
                     {
                         ticketsEnCours.length > 0 && (
                             <div>
                                 <div className={"fr jc-sb ai-c"}>
                                     <h4 style={{fontWeight:"bold"}}>Titre(s) en cours</h4>
-                                    <img src={"/elements/images/reseau_mistral.jpg"} alt={"logo"} style={{width:'160px'}}/>
+                                    <img src={"/elements/images/reseau_mistral.jpg"} alt={"logo"} style={{width:'170px'}}/>
                                 </div>
                                 <div>
                                     {ticketsEnCours.map(ticket => (
@@ -134,7 +138,43 @@ function Home() {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} title={"Rechercher"}>
+                <div>
+                    <input type={"text"} placeholder={"Arrivée"} style={{padding:"1rem", width:"100%", margin:"1rem 0"}}/>
 
+                    <div className={"fr ai-c g1"} style={{padding:'0.8rem 0 0.8rem 0',borderBottom:'1px solid lightgrey'}}>
+                        <div style={{backgroundColor:"#0761ad", width:'40px',height:'40px', borderRadius:'4rem', display:"flex",alignItems:"center",justifyContent:"center"}}>
+                            <FaLocationArrow fill={"white"} size={"20px"}/>
+                        </div>
+                        <h4 style={{fontWeight:"bold"}}>Ma position</h4>
+                    </div>
+
+                    <div style={{ marginTop:'0.25rem',padding:'1rem 0 0 0', borderRadius:"0.5rem", color:"black"}} className={"fc g1"}>
+                        <div className={"fr jc-sb ai-c"}>
+                            <div className={"fr ai-c g0-5 jc-c"}>
+                                <div style={{backgroundColor:"grey", padding:'0.5rem', borderRadius:'4rem', display:"flex",flexDirection:"row"}}>
+                                    <FaHome fill={"white"}/>
+                                </div>
+                                <h4>Maison</h4>
+                            </div>
+                            <div style={{border:"1px solid lightgrey", padding:'0.1rem 0.6rem', fontSize:'0.8rem',fontWeight:"bold", borderRadius:'0.25rem'}}>
+                                Définir
+                            </div>
+                        </div>
+                        <div className={"fr jc-sb ai-c"}>
+                            <div className={"fr ai-c g0-5 jc-c"}>
+                                <div style={{backgroundColor:"grey", padding:'0.5rem', borderRadius:'4rem', display:"flex",flexDirection:"row"}}>
+                                    <FaSuitcase fill={"white"}/>
+                                </div>
+                                <h4>Travail</h4>
+                            </div>
+                            <div style={{border:"1px solid lightgrey", padding:'0.1rem 0.6rem', fontSize:'0.8rem',fontWeight:"bold", borderRadius:'0.25rem'}}>
+                                Définir
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
         </>
     );
 
