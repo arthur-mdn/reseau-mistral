@@ -388,7 +388,7 @@ input[type="radio"].radio-profile:checked + label:after, input[type="radio"].rad
 }
 
 .no_profile_selected, .no_tickets{
-  padding: 4rem;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;

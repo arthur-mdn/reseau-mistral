@@ -105,7 +105,7 @@ function Tickets() {
             {
                 !profileSelected &&
                 <>
-                    <div className={"no_profile_selected"}>
+                    <div className={"no_profile_selected"} style={{textAlign:"center"}}>
                         <h3>Aucun voyageur sélectionné</h3>
                         <p>Veuillez sélectionner un voyageur pour visualiser vos titres.</p>
                         <button type={"button"} onClick={() => setIsProfileSelectionOpen(true)}>Choisir un voyageur</button>
