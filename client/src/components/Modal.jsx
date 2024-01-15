@@ -45,9 +45,11 @@ const Modal = ({ isOpen, onClose, children, title,actions, bgColor = "#f3f3f3", 
                         <div className="modal-content" style={{height:'100%',backgroundColor:hideBg ? "transparent" : bgColor, position:"relative", display:"flex", flexDirection:"column"}}>
                             {
                                 !hideBg &&
-                                <div className={"over_top_menu jc-sb"} style={{padding:"0 1rem"}}>
+                                <div className={"over_top_menu jc-sb"} style={{padding:"0 1rem", position:"relative"}}>
                                     <FaTimes onClick={()=>{onClose()}}/>
-                                    <h2 style={{textAlign:"center"}}>{title}</h2>
+                                    <h4 style={{position:"absolute", left:"50%", transform:"translateX(-50%)", fontWeight:"bold"}}>
+                                        {title}
+                                    </h4>
                                     {actions && actions.length > 0 && (
                                         <div onClick={()=>{setActionPopup(!actionPopup)}}>
                                             <FaEllipsis/>

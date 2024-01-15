@@ -130,6 +130,23 @@ router.delete('/tickets/:ticketId', verifyToken, async (req, res) => {
     }
 });
 
+router.delete('/tickets', verifyToken, async (req, res) => {
+    try {
+        const profileId = req.cookies['selectedProfile'];
+
+        const profile = await Profile.findOne({ _id: profileId, 'userId': req.user.userId });
+        if (!profile) {
+            return res.status(403).json({ message: 'Profil non trouvé ou non associé à cet utilisateur' });
+        }
+
+        const result = await Ticket.deleteMany({ profileId: profile._id });
+
+        res.status(200).json({ message: `Tickets supprimés avec succès`, deletedCount: result.deletedCount });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur serveur: ' + error.message });
+    }
+});
+
 
 
 module.exports = router;

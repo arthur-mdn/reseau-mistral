@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {useTopBar} from "../TopBarContext.jsx";
 import {
-    FaCaretRight,
     FaChevronRight,
     FaEnvelope,
     FaFile,
@@ -12,7 +11,6 @@ import {
     FaSolarPanel, FaSuitcase
 } from "react-icons/fa6";
 import Modal from "../components/Modal.jsx";
-import Boutique from "../components/Boutique.jsx";
 import ProfileSelection from "../components/ProfileSelection.jsx";
 import {FaExternalLinkAlt, FaHome} from "react-icons/fa";
 import config from "../config.js";
@@ -41,6 +39,16 @@ function Menu() {
                 console.error('Erreur lors de la récupération des détails:', error);
             });
     }, []);
+
+    const deleteAllTickets = () => {
+        axios.delete(`${config.serverUrl}/tickets/`, { withCredentials: true })
+            .then(response => {
+                console.log('Tickets supprimés avec succès');
+            })
+            .catch(error => {
+                console.error('Erreur lors de la suppression du ticket:', error);
+            });
+    };
 
     useEffect(() => {
         setTopBarState({ backLink:"", title: 'Menu', isVisible: false, actions: [] });
@@ -136,7 +144,7 @@ function Menu() {
             </div>
             {
                 userDetails && (
-                    <Modal isOpen={profileOpen} onClose={() => setProfileOpen(false)} title={"Mon profil"} padding={"0"} bgColor={"#F5F5F6"} actions={[{title:"Se déconnecter", link:"/logout"}]}>
+                    <Modal isOpen={profileOpen} onClose={() => setProfileOpen(false)} title={"Mon profil"} padding={"0"} bgColor={"#F5F5F6"} actions={[{title:"Se déconnecter", link:"/logout"},{title:"Supprimer mes données",  action: function(){deleteAllTickets()}}]}>
                         <>
                             <div style={{backgroundColor:"#1E21A4", color:"white"}} className={"fc ai-c g0-5"}>
                                 <div style={{backgroundColor:"#bbffff",width:"80px",height:"80px",border:"1px solid lightgrey",borderRadius:"4rem",textTransform:"uppercase",color:"black",display:"flex",alignItems:"center",justifyContent:"center"}}>
