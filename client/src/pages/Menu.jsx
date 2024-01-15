@@ -16,6 +16,7 @@ import Boutique from "../components/Boutique.jsx";
 import ProfileSelection from "../components/ProfileSelection.jsx";
 import {FaExternalLinkAlt, FaHome} from "react-icons/fa";
 import config from "../config.js";
+import Loading from "../components/Loading.jsx";
 
 function Menu() {
     const { setTopBarState } = useTopBar();
@@ -28,11 +29,13 @@ function Menu() {
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [isPolitiqueOpen, setIsPolitiqueOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         axios.get(`${config.serverUrl}/user/details`, { withCredentials: true })
             .then(response => {
                 setUserDetails(response.data);
+                setIsLoading(false);
             })
             .catch(error => {
                 console.error('Erreur lors de la récupération des détails:', error);
@@ -44,6 +47,9 @@ function Menu() {
         return () => setTopBarState({ title: '', isVisible: true });
     }, [setTopBarState]);
 
+    if (isLoading) return (
+        <Loading/>
+    );
     return (
         <>
             <div style={{position:"relative", width:"100%", height:"100%"}}>
@@ -56,8 +62,8 @@ function Menu() {
                             {
                                 userDetails && (
                                     <>
-                                        <div style={{backgroundColor: "#bbffff", width: "40px", height: "40px", border: "1px solid lightgrey", borderRadius: "50px", display: "flex", alignContent: "center", justifyContent: "center", alignItems: "center"}}>
-                                            <span style={{fontFamily: "Arial Narrow, serif", fontSize: "25px", opacity: "0.9", textTransform:"uppercase"}}>
+                                        <div style={{backgroundColor: "#bbffff", width: "40px", height: "40px", border: "1px solid lightgrey", borderRadius: "50px", display: "flex", alignContent: "center", justifyContent: "center", alignItems: "center", overflow:"hidden"}}>
+                                            <span style={{fontSize: "25px", opacity: "0.9", textTransform:"uppercase"}}>
                                                 {userDetails.firstName.substring(0, 1)}{userDetails.lastName.substring(0, 1)}
                                             </span>
                                         </div>

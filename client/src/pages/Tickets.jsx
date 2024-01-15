@@ -11,6 +11,7 @@ import Scan from "../components/Scan.jsx";
 import { useNavigate } from 'react-router-dom';
 import Validations from "../components/Validations.jsx";
 import config from "../config.js";
+import Loading from "../components/Loading.jsx";
 function Tickets() {
     const navigate = useNavigate();
     const { setTopBarState } = useTopBar();
@@ -23,6 +24,7 @@ function Tickets() {
     const [validationListOpen, setValidationListOpen] = useState(false);
     const [howUseOpen, setHowUseOpen] = useState(false);
     const [paymentSuccessOpen, setPaymentSuccessOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setTopBarState({ backLink:"", title: 'M-Tickets', isVisible: true, actions: [{title:"Mes validations", action: function(){setValidationListOpen(true)}},{title:"Comment utiliser ses titres ?", action: function(){setHowUseOpen(true)}}] });
@@ -36,6 +38,7 @@ function Tickets() {
             axios.get(`${config.serverUrl}/user/profiles/${cookies.selectedProfile}`, { withCredentials: true })
                 .then(response => {
                     setProfileSelected(response.data);
+                    setIsLoading(false);
                 })
                 .catch(error => {
                     console.error('Erreur lors de la récupération du profil:', error);
@@ -44,6 +47,8 @@ function Tickets() {
                         removeCookie('selectedProfile', { path: '/' });
                     }
                 });
+        }else{
+            setIsLoading(false);
         }
     }, [cookies.selectedProfile, removeCookie]);
 
@@ -90,6 +95,9 @@ function Tickets() {
                 setIsSubmitting(false);
             });
     }
+    if (isLoading) return (
+        <Loading/>
+    );
 
     return (
         <>

@@ -23,9 +23,9 @@ const TopBar = () => {
                 {!topBarState.backLink && (
                     <div></div>
                 )}
-                <h3 style={{position:"absolute", left:"50%", transform:"translateX(-50%)", fontWeight:"bold"}}>
+                <h4 style={{position:"absolute", left:"50%", transform:"translateX(-50%)", fontWeight:"bold"}}>
                     {topBarState.title}
-                </h3>
+                </h4>
                 {topBarState.actions && topBarState.actions.length > 0 && (
                     <div onClick={()=>{setActionPopup(!actionPopup)}}>
                     <FaEllipsis/>
