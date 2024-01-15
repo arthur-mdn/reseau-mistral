@@ -426,7 +426,7 @@ input[type="radio"].radio-profile:checked + label:after, input[type="radio"].rad
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 5px;
+  border-radius: 0.4rem;
   cursor: pointer;
   padding: 0;
   background-color: white;
