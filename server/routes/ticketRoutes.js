@@ -61,6 +61,10 @@ router.post('/tickets/use', verifyToken, async (req, res) => {
         });
         await newUsage.save();
 
+        const lastCheckTicket = await Ticket.findById(ticketId).populate('usages');
+        if (lastCheckTicket.usages.length >= ticket.priceId.maxUse) {
+            return res.status(400).json({ message: 'Limite d\'utilisation du ticket atteinte' });
+        }
         await Ticket.findByIdAndUpdate(ticketId, {
             $push: { usages: newUsage._id }
         });

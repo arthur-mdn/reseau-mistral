@@ -75,7 +75,6 @@ function Tickets() {
         if (isSubmitting) {
             return;
         }
-
         setIsSubmitting(true);
 
         axios.post(`${config.serverUrl}/tickets/use`, {
@@ -88,10 +87,8 @@ function Tickets() {
             })
             .catch(error => {
                 console.error('Erreur lors de l\'utilisation du ticket:', error);
-            })
-            .finally(() => {
-            setIsSubmitting(false);
-        });
+                setIsSubmitting(false);
+            });
     }
 
     return (
