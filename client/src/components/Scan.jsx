@@ -30,7 +30,7 @@ function Scan({ onScanSuccess, onScanError, onClose }) {
     useEffect(() => {
         if (qrRef.current) {
             const config = {
-                fps: 10,
+                fps: 50,
                 qrbox: 250,
                 aspectRatio: 1
             };
