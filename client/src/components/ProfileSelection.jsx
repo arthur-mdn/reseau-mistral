@@ -24,7 +24,7 @@ function ProfileSelection({ onProfileSelect, onClose, fromProfile= false }) {
     }, []);
 
     const handleProfileSelect = (profile) => {
-        setCookie('selectedProfile', profile._id, { path: '/' });
+        setCookie('selectedProfile', profile._id, { path: '/', domain: config.cookieDomain });
         onProfileSelect(profile);
         onClose();
     };

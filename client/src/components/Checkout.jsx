@@ -4,13 +4,11 @@ import config from "../config.js";
 import {useCookies} from "react-cookie";
 
 function Checkout({ onCheckoutConfirmed, panier, onClose }) {
-    const [cookies, setCookie, removeCookie] = useCookies(['selectedProfile']);
     const handleSubmit = (event) => {
         event.preventDefault();
 
         axios.post(`${config.serverUrl}/store/buy`, {
-            panier,
-            profileId : cookies.selectedProfile
+            panier
         }, { withCredentials: true })
             .then(response => {
                 console.log('Tickets achetés avec succès:', response.data);

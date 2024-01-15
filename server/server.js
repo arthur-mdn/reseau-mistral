@@ -13,7 +13,10 @@ const insertPricesIfNotExist = require('./others/insertPricesIfNotExist');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(cookieParser({
+    sameSite: 'none',
+    secure: true
+}));
 app.use(cors({
     origin: config.clientUrl,
     credentials: true
