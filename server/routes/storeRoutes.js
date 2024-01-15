@@ -14,6 +14,7 @@ router.get('/store/prices', verifyToken, async (req, res) => {
 });
 
 router.post('/store/buy', verifyToken, async (req, res) => {
+    const profileId = req.cookies['selectedProfile'];
     try {
         const panier = req.body.panier;
         let ticketsToCreate = [];
@@ -28,7 +29,7 @@ router.post('/store/buy', verifyToken, async (req, res) => {
 
             for (let i = 0; i < numberOfTickets; i++) {
                 ticketsToCreate.push({
-                    profileId: req.selectedProfile,
+                    profileId: profileId,
                     priceId: item.id
                 });
             }
