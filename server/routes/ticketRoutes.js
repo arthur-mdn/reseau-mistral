@@ -24,9 +24,13 @@ router.post('/tickets/use', verifyToken, async (req, res) => {
     const { ticketId, scanData } = req.body;
 
     try {
-        const ticket = await Ticket.findById(ticketId).populate('priceId');
+        const ticket = await Ticket.findById(ticketId).populate('priceId').populate('usages');
         if (!ticket) {
             return res.status(404).json({ message: 'Ticket non trouvé' });
+        }
+
+        if (ticket.usages.length >= ticket.priceId.maxUse) {
+            return res.status(400).json({ message: 'Limite d\'utilisation du ticket atteinte' });
         }
 
         const maxTime = parseDuration(ticket.priceId.maxTime);
