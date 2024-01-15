@@ -302,7 +302,7 @@ function Ticket() {
                                             <div>
                                                 <h2 style={{fontWeight:"bold",textAlign:"center"}}>{formatDate(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h2>
                                                 <h3 style={{textAlign:"center",fontSize:'1.3rem',lineHeight:'1.5rem'}}>{formatTime(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h3>
-                                                <h1 style={{fontWeight:"bold", fontSize:"1.3rem",textWrap:"nowrap", textTransform:"uppercase",maxWidth:'225px', overflow:"hidden",textOverflow:"ellipsis", textAlign:"center"}}>{B64_ID}</h1>
+                                                <h1 style={{fontWeight:"bold", fontSize:"1.3rem",textWrap:"nowrap", textTransform:"uppercase",maxWidth:'225px', overflow:"hidden",textOverflow:"ellipsis", textAlign:"center", whiteSpace:'nowrap', wordBreak:"break-word"}}>{B64_ID}</h1>
                                             </div>
                                             <h1 style={{width:'70px', color:'limegreen',fontSize:"1.5rem", fontWeight:"bold"}}>{timePassed}</h1>
                                         </div>
@@ -328,7 +328,7 @@ function Ticket() {
                             </div>
                             <div style={{padding:'1rem', display:"flex",flexDirection:"column", alignItems:"center"}}>
                                 <QRCodeSVG value={B64_ID} size={150} level={"H"} width={'60%'} height={'60%'} style={{maxWidth:'450px'}}/>
-                                <h1 style={{fontWeight:"bold", fontSize:"1.5rem",textWrap:"nowrap", textTransform:"uppercase",marginTop:'1rem'}}>{B64_ID}</h1>
+                                <h1 style={{fontWeight:"bold", fontSize:"1.2rem",textWrap:"nowrap", textTransform:"uppercase",marginTop:'1rem', textAlign:"center", whiteSpace:'nowrap', wordBreak:"break-word"}}>{B64_ID}</h1>
                                 <h4 style={{marginTop:'1rem'}}>Fin de validation</h4>
                                 <div className={"fr jc-sb"} style={{backgroundColor:"black",color:"white", padding:'0.5rem 1rem', borderRadius:'0.5rem'}}>
                                     <div>

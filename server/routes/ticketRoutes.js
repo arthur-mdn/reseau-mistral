@@ -24,13 +24,24 @@ router.post('/tickets/use', verifyToken, async (req, res) => {
     const { ticketId, scanData } = req.body;
 
     try {
-        const ticket = await Ticket.findById(ticketId).populate('priceId').populate('usages');
+        const ticket = await Ticket.findById(ticketId).populate('priceId').populate({
+            path: 'usages',
+            options: { sort: { 'date': -1 } }
+        });
         if (!ticket) {
             return res.status(404).json({ message: 'Ticket non trouvé' });
         }
 
         if (ticket.usages.length >= ticket.priceId.maxUse) {
             return res.status(400).json({ message: 'Limite d\'utilisation du ticket atteinte' });
+        }
+
+        if (ticket.usages.length > 0) {
+            const lastUsageTime = new Date(ticket.usages[0].date).getTime();
+            const currentTime = new Date().getTime();
+            if (currentTime - lastUsageTime < 1000) {
+                return res.status(400).json({ message: 'Un usage a déjà été enregistré récemment' });
+            }
         }
 
         const maxTime = parseDuration(ticket.priceId.maxTime);
