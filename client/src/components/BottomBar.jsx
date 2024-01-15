@@ -1,40 +1,76 @@
 import {FaHouse, FaClock, FaTicket, FaTriangleExclamation, FaBars} from "react-icons/fa6";
 import {Link} from "react-router-dom";
-
+import { useLocation } from 'react-router-dom';
 
 function BottomBar() {
+    const location = useLocation();
+    function isActive(base, path) {
+        return path === base || path.startsWith(`${base}/`);
+    }
     return (
         <>
-            <div style={{minHeight:'100px'}}></div>
+            <div style={{ minHeight: '90px' }}></div>
             <nav style={styles.navbar}>
                 <ul style={styles.menu}>
                     <li style={styles.menuItem}>
-                        <Link to={'/'} style={styles.menuLink} >
-                            <FaHouse style={{fontSize:'1.2rem'}}/>
-                            <span style={styles.menuLinkSpan} >Accueil</span>
+                        <Link to={'/'} style={location.pathname === '/' ? { ...styles.menuLink, color:'#6A6D71' } : styles.menuLink}>
+                            <img
+                                src={location.pathname === '/' ? '/elements/menu/home_active.svg' : '/elements/menu/home.svg'}
+                                alt="Accueil"
+                                style={{ width: '1.2rem' }}
+                            />
+                            <span style={styles.menuLinkSpan}>Accueil</span>
                         </Link>
                     </li>
                     <li style={styles.menuItem}>
-                        <Link to={'/horaires'} style={styles.menuLink} >
-                            <FaClock style={{fontSize:'1.2rem'}}/>
+                        <Link
+                            to={'/horaires'}
+                            style={isActive('/horaires', location.pathname) ? { ...styles.menuLink, color:'#6A6D71' } : styles.menuLink}
+                        >
+                            <img
+                                src={isActive('/horaires', location.pathname) ? '/elements/menu/clock_active.svg' : '/elements/menu/clock.svg'}
+                                alt="Horaires"
+                                style={{ width: '1.2rem' }}
+                            />
                             <span style={styles.menuLinkSpan}>Horaires</span>
                         </Link>
                     </li>
                     <li style={styles.menuItem}>
-                        <Link to={'/tickets'} style={styles.menuLink} >
-                            <FaTicket style={{fontSize:'1.2rem'}}/>
+                        <Link
+                            to={'/tickets'}
+                            style={isActive('/tickets', location.pathname) ? { ...styles.menuLink, color:'#6A6D71' } : styles.menuLink}
+                        >
+                            <img
+                                src={isActive('/tickets', location.pathname) ? '/elements/menu/ticket_active.svg' : '/elements/menu/ticket.svg'}
+                                alt="M-Tickets"
+                                style={{ width: '1.2rem' }}
+                            />
                             <span style={styles.menuLinkSpan}>M-Tickets</span>
                         </Link>
                     </li>
                     <li style={styles.menuItem}>
-                        <Link to={'/trafic'} style={styles.menuLink}>
-                            <FaTriangleExclamation style={{fontSize:'1.2rem'}}/>
+                        <Link
+                            to={'/trafic'}
+                            style={isActive('/trafic', location.pathname) ? { ...styles.menuLink, color:'#6A6D71' } : styles.menuLink}
+                        >
+                            <img
+                                src={isActive('/trafic', location.pathname) ? '/elements/menu/trafic_active.svg' : '/elements/menu/trafic.svg'}
+                                alt="Infos trafic"
+                                style={{ width: '1.2rem' }}
+                            />
                             <span style={styles.menuLinkSpan}>Infos trafic</span>
                         </Link>
                     </li>
                     <li style={styles.menuItem}>
-                        <Link to={'/menu'} style={styles.menuLink}>
-                            <FaBars style={{fontSize:'1.2rem'}}/>
+                        <Link
+                            to={'/menu'}
+                            style={isActive('/menu', location.pathname) ? { ...styles.menuLink, color:'#6A6D71' } : styles.menuLink}
+                        >
+                            <img
+                                src={isActive('/menu', location.pathname) ? '/elements/menu/menu_active.svg' : '/elements/menu/menu.svg'}
+                                alt="Menu"
+                                style={{ width: '1.2rem' }}
+                            />
                             <span style={styles.menuLinkSpan}>Menu</span>
                         </Link>
                     </li>
@@ -52,9 +88,9 @@ const styles = {
         alignItems: 'center',
         width: '100%',
         zIndex: 1000,
-        padding: '1rem 0rem 2.8rem',
+        padding: '1rem 0rem 2rem',
         backgroundColor:'white',
-        height: '100px',
+        height: '90px',
         boxShadow:'rgb(67 71 85 / 27%) 1px -2px 0.25em, rgb(90 125 188 / 5%) 0px 0.25em 1em',
         position: 'fixed',
         bottom: 0
@@ -78,7 +114,7 @@ const styles = {
         alignItems:'center',
         gap:'0.2rem',
         fontSize: '0.8rem',
-        color: '#000'
+        color: '#ABABAB'
     },
     menuLinkSpan:{
         maxWidth: '100%',
