@@ -155,11 +155,11 @@ function TicketSlider({ tickets, onTicketSelect }) {
                        }
 
                     </span>
-                    <div style={{position:"relative", margin:'0.5rem 0'}}>
+                    <div style={{position:"relative", margin:'0.5rem 0', display:"flex"}}>
                         {
                             remainingTimes[ticket._id] && (
-                                <div style={{width:'100%', height:'100%', backgroundColor:'rgba(52,52,52,0.3)',borderRadius:'15px', position:"absolute",top:0,left:0 }} className={"fc ai-c jc-c"}>
-                                    <FaBan size={"4rem"} fill={"rgb(80,80,80)"} style={{rotate:"90deg"}}/>
+                                <div style={{width:'100%', height:'100%', backgroundColor:'rgba(52,52,52,0.2)',borderRadius:'15px', position:"absolute",top:0,left:0, boxSizing:"border-box", border:"4px solid white" }} className={"fc ai-c jc-c"}>
+                                    <FaBan size={"4rem"} fill={"rgb(80,80,80)"} style={{rotate:"90deg", opacity:0.6}}/>
                                 </div>
                             )
                         }

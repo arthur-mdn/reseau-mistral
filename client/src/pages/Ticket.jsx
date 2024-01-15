@@ -218,10 +218,10 @@ function Ticket() {
                                 <img src={"/elements/icons/hourglass.png"} alt={"hourglass"}/>
                             </div>
                         </div>
-                        <div style={{position:"relative", boxShadow:"rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px", borderRadius:"2rem"}}>
-                            <img src={`/elements/tickets/${ticketDetails.priceId.image}`} style={{width:'65vw', maxWidth:'400px', minWidth:'200px'}}/>
-                            <div style={{position:"absolute", backgroundColor:"rgba(0,0,0,0.9)", bottom:0, left:0, width:"100%", color:"white", display:"flex", padding:"0.3rem 1rem", flexDirection:"column",alignItems:"center", borderBottomLeftRadius:"2rem", borderBottomRightRadius:"2rem", border:"4px solid white", borderTop:0}}>
-                                <h4 style={{color:"grey"}}>Fin de validité :</h4>
+                        <div style={{position:"relative", boxShadow:"rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px", borderRadius:"1.5rem"}}>
+                            <img src={`/elements/tickets/${ticketDetails.priceId.image}`} style={{width:'60vw', maxWidth:'400px', minWidth:'200px', padding:'0 1rem'}}/>
+                            <div style={{position:"absolute", backgroundColor:"rgba(0,0,0,0.9)", bottom:0, left:0, width:"100%", color:"white", display:"flex", padding:"0.5rem 1rem 0.3rem", flexDirection:"column",alignItems:"center", borderBottomLeftRadius:"1.5rem", borderBottomRightRadius:"1.5rem", border:"4px solid white", borderTop:0}}>
+                                <h4 style={{color:"grey", lineHeight:'1rem'}}>Fin de validité :</h4>
                                 <span style={{fontSize:'1.3rem',lineHeight:'1.8rem',fontWeight:"bold"}}>{timeRemaining}</span>
                             </div>
                         </div>
@@ -255,7 +255,7 @@ function Ticket() {
                             </div>
                             <h5 style={{fontWeight:"bold"}}>Comment prendre une correspondance ?</h5>
                         </div>
-                        <button type={"button"} style={{width:'100%'}} onClick={()=>{setControlModalOpen(true)}}>Afficher mon titre en cours</button>
+                        <button type={"button"} style={{width:'100%', padding:'0.5rem 0rem', borderRadius:'0.5rem'}} onClick={()=>{setControlModalOpen(true)}}>Afficher mon titre en cours</button>
                     </div>
                     <ControlModal isOpen={controlModalOpen} onClose={() => setControlModalOpen(false)} onOpenQrCode={() => setIsControlQrOpen(true)} title={""} bgColor={"rgb(41, 41, 41)"}>
                         <div className={"fc h100"} >
