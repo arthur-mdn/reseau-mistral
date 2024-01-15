@@ -86,6 +86,29 @@ router.get('/tickets/:ticketId', verifyToken, async (req, res) => {
     }
 });
 
+router.delete('/tickets/:ticketId', verifyToken, async (req, res) => {
+    try {
+        const ticketId = req.params.ticketId;
+        const userId = req.user.userId;
+        const profileId = req.cookies['selectedProfile'];
+
+        const ticket = await Ticket.findById(ticketId);
+        if (!ticket) {
+            return res.status(404).json({ message: 'Ticket non trouvé' });
+        }
+
+        const profile = await Profile.findOne({ _id: profileId, 'userId': userId });
+        if (!profile || ticket.profileId.toString() !== profileId) {
+            return res.status(403).json({ message: 'Accès non autorisé à ce ticket' });
+        }
+
+        await Ticket.findByIdAndDelete(ticketId);
+        res.status(200).json({ message: 'Ticket supprimé avec succès' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur serveur: ' + error.message });
+    }
+});
+
 
 
 module.exports = router;

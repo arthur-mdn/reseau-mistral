@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {useTopBar} from "../TopBarContext.jsx";
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import Modal from "../components/Modal.jsx";
 import ControlModal from "../components/ControlModal.jsx";
 import ControlTouch from "../components/ControlTouch.jsx";
@@ -119,6 +119,7 @@ const getLastUsage = (usages) => {
 };
 
 function Ticket() {
+    const navigate = useNavigate();
     const { ticketId } = useParams();
     const { setTopBarState } = useTopBar();
     const [ticketDetails, setTicketDetails] = useState(null);
@@ -168,8 +169,20 @@ function Ticket() {
             });
     }, [ticketId]);
 
+    const deleteTicket = () => {
+        axios.delete(`${config.serverUrl}/tickets/${ticketId}`, { withCredentials: true })
+            .then(response => {
+                navigate('/tickets/', { replace: true });
+                console.log('Ticket supprimé avec succès');
+            })
+            .catch(error => {
+                console.error('Erreur lors de la suppression du ticket:', error);
+            });
+    };
+
+
     useEffect(() => {
-        setTopBarState({ backLink:{title:"M-Tickets", link:"/tickets/"}, title: 'Votre voyage', isVisible: true, actions: [] });
+        setTopBarState({ backLink:{title:"M-Tickets", link:"/tickets/"}, title: 'Votre voyage', isVisible: true, actions: [{title:"Supprimer le ticket", action: function(){deleteTicket()}}] });
         // Réinitialiser lors du démontage
         return () => setTopBarState({ title: '', isVisible: true });
     }, [setTopBarState]);
