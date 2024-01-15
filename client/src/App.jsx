@@ -1,5 +1,6 @@
 // App.jsx
 import React from 'react';
+import config from "./config.js";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
 import Login from "./pages/Login.jsx";
@@ -15,12 +16,14 @@ import Menu from "./pages/Menu.jsx";
 import Horaires from "./pages/Horaires.jsx";
 import Ticket from "./pages/Ticket.jsx";
 import Loading from "./components/Loading.jsx";
+import DemoBanner from "./components/DemoBanner.jsx";
 
 const AuthenticatedApp = () => {
     const { authStatus } = useAuth();
 
     return (
         <Router>
+            {config.demoMode && <DemoBanner />}
             {authStatus === "loading" ? (
                 <Loading />
             ) : (
