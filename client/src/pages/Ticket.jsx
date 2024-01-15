@@ -206,9 +206,9 @@ function Ticket() {
                         </div>
                         <div style={{position:"relative", boxShadow:"rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px", borderRadius:"2rem"}}>
                             <img src={`/elements/tickets/${ticketDetails.priceId.image}`} style={{width:'65vw', maxWidth:'400px', minWidth:'200px'}}/>
-                            <div style={{position:"absolute", backgroundColor:"rgba(0,0,0,0.9)", bottom:0, left:0, width:"100%", color:"white", display:"flex", padding:"0.5rem 1rem", flexDirection:"column",alignItems:"center", borderBottomLeftRadius:"2rem", borderBottomRightRadius:"2rem", border:"4px solid white", borderTop:0}}>
+                            <div style={{position:"absolute", backgroundColor:"rgba(0,0,0,0.9)", bottom:0, left:0, width:"100%", color:"white", display:"flex", padding:"0.3rem 1rem", flexDirection:"column",alignItems:"center", borderBottomLeftRadius:"2rem", borderBottomRightRadius:"2rem", border:"4px solid white", borderTop:0}}>
                                 <h4 style={{color:"grey"}}>Fin de validité :</h4>
-                                <span style={{fontSize:'1.4rem',lineHeight:'1.8rem',fontWeight:"bold"}}>{timeRemaining}</span>
+                                <span style={{fontSize:'1.3rem',lineHeight:'1.8rem',fontWeight:"bold"}}>{timeRemaining}</span>
                             </div>
                         </div>
                         {/* Afficher les détails du ticket ici */}
@@ -289,7 +289,7 @@ function Ticket() {
                                             <div>
                                                 <h2 style={{fontWeight:"bold",textAlign:"center"}}>{formatDate(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h2>
                                                 <h3 style={{textAlign:"center",fontSize:'1.3rem',lineHeight:'1.5rem'}}>{formatTime(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h3>
-                                                <h1 style={{fontWeight:"bold", fontSize:"1.3rem",textWrap:"nowrap", textTransform:"uppercase",maxWidth:'245px', overflow:"hidden",textOverflow:"ellipsis"}}>{B64_ID}</h1>
+                                                <h1 style={{fontWeight:"bold", fontSize:"1.3rem",textWrap:"nowrap", textTransform:"uppercase",maxWidth:'225px', overflow:"hidden",textOverflow:"ellipsis", textAlign:"center"}}>{B64_ID}</h1>
                                             </div>
                                             <h1 style={{width:'70px', color:'limegreen',fontSize:"1.5rem", fontWeight:"bold"}}>{timePassed}</h1>
                                         </div>
