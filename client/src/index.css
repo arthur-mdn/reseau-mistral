@@ -21,6 +21,17 @@
   --sub-card-bg-color: #f0f0f0;
   --sub-text-color: #000000;
 }
+/*
+body{
+  overflow: hidden;
+}
+#root{
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+ */
 #root{
   background-color: white;
   display: flex;
