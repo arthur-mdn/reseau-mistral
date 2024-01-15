@@ -329,7 +329,7 @@ button:focus-visible {
   gap: 15px;
   align-items: center;
   background-color: #ffffff;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 10px;
   cursor: pointer;
   transition: 0.3s background-color;

@@ -53,11 +53,15 @@ function ProfileSelection({ onProfileSelect, onClose, fromProfile= false }) {
                         />
                         <label htmlFor={`radio-profile-${profile._id}`}>
                         </label>
-                        <span style={{textAlign:"left"}}>
-                            {profile.prenom} {profile.nom}
-                            <br/>
-                            N°{profile._id}
-                        </span>
+                        <div style={{textAlign:"left", gap:'0.2rem'}} className={"fc"} >
+                            <h4 style={{fontWeight:"bold", fontSize:'0.9rem'}}>
+                                {profile.prenom} {profile.nom}
+                            </h4>
+                            <p style={{fontSize:'0.8rem', opacity:0.8}}>
+                                N°{profile._id}
+                            </p>
+
+                        </div>
                     </button>
                 ))}
             </div>

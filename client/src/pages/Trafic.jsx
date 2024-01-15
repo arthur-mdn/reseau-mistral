@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Routes, Route, Navigate, Link} from 'react-rout
 import axios from 'axios';
 import { useAuth } from '../AuthContext';
 import {useTopBar} from "../TopBarContext.jsx";
+import {FaExclamation} from "react-icons/fa6";
 
 function Trafic() {
     const { setTopBarState } = useTopBar();
@@ -27,11 +28,22 @@ function Trafic() {
 
     return (
         <div className={"fc g0-5 jc-fs"} style={{padding:'0.5rem', backgroundColor:"#ebebeb", height:'100%'}}>
-            <h4>Toutes les lignes concernées</h4>
+            <div className={"fr ai-c jc-c"} style={{padding:'0.2rem',backgroundColor:"lightgrey",borderRadius:'7px'}}>
+                <div style={{backgroundColor:"white",borderRadius:'5px', width:'100%', textAlign:"center", fontSize:'1rem', padding:'0.2rem 0'}}>
+                    En cours
+                </div>
+                <div style={{borderRadius:'5px', width:'100%',backgroundColor:"lightgrey", textAlign:"center", fontSize:'1rem', padding:'0.2rem 0'}}>
+                    À venir
+                </div>
+            </div>
+            <h4 style={{padding:'0.5rem 0.5rem 0.5rem 0.8rem'}}>Toutes les lignes concernées</h4>
             <div style={{display:"flex",flexWrap:"wrap", justifyContent:"space-evenly", gap:'1rem', backgroundColor:"white",padding:'0.5rem', borderRadius:'0.5rem'}}>
                 {horairesData.map((item, index) => (
-                    <div key={item.BulleId} style={{backgroundColor: item.BulleColor, color:"white", fontWeight:'bold',fontSize:'1.3rem', borderRadius:"4rem", padding:'0.3rem 0.9rem'}}>
+                    <div key={item.BulleId} style={{position:"relative",backgroundColor: item.BulleColor, color:"white", fontWeight:'bold',fontSize:'1.3rem', borderRadius:"4rem", padding:'0.3rem 0.9rem'}}>
                         {item.BulleId}
+                        <div style={{position:"absolute", bottom:"-4px", right:"-4px", backgroundColor:'#f5752a', width:'20px', height:'20px', borderRadius:'4rem'}} className={"fr ai-c jc-c"}>
+                            <FaExclamation size={'15px'}/>
+                        </div>
                     </div>
                 ))}
             </div>

@@ -187,7 +187,7 @@ function Menu() {
 
                                 <div style={{backgroundColor:"white",padding:'1rem', borderRadius:'0.5rem'}}>
                                     <h4>
-                                        Voyageurs M-tickets
+                                        Voyageur(s) M-tickets
                                     </h4>
                                     <div className={"fc g0-5 ai-c"} style={{marginTop:'0.5rem'}}>
                                         <ProfileSelection fromProfile={true} onProfileSelect={()=>{}} onClose={()=>{}}/>
