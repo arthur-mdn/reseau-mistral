@@ -1,6 +1,5 @@
 // App.jsx
 import React from 'react';
-import config from "./config.js";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
 import Login from "./pages/Login.jsx";
@@ -23,7 +22,7 @@ const AuthenticatedApp = () => {
 
     return (
         <Router>
-            {config.demoMode && <DemoBanner />}
+            <DemoBanner />
             {authStatus === "loading" ? (
                 <Loading />
             ) : (

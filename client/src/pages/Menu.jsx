@@ -15,6 +15,7 @@ import ProfileSelection from "../components/ProfileSelection.jsx";
 import {FaExternalLinkAlt, FaHome} from "react-icons/fa";
 import config from "../config.js";
 import Loading from "../components/Loading.jsx";
+import {useCookies} from "react-cookie";
 
 function Menu() {
     const { setTopBarState } = useTopBar();
@@ -28,6 +29,14 @@ function Menu() {
     const [isPolitiqueOpen, setIsPolitiqueOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [cookies, setCookie] = useCookies(['hideDemoBanner']);
+    const [isDemoModeDisabled, setIsDemoModeDisabled] = useState(cookies.hideDemoBanner === true);
+
+    const handleDemoModeChange = (event) => {
+        const isChecked = event.target.checked;
+        setIsDemoModeDisabled(isChecked);
+        setCookie('hideDemoBanner', isChecked, { path: '/' });
+    };
 
     useEffect(() => {
         axios.get(`${config.serverUrl}/user/details`, { withCredentials: true })
@@ -269,6 +278,17 @@ function Menu() {
             </Modal>
 
             <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} title={"Paramètres"}>
+                <label className={"fr g0-5 ai-c"}>
+                    <input
+                        type="checkbox"
+                        checked={isDemoModeDisabled}
+                        onChange={handleDemoModeChange}
+                        style={{colorScheme:"light"}}
+                    />
+                    <span>
+                        Désactiver le mode démo
+                    </span>
+                </label>
             </Modal>
 
 
