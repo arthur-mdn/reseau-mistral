@@ -47,7 +47,7 @@ const Modal = ({ isOpen, onClose, children, title,actions, bgColor = "#f3f3f3", 
                                 !hideBg &&
                                 <div className={"over_top_menu jc-sb"} style={{padding:"0 1rem", position:"relative"}}>
                                     <FaTimes onClick={()=>{onClose()}}/>
-                                    <h4 style={{position:"absolute", left:"50%", transform:"translateX(-50%)", fontWeight:"bold"}}>
+                                    <h4 style={{position:"absolute", left:"50%", transform:"translateX(-50%)", fontWeight:"bold", whiteSpace:'nowrap', wordBreak:"break-word"}}>
                                         {title}
                                     </h4>
                                     {actions && actions.length > 0 && (

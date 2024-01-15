@@ -226,18 +226,17 @@ function Ticket() {
                             </div>
                         </div>
                         {/* Afficher les détails du ticket ici */}
-                        <h3>Mes validations</h3>
+                        <h3 style={{fontWeight:"bold"}}>Mes validations</h3>
                         <div style={{width:'100%'}}>
                             {Object.keys(groupedUsages).map((date) => (
-                                <div key={date}>
-                                    <span style={{backgroundColor:"#e9e9e9", padding:"0.3rem", borderRadius:'0.25rem', fontSize:'0.8rem'}}>{formatDateStr(date)}</span>
+                                <div key={date} className={"fc"} style={{gap:'0.3rem'}}>
+                                    <span style={{backgroundColor:"#e9e9e9", padding:"0.1rem 0.5rem", borderRadius:'0.25rem', fontSize:'0.8rem', alignSelf:'flex-start'}}>{formatDateStr(date)}</span>
                                     {groupedUsages[date].map((usage) => (
                                         <div key={usage._id} >
-
-                                            <div className={"fr jc-sb"} style={{border:"1px dashed #e5e5e5", borderLeft:0,borderRight:0,padding:'0.5rem'}}>
+                                            <div className={"fr jc-sb"} style={{border:"1px dashed #e5e5e5", borderLeft:0,borderRight:0,padding:'0.4rem 0.5rem 0.3rem'}}>
                                                 <div>
-                                                    <p>1 validation</p>
-                                                    <h4 style={{fontWeight:"bold"}}>{ticketDetails.priceId.title}</h4>
+                                                    <p style={{lineHeight:"0.9rem",fontSize:'0.9rem'}}>1 validation</p>
+                                                    <h4 style={{fontWeight:"bold",lineHeight:"1.3rem"}}>{ticketDetails.priceId.title}</h4>
                                                 </div>
                                                 <h4 style={{fontWeight:"bold"}}>{formatTime(usage.date)}</h4>
                                             </div>
