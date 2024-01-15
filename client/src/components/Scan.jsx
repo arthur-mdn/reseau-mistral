@@ -3,21 +3,28 @@ import { Html5QrcodeScanner } from 'html5-qrcode';
 import {FaBolt} from "react-icons/fa6";
 import ProfileSelection from "./ProfileSelection.jsx";
 import Modal from "./Modal.jsx";
+import {FaBackspace} from "react-icons/fa";
 
 function Scan({ onScanSuccess, onScanError, onClose }) {
     const qrRef = useRef(null);
     const [isManualScanOpen, setIsManualScanOpen] = useState(false);
     let scanner = null;
     let [code, setCode] = useState("");
+    const [codeError, setCodeError] = useState(null);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        const formatRegex = /^[0-9]{3}\+[0-9]{3}$/;
 
-        if (code) {
+        if (formatRegex.test(code)) {
             onScanSuccess(code);
             setIsManualScanOpen(false);
             setCode("");
+            setCodeError(null)
+        } else {
+            setCodeError("Le format du code doit être 'XXX+XXX'.");
         }
+
     };
 
     useEffect(() => {
@@ -54,6 +61,24 @@ function Scan({ onScanSuccess, onScanError, onClose }) {
         };
     }, [onScanSuccess, onScanError]);
 
+    const handleButtonClick = (value) => {
+        if (value === 'effacer') {
+            setCode(code.slice(0, -1)); // Supprime le dernier caractère
+        } else {
+            setCode(code + value); // Ajoute le caractère cliqué
+        }
+    };
+
+    const renderVirtualKeyboard = () => {
+        const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', 'effacer'];
+        return keys.map(key => (
+            <button type={"button"} key={key} onClick={() => handleButtonClick(key)} style={{flex:'1 1 25%',margin:"auto",flexGrow:0,padding:0,backgroundColor:"white", color:"black", width:"50px", height:'50px', display:"flex",alignItems:"center", justifyContent:"center",borderRadius:'2rem',pointerEvents:"all",fontWeight:"bold", boxShadow:"rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"}}>
+
+                {key === 'effacer' ? <FaBackspace/> : key}
+            </button>
+        ));
+    };
+
     return (
         <>
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -69,6 +94,11 @@ function Scan({ onScanSuccess, onScanError, onClose }) {
             </div>
             <Modal isOpen={isManualScanOpen} onClose={() => setIsManualScanOpen(false)} title={"Saisir code manuel"}>
                 <form onSubmit={handleSubmit}>
+                    {codeError && (
+                        <div style={{color:"red", textAlign:"center", margin:"1rem 0"}}>
+                            {codeError}
+                        </div>
+                    )}
                     <input type={"text"}
                            maxLength={7}
                            placeholder={"Code"}
@@ -77,6 +107,11 @@ function Scan({ onScanSuccess, onScanError, onClose }) {
                            value={code}
                            onChange={(e) => setCode(e.target.value)}
                     />
+                    <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap:'0.8rem'}}>
+                        {renderVirtualKeyboard()}
+                    </div>
+                    <br/>
+                    <br/>
                     <button type={"submit"} style={{width:"100%", margin:"1rem 0"}}>Valider</button>
                 </form>
             </Modal>
