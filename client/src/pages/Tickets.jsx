@@ -135,7 +135,7 @@ function Tickets() {
                         profileSelected.tickets && profileSelected.tickets.length > 0 &&
                         <>
                             <div style={{display:"flex",flexDirection:"column", height:"100%"}} className={"bg-grey"}>
-                                <h4 style={{padding:' 1.rem 1rem', fontSize:'0.9rem'}}>SUR MON TÉLÉPHONE</h4>
+                                <h4 style={{padding:' 1.2rem 1rem', fontSize:'0.9rem'}}>SUR MON TÉLÉPHONE</h4>
                                 <div className={"tickets"}>
                                     <TicketSlider
                                         tickets={profileSelected.tickets}
