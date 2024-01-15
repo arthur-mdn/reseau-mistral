@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const verifyToken = require('../others/verifyToken');
 const TicketUsage = require("../models/TicketUsage");
-
+let ticketLocks = {};
 
 function parseDuration(durationString) {
     const [amount, unit] = durationString.split(' ');
@@ -22,6 +22,11 @@ function parseDuration(durationString) {
 
 router.post('/tickets/use', verifyToken, async (req, res) => {
     const { ticketId, scanData } = req.body;
+
+    if (ticketLocks[ticketId]) {
+        return res.status(429).json({ message: 'Ce ticket est actuellement en cours de traitement' });
+    }
+    ticketLocks[ticketId] = true;
 
     try {
         const ticket = await Ticket.findById(ticketId).populate('priceId').populate({
@@ -61,16 +66,13 @@ router.post('/tickets/use', verifyToken, async (req, res) => {
         });
         await newUsage.save();
 
-        const lastCheckTicket = await Ticket.findById(ticketId).populate('usages');
-        if (lastCheckTicket.usages.length >= ticket.priceId.maxUse) {
-            return res.status(400).json({ message: 'Limite d\'utilisation du ticket atteinte' });
-        }
         await Ticket.findByIdAndUpdate(ticketId, {
             $push: { usages: newUsage._id }
         });
-
+        delete ticketLocks[ticketId];
         res.json({ message: 'Usage enregistré avec succès', usage: newUsage });
     } catch (error) {
+        delete ticketLocks[ticketId];
         res.status(500).json({ message: 'Erreur serveur: ' + error });
     }
 });
