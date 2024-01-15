@@ -9,7 +9,7 @@ function BottomBar() {
     }
     return (
         <>
-            <div style={{ minHeight: '90px' }}></div>
+            <div style={{ minHeight: '85px' }}></div>
             <nav style={styles.navbar}>
                 <ul style={styles.menu}>
                     <li style={styles.menuItem}>
@@ -90,7 +90,7 @@ const styles = {
         zIndex: 1000,
         padding: '1rem 0rem 2rem',
         backgroundColor:'white',
-        height: '90px',
+        height: '85px',
         boxShadow:'rgb(67 71 85 / 27%) 1px -2px 0.25em, rgb(90 125 188 / 5%) 0px 0.25em 1em',
         position: 'fixed',
         bottom: 0

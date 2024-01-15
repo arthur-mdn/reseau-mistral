@@ -66,27 +66,33 @@ const Modal = ({ isOpen, onClose, children, title,actions, bgColor = "#f3f3f3", 
                                     <div style={{position:"relative",width:"100%",height:"100%", display:"flex", justifyContent:"flex-end",alignItems:"flex-end"}}>
                                         <div onClick={()=>{setActionPopup(!actionPopup)}} style={{position:"absolute",width:"100%", height:"100%", backgroundColor:"black", opacity:"0.3", zIndex:999}}>
                                         </div>
-                                        <ul style={{position:"relative",listStyleType:"none", margin:"0", padding:"1rem 1rem 4rem",gap:"0rem", zIndex:99999,width:"100%", display:"flex", alignItems:"center",justifyContent:"flex-end",flexDirection:"column"}}>
+                                        <div style={{position:"relative",listStyleType:"none", margin:"0", padding:"1rem 0.5rem 4rem",gap:"0rem", zIndex:99999,width:"100%", display:"flex", alignItems:"center",justifyContent:"flex-end",flexDirection:"column"}}>
+                                            <ul style={{listStyleType:"none", margin:"0", width:'100%',borderRadius:"0.5rem",overflow:"hidden"}}>
                                             {actions.map((action, index) => (
-                                                <li key={index} style={{ width:"100%",margin:"0", padding:"0.6rem",borderRadius:"0.5rem", backgroundColor:"white", textAlign:"center"}}>
+                                                <li key={index} style={{ width:"100%",margin:"0", padding:"0.7rem", backgroundColor:"white", textAlign:"center", borderBottom:'1px solid lightgrey'}}>
                                                     {action.action && (
                                                         <div onClick={()=>{ setActionPopup(false);action.action()}} style={{color:"blue",textDecoration:"none"}}>
-                                                            {action.title}
+                                                            <h3>
+                                                                {action.title}
+                                                            </h3>
                                                         </div>
                                                     )}
                                                     {action.link && (
-                                                        <Link to={action.link} style={{color:"blue", textDecoration:"none"}}>
-                                                            {action.title}
+                                                        <Link to={action.link} style={{color:"blue", textDecoration:"none", width:'100%', height:'100%'}}>
+                                                            <h3>
+                                                                {action.title}
+                                                            </h3>
                                                         </Link>
                                                     )}
                                                 </li>
                                             ))}
+                                        </ul>
                                             <li key={"cancel"} style={{ width:"100%",margin:"0.5rem 0 0 0", padding:"0.6rem",borderRadius:"0.5rem", backgroundColor:"white",textAlign:"center"}}>
                                                 <div onClick={()=>{setActionPopup(!actionPopup)}} style={{color:"blue",fontWeight:"bold", textDecoration:"none"}}>
                                                     Annuler
                                                 </div>
                                             </li>
-                                        </ul>
+                                        </div>
                                     </div>
 
                                 </div>
