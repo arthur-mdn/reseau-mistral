@@ -22,7 +22,7 @@ function AddProfile({ onProfileAdded }) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={"fc g1"}>
             <div>
                 <label>Prénom</label>
                 <input
@@ -30,6 +30,7 @@ function AddProfile({ onProfileAdded }) {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder={"Prénom"}
+                    style={{padding:'1.5rem', borderRadius:'0.5rem'}}
                 />
             </div>
             <div>
@@ -39,6 +40,7 @@ function AddProfile({ onProfileAdded }) {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder={"Nom"}
+                    style={{padding:'1.5rem', borderRadius:'0.5rem'}}
                 />
             </div>
             <div>
@@ -48,6 +50,7 @@ function AddProfile({ onProfileAdded }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={"Email"}
+                    style={{padding:'1.5rem', borderRadius:'0.5rem'}}
                 />
             </div>
             <br/>

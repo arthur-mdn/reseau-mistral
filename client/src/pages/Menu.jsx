@@ -62,11 +62,11 @@ function Menu() {
         <>
             <div style={{position:"relative", width:"100%", height:"100%"}}>
 
-                <div style={{ width: "100%", display: "flex", alignItems: "center",padding:"2rem 0",justifyContent: "center"}}>
-                    <img src="/elements/favicon.png" style={{width: "50px", borderRadius: "25px"}}/>
+                <div style={{ width: "100%", display: "flex", alignItems: "center",padding:"1rem 0 1rem",justifyContent: "center"}}>
+                    <img src="/elements/favicon.png" style={{width: "65px", borderRadius: "25px"}}/>
                 </div>
                 <div style={{padding: 0,margin:"0 1rem", borderRadius: "10px", backgroundColor: "white", boxShadow: "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px", position:"relative", zIndex:1}}>
-                    <button onClick={()=>{setProfileOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}}>
+                    <button onClick={()=>{setProfileOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.5rem 0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}}>
                             {
                                 userDetails && (
                                     <>
@@ -82,53 +82,53 @@ function Menu() {
                             }
                         <FaChevronRight style={{marginLeft:"auto"}}/>
                     </button>
-                    <button onClick={()=>{setFavoriteOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}}>
+                    <button onClick={()=>{setFavoriteOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.5rem 0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}}>
                         <div
                             style={{width: "40px", height: "40px", borderRadius: "50px", display: "flex", alignContent: "center", justifyContent: "center", alignItems: "center"}}
                         >
-                            <FaHeart/>
+                            <FaHeart size={'20px'}/>
                         </div>
                         <span>Favoris</span>
                         <FaChevronRight style={{marginLeft:"auto"}}/>
                     </button>
-                    <button  onClick={()=>{setIsPlanOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}} >
+                    <button  onClick={()=>{setIsPlanOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.5rem 0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}} >
                         <div style={{width: "40px", height: "40px", borderRadius: "50px", display: "flex", alignContent: "center", justifyContent: "center", alignItems: "center"}}>
-                            <FaSolarPanel/>
+                            <FaSolarPanel size={'20px'}/>
                         </div>
                         <span>Plans des réseaux</span>
                         <FaChevronRight style={{marginLeft:"auto"}}/>
                     </button>
-                    <button onClick={()=>{setIsDocumentsOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}} >
+                    <button onClick={()=>{setIsDocumentsOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.5rem 0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}} >
                         <div style={{width: "40px", height: "40px", borderRadius: "50px", display: "flex", alignContent: "center", justifyContent: "center", alignItems: "center"}}>
-                            <FaFile/>
+                            <FaFile size={'20px'}/>
                         </div>
                         <span>Mes documents</span>
                         <FaChevronRight style={{marginLeft:"auto"}}/>
                     </button>
-                    <button  onClick={()=>{setIsLiensOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}} >
+                    <button  onClick={()=>{setIsLiensOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.5rem 0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}} >
                         <div style={{width: "40px", height: "40px", borderRadius: "50px", display: "flex", alignContent: "center", justifyContent: "center", alignItems: "center"}}>
-                            <FaLink/>
+                            <FaLink size={'20px'}/>
                         </div>
                         <span>Liens utiles : Achat, Appel Bus, PV</span>
                         <FaChevronRight style={{marginLeft:"auto"}}/>
                     </button>
-                    <button  onClick={()=>{setIsContactOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:0}} >
+                    <button  onClick={()=>{setIsContactOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.5rem 0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:0}} >
                         <div style={{width: "40px", height: "40px", borderRadius: "50px", display: "flex", alignContent: "center", justifyContent: "center", alignItems: "center"}}>
-                            <FaEnvelope/>
+                            <FaEnvelope size={'20px'}/>
                         </div>
                         <span>Nous contacter</span>
-                        <FaChevronRight style={{marginLeft:"auto"}}/>
+                        <FaChevronRight size={'20px'} style={{marginLeft:"auto"}}/>
                     </button>
                 </div>
 
 
                 <div
-                    style={{padding: "2rem", display:"flex", flexDirection:"column", gap:"2rem", position:"relative", zIndex:1}}>
+                    style={{padding: "2rem", display:"flex", flexDirection:"column", gap:"1rem", position:"relative", zIndex:1}}>
 
                     <button  onClick={()=>{setIsPolitiqueOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0rem',backgroundColor:"transparent",color:"white",marginRight:"auto",borderBottom:0}} >
                         Politique de confidentialité
                     </button>
-
+                    <hr style={{border:"1px solid white", margin:0, opacity:0.1}}/>
                     <button  onClick={()=>{setIsSettingsOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0rem',backgroundColor:"transparent",color:"white",marginRight:"auto",borderBottom:0}} >
                         Paramètres
                     </button>

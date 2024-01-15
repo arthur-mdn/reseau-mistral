@@ -40,7 +40,7 @@ function PaiementRecap({ panier, onClose, onCheckoutConfirmed }) {
                 </div>
                 <br/>
                 <br/>
-                <div className={"fr g0-5"}>
+                <div className={"fr g0-5 ai-c jc-fs"}>
                     <input type={"checkbox"} id={"cgv"} style={{colorScheme:"light"}}
                     checked={cgv_checked} onChange={(e) => {setCgv_checked(e.target.checked)}}
                     />
@@ -49,11 +49,11 @@ function PaiementRecap({ panier, onClose, onCheckoutConfirmed }) {
             </div>
             <br/>
 
-            <button type={"button"} style={{width:"100%", marginTop:"auto"}} onClick={() => {if(cgv_checked){setCheckoutOpen(true)}else{alert("Merci d'accepter les CGV")}}}>
+            <button type={"button"} style={{width:"100%", marginTop:"auto",marginBottom:'1rem'}} onClick={() => {if(cgv_checked){setCheckoutOpen(true)}else{alert("Merci d'accepter les CGV")}}}>
                 Payer
             </button>
 
-            <Modal isOpen={checkoutOpen} onClose={() => setCheckoutOpen(false)} title={"Paiement"}>
+            <Modal isOpen={checkoutOpen} onClose={() => setCheckoutOpen(false)} title={"Paiement"} bgColor={"white"}>
                 <Checkout panier={panier} onCheckoutConfirmed={() => {setCheckoutOpen(false);onCheckoutConfirmed()}} onClose={() => setCheckoutOpen(false)} />
             </Modal>
         </>

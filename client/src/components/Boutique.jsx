@@ -80,7 +80,7 @@ function Boutique({ onClose, onCheckoutConfirmed }) {
                 totalPrice > 0 &&
                 <div className={"total"}>
                     <div>Total :  <h3>{totalPrice.toFixed(2)} €</h3></div>
-                    <button type="button" onClick={handlePurchase}> Acheter</button>
+                    <button type="button" onClick={handlePurchase} style={{marginBottom:'1rem'}}> Acheter</button>
                 </div>
             }
 

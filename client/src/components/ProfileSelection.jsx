@@ -64,14 +64,14 @@ function ProfileSelection({ onProfileSelect, onClose, fromProfile= false }) {
             <br/>
             {
                 fromProfile &&
-                <button type={"button"} style={{ backgroundColor: "transparent", color:"#1E21A4",marginRight:"auto", padding:0}} onClick={() => {setAddProfileOpen(true)}}>
+                <button type={"button"} style={{ backgroundColor: "transparent", color:"#1E21A4",marginRight:"auto", padding:0,marginBottom:'1rem'}} onClick={() => {setAddProfileOpen(true)}}>
                     <FaPlus/>Ajouter un voyageur
                 </button>
 
             }
             {
                 !fromProfile &&
-                <button type={"button"} style={{width:"100%", marginTop:"auto"}} onClick={() => {setAddProfileOpen(true)}}>
+                <button type={"button"} style={{width:"100%", marginTop:"auto",marginBottom:'1rem'}} onClick={() => {setAddProfileOpen(true)}}>
                     Ajouter un voyageur
                 </button>
             }
