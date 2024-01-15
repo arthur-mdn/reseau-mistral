@@ -19,11 +19,11 @@ const priceSchema = new Schema({
         type: Number,
         default: 1
     },
-    use: {
+    maxUse: {
         type: Number,
         default: 1
     },
-    time: {
+    maxTime: {
         type: String,
         required: true
     },
