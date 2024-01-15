@@ -9,6 +9,7 @@ const storeRoutes = require('./routes/storeRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const config = require('./others/config');
 const database = require('./others/database');
+const insertPricesIfNotExist = require('./others/insertPricesIfNotExist');
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,6 +20,8 @@ app.use(cors({
 }));
 
 database.connect();
+
+insertPricesIfNotExist();
 
 app.use(authRoutes);
 app.use(userRoutes);
