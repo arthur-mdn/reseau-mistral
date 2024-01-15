@@ -139,7 +139,7 @@ function TicketSlider({ tickets, onTicketSelect }) {
                    <span className={"time_remaining"}>
                        {
                            remainingTimes[ticket._id] && (
-                               <h4 style={{fontWeight:"bold", fontSize:'0.9rem'}}>
+                               <h4 style={{fontSize:'0.9rem'}}>
                                 Temps restant : {remainingTimes[ticket._id] || 'N/A'}
                                </h4>
                            )
