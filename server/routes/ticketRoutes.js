@@ -6,10 +6,40 @@ const verifyToken = require('../others/verifyToken');
 const TicketUsage = require("../models/TicketUsage");
 
 
+function parseDuration(durationString) {
+    const [amount, unit] = durationString.split(' ');
+    switch (unit) {
+        case 'hour':
+        case 'hours':
+            return amount * 60 * 60 * 1000;
+        case 'day':
+        case 'days':
+            return amount * 24 * 60 * 60 * 1000;
+        default:
+            return 0;
+    }
+}
+
 router.post('/tickets/use', verifyToken, async (req, res) => {
     const { ticketId, scanData } = req.body;
 
     try {
+        const ticket = await Ticket.findById(ticketId).populate('priceId');
+        if (!ticket) {
+            return res.status(404).json({ message: 'Ticket non trouvé' });
+        }
+
+        const maxTime = parseDuration(ticket.priceId.maxTime);
+        const cutoffTime = new Date(new Date().getTime() - maxTime);
+
+        const existingUsage = await TicketUsage.findOne({
+            ticketId: ticket._id,
+            date: { $gte: cutoffTime }
+        });
+
+        if (existingUsage) {
+            return res.status(400).json({ message: 'Usage déjà enregistré dans la période définie' });
+        }
         const newUsage = new TicketUsage({
             ticketId,
             scanData
