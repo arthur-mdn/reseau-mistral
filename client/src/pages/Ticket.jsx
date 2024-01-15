@@ -8,6 +8,7 @@ import ControlTouch from "../components/ControlTouch.jsx";
 import {FaChevronLeft, FaInfo} from "react-icons/fa6";
 import { QRCodeSVG } from 'qrcode.react';
 import config from "../config.js";
+import Loading from "../components/Loading.jsx";
 
 const decToHex = (dec) => dec.toString(16);
 
@@ -359,7 +360,7 @@ function Ticket() {
                     </Modal>
                 </>
             ) : (
-                <p>Chargement des détails du ticket...</p>
+                <Loading/>
             )}
 
         </>
