@@ -70,7 +70,14 @@ function Tickets() {
             });
     }
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const useThisTicket = (scanData) => {
+        if (isSubmitting) {
+            return;
+        }
+
+        setIsSubmitting(true);
+
         axios.post(`${config.serverUrl}/tickets/use`, {
             ticketId: ticketSelected._id,
             scanData: scanData
@@ -81,7 +88,10 @@ function Tickets() {
             })
             .catch(error => {
                 console.error('Erreur lors de l\'utilisation du ticket:', error);
-            });
+            })
+            .finally(() => {
+            setIsSubmitting(false);
+        });
     }
 
     return (
