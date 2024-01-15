@@ -139,9 +139,9 @@ function TicketSlider({ tickets, onTicketSelect }) {
                    <span className={"time_remaining"}>
                        {
                            remainingTimes[ticket._id] && (
-                               <>
+                               <h4 style={{fontWeight:"bold", fontSize:'0.9rem'}}>
                                 Temps restant : {remainingTimes[ticket._id] || 'N/A'}
-                               </>
+                               </h4>
                            )
 
                        }
@@ -165,7 +165,7 @@ function TicketSlider({ tickets, onTicketSelect }) {
                         }
                         <img src={`/elements/tickets/${ticket.priceId.image}`} alt={ticket.priceId.title} style={{margin:' 0'}}/>
                     </div>
-                    <div>{ticket.priceId.title}</div>
+                    <div  style={{fontWeight:"bold", fontSize:'0.9rem'}}>{ticket.priceId.title}</div>
                 </SwiperSlide>
             ))}
         </Swiper>
