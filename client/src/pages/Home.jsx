@@ -7,6 +7,7 @@ import {FaLocationArrow, FaSuitcase} from "react-icons/fa6";
 import {useCookies} from "react-cookie";
 import config from "../config.js";
 import Modal from "../components/Modal.jsx";
+import Loading from "../components/Loading.jsx";
 
 function parseDuration(durationString) {
     const [amount, unit] = durationString.split(' ');
@@ -28,6 +29,7 @@ function Home() {
     const [cookies, setCookie, removeCookie] = useCookies(['selectedProfile']);
     const [ticketsEnCours, setTicketsEnCours] = useState([]);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (cookies.selectedProfile) {
@@ -41,8 +43,11 @@ function Home() {
                     if (error.response && error.response.status === 404) {
                         // Supprimer le cookie si le profil n'est pas trouvé
                         removeCookie('selectedProfile', { path: '/' });
+                        setIsLoading(false);
                     }
                 });
+        }else{
+            setIsLoading(false);
         }
     }, [cookies.selectedProfile, removeCookie]);
 
@@ -56,6 +61,7 @@ function Home() {
             });
         });
         setTicketsEnCours(ticketsActifs);
+        setIsLoading(false);
     };
 
 
@@ -64,6 +70,10 @@ function Home() {
 
         return () => setTopBarState({ title: '', isVisible: true });
     }, [setTopBarState]);
+
+    if (isLoading) return (
+        <Loading/>
+    );
 
     return (
         <>
