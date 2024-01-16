@@ -34,7 +34,7 @@ const DemoBanner = () => {
                     zIndex: 1000000000000
                 }}>
                     <h3 style={{backgroundColor: 'rgba(0, 0, 0, 0.5)', padding:'0.5rem', borderRadius:'1rem'}}>
-                        Application factice, ne pas utiliser en production
+                        Application de démonstration, usage quotidien strictement interdit.
                     </h3>
                 </div>
                 )
