@@ -1,0 +1,36 @@
+version: '3'
+
+services: 
+  reseau-mistral-mongodb:
+    image: mongo
+    volumes:
+      - reseau_mistral_mongodb_data:/data/db
+
+  reseau-mistral-client:
+    build:
+      context: ./client
+      args:
+        VITE_INSTANCE_URL: "https://reseau-mistral.mondon.pro"
+        VITE_SERVER_URL: "https://api.reseau-mistral.mondon.pro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.reseau-mistral-client.rule=Host(`reseau-mistral.mondon.pro`)"
+      - "traefik.http.routers.reseau-mistral-client.entrypoints=websecure"
+      - "traefik.http.routers.reseau-mistral-client.tls.certresolver=myresolver"
+
+  reseau-mistral-server:
+    build:
+      context: ./server
+    env_file: ./server/.env
+    environment:
+        DB_URI: mongodb://reseau-mistral-mongodb:27017/reseau-mistral
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.reseau-mistral-server.rule=Host(`api.reseau-mistral.mondon.pro`)"
+      - "traefik.http.services.reseau-mistral-server.loadbalancer.server.port=3001"
+      - "traefik.http.routers.reseau-mistral-server.entrypoints=websecure"
+      - "traefik.http.routers.reseau-mistral-server.tls.certresolver=myresolver"
+
+volumes:
+  reseau_mistral_mongodb_data:
+    driver: local
