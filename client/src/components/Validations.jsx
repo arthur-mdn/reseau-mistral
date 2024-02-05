@@ -16,15 +16,23 @@ function formatTime(timeString) {
 
 function groupTicketsByDate(tickets) {
     const grouped = {};
+
     tickets.forEach(ticket => {
         ticket.usages.forEach(usage => {
-            const dateKey = formatDate(usage.date);
-            if (!grouped[dateKey]) {
-                grouped[dateKey] = [];
-            }
-            grouped[dateKey].push(usage);
+            usage.timestamp = new Date(usage.date).getTime();
         });
     });
+
+    const sortedUsages = tickets.flatMap(ticket => ticket.usages).sort((b, a) => b.timestamp - a.timestamp);
+
+    sortedUsages.forEach(usage => {
+        const dateKey = formatDate(usage.date);
+        if (!grouped[dateKey]) {
+            grouped[dateKey] = [];
+        }
+        grouped[dateKey].push(usage);
+    });
+
     return grouped;
 }
 
