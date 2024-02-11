@@ -76,11 +76,13 @@ function Tickets() {
     }
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+
     const useThisTicket = (scanData) => {
         if (isSubmitting) {
             return;
         }
         setIsSubmitting(true);
+        setIsLoading(true);
 
         axios.post(`${config.serverUrl}/tickets/use`, {
             ticketId: ticketSelected._id,
@@ -88,9 +90,11 @@ function Tickets() {
         },
             { withCredentials: true })
             .then(response => {
+                setIsLoading(false);
                 navigate('/tickets/' + ticketSelected._id, { replace: true });
             })
             .catch(error => {
+                setIsLoading(false);
                 console.error('Erreur lors de l\'utilisation du ticket:', error);
                 setIsSubmitting(false);
             });
