@@ -157,7 +157,7 @@ function Tickets() {
             {
                 profileSelected && profileSelected.tickets && (
                     <>
-                        <Modal isOpen={validationListOpen} onClose={() => setValidationListOpen(false)} title={"Mes validations"} padding={0}>
+                        <Modal isOpen={validationListOpen} onClose={() => setValidationListOpen(false)} title={"Mes validations"} padding={0} contentOverflowY={"scroll"}>
                             <Validations tickets={profileSelected.tickets} />
                         </Modal>
                         <Modal isOpen={howUseOpen} onClose={() => setHowUseOpen(false)} title={"Comment utiliser ses titres ?"} padding={0}>
