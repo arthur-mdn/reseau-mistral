@@ -96,7 +96,7 @@ function Home() {
                                 </div>
                                 <div>
                                     {ticketsEnCours.map(ticket => (
-                                        <Link onClick={()=>{setIsLoading(true)g}} key={ticket._id} to={`/tickets/${ticket._id}`} style={{backgroundColor:"white", marginTop:'0.25rem',padding:"0.5rem", borderRadius:"0.5rem", color:"black"}} className={"fr ai-c g0-5"}>
+                                        <Link onClick={()=>{setIsLoading(true)}} key={ticket._id} to={`/tickets/${ticket._id}`} style={{backgroundColor:"white", marginTop:'0.25rem',padding:"0.5rem", borderRadius:"0.5rem", color:"black"}} className={"fr ai-c g0-5"}>
                                             <div style={{backgroundColor:"#1E21A4", padding:'0.5rem', borderRadius:'4rem', display:"flex",flexDirection:"row",position:"relative"}}>
                                                 <div style={{position:"absolute",top:0,right:0,backgroundColor:"red",borderRadius:'4rem', width:'10px', height:'10px'}}>
 
