@@ -1,0 +1,576 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"/>
+    <soap:Body>
+        <ns1:LinesDiscoveryResponse xmlns:ns1="http://wsdl.siri.org.uk">
+            <Answer xmlns:ns2="http://www.ifopt.org.uk/ifopt" xmlns:ns3="http://www.ifopt.org.uk/acsb"
+                    xmlns:ns4="http://datex2.eu/schema/2_0RC1/2_0" xmlns:ns5="http://www.siri.org.uk/siri"
+                    xmlns:ns6="http://wsdl.siri.org.uk/siri" version="2.0:FR-IDF-2.4">
+                <ns5:ResponseTimestamp>2024-02-12T21:21:02.903+01:00</ns5:ResponseTimestamp>
+                <ns5:Status>true</ns5:Status>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>1</ns5:LineRef>
+                    <ns5:LineName>COUPIANE - BEAUCAIRE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>3</ns5:LineRef>
+                    <ns5:LineName>4 CH. DES ROUTES - MOURILLON</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>6</ns5:LineRef>
+                    <ns5:LineName>RIPELLE - TERRE PROMISE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>8</ns5:LineRef>
+                    <ns5:LineName>LA SEYNE - BLACHE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>9</ns5:LineRef>
+                    <ns5:LineName>HOPITAL - GARE TOULON</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>10</ns5:LineRef>
+                    <ns5:LineName>LYAUTEY - DARBOUSSEDES</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>11</ns5:LineRef>
+                    <ns5:LineName>BLACHE - MONTSERRAT</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>12</ns5:LineRef>
+                    <ns5:LineName>PORTES OLL. - LA SEYNE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>15</ns5:LineRef>
+                    <ns5:LineName>BAS FARON-PORT-LIBERTE-GARE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>17</ns5:LineRef>
+                    <ns5:LineName>L'ORATOIRE - LYCEE COSTEBELLE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>18</ns5:LineRef>
+                    <ns5:LineName>BLACHE - SABLETTES</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>19</ns5:LineRef>
+                    <ns5:LineName>PLANQUETTE - OBSERVATOIRE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>20</ns5:LineRef>
+                    <ns5:LineName>FT ROUGE/FT BLANC-FT D'ART.</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>23</ns5:LineRef>
+                    <ns5:LineName>GARE - ESPACE 3000</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>28</ns5:LineRef>
+                    <ns5:LineName>SABLETTES - ST MANDRIER</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>29</ns5:LineRef>
+                    <ns5:LineName>LYCEE COSTEBELLE - GARE ROUT.</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>31</ns5:LineRef>
+                    <ns5:LineName>ART. DE MARINE - STE CLAIRE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>33</ns5:LineRef>
+                    <ns5:LineName>NAVETTE MOURILLON</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>36</ns5:LineRef>
+                    <ns5:LineName>AMENIERS-STE ROSELINE/B.HERB.</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>39</ns5:LineRef>
+                    <ns5:LineName>LYCEE GOLF HOTEL-GARE(TOULON)</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>40</ns5:LineRef>
+                    <ns5:LineName>LA BARRE-SUP.TOULON/MAS FARON</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>55</ns5:LineRef>
+                    <ns5:LineName>REVEST-CAMPUS GARDE/VALETTE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>63</ns5:LineRef>
+                    <ns5:LineName>MOULIN 1er>AEROPORT TOUL/HYERES</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>67</ns5:LineRef>
+                    <ns5:LineName>HYERES JOFFRE - TOUR FONDUE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>68</ns5:LineRef>
+                    <ns5:LineName>BADINE-PARC CHEVAL</ns5:LineName>
+                    <ns5:Monitored>false</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>70</ns5:LineRef>
+                    <ns5:LineName>GARE ROUTIERE - BONNEGRACE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>72</ns5:LineRef>
+                    <ns5:LineName>BONNEGRACE - LANGEVIN</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>81</ns5:LineRef>
+                    <ns5:LineName>LANGEVIN - LE MAI / FABREGAS</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>82</ns5:LineRef>
+                    <ns5:LineName>GARE - MONT DES OISEAUX</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>83</ns5:LineRef>
+                    <ns5:LineName>SABLETTES-GARE OLL/SANARY</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>84</ns5:LineRef>
+                    <ns5:LineName>SABLETTES - REPPE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>87</ns5:LineRef>
+                    <ns5:LineName>SEYNE CENTRE - LE BRUSC</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>91</ns5:LineRef>
+                    <ns5:LineName>PLANQUETTE - OURSINIERES</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>92</ns5:LineRef>
+                    <ns5:LineName>PLANQUETTE - CARTHAGE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>98</ns5:LineRef>
+                    <ns5:LineName>TOURRACHE - TERRE PROMISE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>102</ns5:LineRef>
+                    <ns5:LineName>GARE RTE TLN-AEROPORT HYERES</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>103</ns5:LineRef>
+                    <ns5:LineName>GARE ROUT. TLN-MOULIN 1ER</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>111</ns5:LineRef>
+                    <ns5:LineName>CEZANNE - BOUZIGUES 2/MUSEUM</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>11B</ns5:LineRef>
+                    <ns5:LineName>LA BAUME - BLACHE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>120</ns5:LineRef>
+                    <ns5:LineName>GARE OLL.-GARE SEYNE/SIX FOURS</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>129</ns5:LineRef>
+                    <ns5:LineName>DE GAULLE - GARE (LA GARDE)</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>191</ns5:LineRef>
+                    <ns5:LineName>OBSERVATOIRE - TOURRACHE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>U</ns5:LineRef>
+                    <ns5:LineName>TECH.MER/POLE D'ACT. TLN EST</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>9941</ns5:LineRef>
+                    <ns5:LineName>NAV. SCE PERSONNEL BRUNET</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>9942</ns5:LineRef>
+                    <ns5:LineName>NAV. SCE PERSONNEL BREGAILLON</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>BN1</ns5:LineRef>
+                    <ns5:LineName>VAUBAN - QUAI MILHAUD</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>BN2</ns5:LineRef>
+                    <ns5:LineName>NAVETTE STE ANNE - BN MILHAUD 6</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>BN3</ns5:LineRef>
+                    <ns5:LineName>QUAI DHONN/VAUB-BASS CASTIGNO</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>8M</ns5:LineRef>
+                    <ns5:LineName>MARITIME LA SEYNE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>18M</ns5:LineRef>
+                    <ns5:LineName>MARITIME LES SABLETTES</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>28M</ns5:LineRef>
+                    <ns5:LineName>MARITIME ST MANDRIER</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>112</ns5:LineRef>
+                    <ns5:LineName>BEAUCAIRE - LA MARQUISANNE</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>65</ns5:LineRef>
+                    <ns5:LineName>SALINS - P+R ARROMANCHES 2</ns5:LineName>
+                    <ns5:Monitored>false</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>7803</ns5:LineRef>
+                    <ns5:LineName>7803 AEROPORT - ST TROPEZ</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>TLV</ns5:LineRef>
+                    <ns5:LineName>TOUR FONDUE - PORQUEROLLES</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+                <ns5:AnnotatedLineRef>
+                    <ns5:LineRef>95</ns5:LineRef>
+                    <ns5:LineName>Service Formation</ns5:LineName>
+                    <ns5:Monitored>true</ns5:Monitored>
+                    <ns5:Destinations>
+                        <ns5:Destination>
+                            <ns5:DestinationRef>PR4SAN</ns5:DestinationRef>
+                        </ns5:Destination>
+                    </ns5:Destinations>
+                </ns5:AnnotatedLineRef>
+            </Answer>
+            <AnswerExtension xmlns:ns2="http://www.ifopt.org.uk/ifopt" xmlns:ns3="http://www.ifopt.org.uk/acsb"
+                             xmlns:ns4="http://datex2.eu/schema/2_0RC1/2_0" xmlns:ns5="http://www.siri.org.uk/siri"
+                             xmlns:ns6="http://wsdl.siri.org.uk/siri"/>
+        </ns1:LinesDiscoveryResponse>
+    </soap:Body>
+</soap:Envelope>
