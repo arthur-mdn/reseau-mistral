@@ -53,9 +53,9 @@ const Modal = ({ isOpen, onClose, children, title,actions, bgColor = "#f3f3f3", 
                                         {title}
                                     </h4>
                                     {actions && actions.length > 0 && (
-                                        <div onClick={()=>{setActionPopup(!actionPopup)}}>
+                                        <button onClick={()=>{setActionPopup(!actionPopup)}} style={{padding:'0.5rem 0.5rem', backgroundColor: "transparent", color:"white"}} className={"fc ai-c jc-c"}>
                                             <FaEllipsis color={"#ffffff"}/>
-                                        </div>
+                                        </button>
                                     )}
                                 </div>
                             }

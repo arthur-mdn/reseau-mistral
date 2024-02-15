@@ -27,9 +27,9 @@ const TopBar = () => {
                     {topBarState.title}
                 </h4>
                 {topBarState.actions && topBarState.actions.length > 0 && (
-                    <div onClick={()=>{setActionPopup(!actionPopup)}}>
-                    <FaEllipsis/>
-                    </div>
+                    <button onClick={()=>{setActionPopup(!actionPopup)}} style={{padding:'0.5rem 0.5rem', backgroundColor: "transparent", color:"white"}} className={"fc ai-c jc-c"}>
+                        <FaEllipsis/>
+                    </button>
                 )}
             </div>
             <div>
