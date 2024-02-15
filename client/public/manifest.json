@@ -1,0 +1,14 @@
+{
+  "name": "Réseau Mistral",
+  "short_name": "Réseau Mistral",
+  "start_url": "https://reseau-mistral.mondon.pro/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/elements/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
