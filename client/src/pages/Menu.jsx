@@ -35,7 +35,7 @@ function Menu() {
     const handleDemoModeChange = (event) => {
         const isChecked = event.target.checked;
         setIsDemoModeDisabled(isChecked);
-        setCookie('hideDemoBanner', isChecked, { path: '/' });
+        setCookie('hideDemoBanner', isChecked, { path: '/', maxAge: 365 * 24 * 60 * 60 * 1000  });
     };
 
     useEffect(() => {

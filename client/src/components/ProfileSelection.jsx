@@ -24,7 +24,7 @@ function ProfileSelection({ onProfileSelect, onClose, fromProfile= false }) {
     }, []);
 
     const handleProfileSelect = (profile) => {
-        setCookie('selectedProfile', profile._id, { path: '/', domain: config.cookieDomain });
+        setCookie('selectedProfile', profile._id, { path: '/', domain: config.cookieDomain, maxAge: 365 * 24 * 60 * 60 * 1000  });
         onProfileSelect(profile);
         onClose();
     };
@@ -35,7 +35,7 @@ function ProfileSelection({ onProfileSelect, onClose, fromProfile= false }) {
     const addProfileCallback = (newProfileData) => {
         setAddProfileOpen(false);
         setProfiles(currentProfiles => [...currentProfiles, newProfileData]);
-        setCookie('selectedProfile', newProfileData._id, { path: '/' });
+        setCookie('selectedProfile', newProfileData._id, { path: '/', maxAge: 365 * 24 * 60 * 60 * 1000  });
     };
 
     return (
