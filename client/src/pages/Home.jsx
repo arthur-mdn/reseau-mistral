@@ -10,7 +10,7 @@ import api from '../api';
 import { isTicketActive } from '../utils/duration.js';
 import { requestCameraPermission } from '../utils/cameraPermission';
 
-const SHEET_REDUIT = 148;
+const SHEET_REDUIT = 78;
 const SHEET_GRAB = 44;
 
 function nearestSnap(height, snaps) {
