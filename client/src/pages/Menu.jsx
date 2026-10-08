@@ -15,6 +15,7 @@ import ProfileSelection from '../components/ProfileSelection.jsx';
 import { FaExternalLinkAlt, FaHome } from 'react-icons/fa';
 import Loading from '../components/Loading.jsx';
 import api from '../api';
+import { isDemoBannerHidden, toggleDemoBannerHidden } from '../utils/demoBanner';
 
 const menuIconStyle = {
     width: '40px',
@@ -56,8 +57,27 @@ function Menu() {
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [isPolitiqueOpen, setIsPolitiqueOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [bannerConfirmOpen, setBannerConfirmOpen] = useState(false);
+    const [bannerHidden, setBannerHidden] = useState(() => isDemoBannerHidden());
+    const [settingsClickCount, setSettingsClickCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [loadError, setLoadError] = useState(null);
+
+    const handleSettingsPhraseClick = () => {
+        const next = settingsClickCount + 1;
+        if (next >= 11) {
+            setSettingsClickCount(0);
+            setBannerConfirmOpen(true);
+            return;
+        }
+        setSettingsClickCount(next);
+    };
+
+    const confirmBannerToggle = () => {
+        const nextHidden = toggleDemoBannerHidden();
+        setBannerHidden(nextHidden);
+        setBannerConfirmOpen(false);
+    };
 
     useEffect(() => {
         const controller = new AbortController();
@@ -320,8 +340,64 @@ function Menu() {
 
             <Modal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} title={"Nous contacter"} />
             <Modal isOpen={isPolitiqueOpen} onClose={() => setIsPolitiqueOpen(false)} title={"Politique de confidentialité"} />
-            <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} title={"Paramètres"}>
-                <p>Cette application est une simulation. L'avertissement de démonstration reste toujours visible.</p>
+            <Modal
+                isOpen={isSettingsOpen}
+                onClose={() => {
+                    setIsSettingsOpen(false);
+                    setSettingsClickCount(0);
+                }}
+                title={"Paramètres"}
+            >
+                <p
+                    onClick={handleSettingsPhraseClick}
+                    style={{ cursor: 'default', userSelect: 'none' }}
+                >
+                    Cette application est une simulation. L'avertissement de démonstration reste toujours visible.
+                </p>
+            </Modal>
+
+            <Modal
+                isOpen={bannerConfirmOpen}
+                onClose={() => setBannerConfirmOpen(false)}
+                title={"Confirmation"}
+                bgColor={"#FFF"}
+            >
+                <div className={"fc g1"} style={{ paddingTop: '1rem' }}>
+                    <p style={{ fontWeight: 600, color: '#B00020' }}>
+                        {bannerHidden
+                            ? 'Êtes-vous sûr de vouloir réafficher le bandeau ?'
+                            : 'Êtes-vous sûr de vouloir retirer le bandeau ?'}
+                    </p>
+                    <button
+                        type="button"
+                        onClick={confirmBannerToggle}
+                        style={{
+                            width: '100%',
+                            backgroundColor: '#B00020',
+                            color: 'white',
+                            border: 0,
+                            padding: '0.85rem 1rem',
+                            borderRadius: '0.5rem',
+                            fontWeight: 600,
+                        }}
+                    >
+                        Confirmer
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setBannerConfirmOpen(false)}
+                        style={{
+                            width: '100%',
+                            backgroundColor: 'transparent',
+                            color: '#333',
+                            border: '1px solid lightgrey',
+                            padding: '0.85rem 1rem',
+                            borderRadius: '0.5rem',
+                        }}
+                    >
+                        Annuler
+                    </button>
+                </div>
             </Modal>
         </>
     );
