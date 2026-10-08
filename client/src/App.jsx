@@ -1,6 +1,7 @@
 // App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
 import { AuthProvider, useAuth } from './AuthContext';
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -62,9 +63,11 @@ const AuthenticatedApp = () => {
 
 const App = () => {
     return (
-        <AuthProvider>
-            <AuthenticatedApp />
-        </AuthProvider>
+        <CookiesProvider defaultSetOptions={{ path: '/' }}>
+            <AuthProvider>
+                <AuthenticatedApp />
+            </AuthProvider>
+        </CookiesProvider>
     );
 };
 

@@ -1,6 +1,5 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 const express = require('express');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
@@ -12,11 +11,8 @@ const database = require('./others/database');
 const insertPricesIfNotExist = require('./others/insertPricesIfNotExist');
 
 const app = express();
-app.use(bodyParser.json());
-app.use(cookieParser({
-    sameSite: 'none',
-    secure: true
-}));
+app.use(express.json());
+app.use(cookieParser());
 app.use(cors({
     origin: config.clientUrl,
     credentials: true
