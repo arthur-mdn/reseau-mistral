@@ -639,27 +639,134 @@ button.decrement {
 }
 
 
-.swiper-slide { width: 280px;    cursor: grab; }
-.ticket-card{
+.tickets {
+  width: 100%;
+  overflow: hidden;
+}
+
+.tickets-slider {
+  width: 100%;
+  overflow: hidden;
+}
+
+.mySwiper {
+  width: 100%;
+  overflow: visible;
+  padding: 0.5rem 0 1rem;
+}
+
+.mySwiper .swiper-wrapper {
+  align-items: center;
+}
+
+.mySwiper .swiper-slide,
+.mySwiper .ticket-card {
+  width: min(72vw, 300px) !important;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   user-select: none;
+  cursor: grab;
   transition: transform 0.3s ease-in-out;
 }
 
-.ticket-card:not(.swiper-slide-active) {
-  transform: scale(0.8);
+.mySwiper .ticket-card:not(.swiper-slide-active) {
+  transform: scale(0.86);
   z-index: 1;
-  transition: transform 0.3s ease-in-out;
 }
 
-.swiper-slide img {
-  max-width: 100%;    margin: 1rem 0;
+.mySwiper .ticket-card.swiper-slide-active {
+  transform: scale(1);
+  z-index: 2;
+}
+
+.ticket-card__btn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0 !important;
+  margin: 0;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #000 !important;
+  cursor: grab;
+  text-align: center;
+}
+
+.ticket-card__btn:hover,
+.ticket-card__btn:focus {
+  background: transparent !important;
+  color: #000 !important;
+  opacity: 1;
+}
+
+.ticket-card__image-wrap {
+  position: relative;
+  margin: 0.5rem 0;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.ticket-card__lock {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 15px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  border: 4px solid white;
+  z-index: 2;
+}
+
+.ticket-card__lock-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.ticket-card__lock h3 {
+  font-size: 0.9rem;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 1rem;
+}
+
+.ticket-card__title {
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-align: center;
+  width: 100%;
+}
+
+.mySwiper .swiper-slide img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
   background-color: white;
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   border-radius: 15px;
+}
+
+.time_remaining {
+  min-height: 1.2rem;
+  text-align: center;
+  width: 100%;
 }
 
 #html5-qrcode-select-camera{

@@ -1,9 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Scrollbar } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/scrollbar';
 import { FaLock } from 'react-icons/fa6';
 import { parseDuration } from '../utils/duration.js';
 
@@ -32,31 +29,32 @@ function findLatestUseDate(ticket) {
     return latest;
 }
 
-function TicketSlider({ tickets, onTicketSelect }) {
-    const [selectedTicketId, setSelectedTicketId] = useState(null);
-    const [remainingTimes, setRemainingTimes] = useState({});
+function computeRemainingTimes(ticketList) {
+    const next = {};
+    ticketList.forEach((ticket) => {
+        const latestUseDate = findLatestUseDate(ticket);
+        if (latestUseDate && ticket.priceId?.maxTime) {
+            next[ticket._id] = calculateRemainingTime(latestUseDate, ticket.priceId.maxTime);
+        }
+    });
+    return next;
+}
 
-    const computeRemainingTimes = (ticketList) => {
-        const next = {};
-        ticketList.forEach((ticket) => {
-            const latestUseDate = findLatestUseDate(ticket);
-            if (latestUseDate && ticket.priceId?.maxTime) {
-                next[ticket._id] = calculateRemainingTime(latestUseDate, ticket.priceId.maxTime);
-            }
-        });
-        return next;
-    };
+function TicketSlider({ tickets, onTicketSelect }) {
+    const swiperRef = useRef(null);
+    const [selectedTicketId, setSelectedTicketId] = useState(null);
+    const [remainingTimes, setRemainingTimes] = useState(() => computeRemainingTimes(tickets || []));
 
     useEffect(() => {
-        setRemainingTimes(computeRemainingTimes(tickets));
+        setRemainingTimes(computeRemainingTimes(tickets || []));
         const intervalId = setInterval(() => {
-            setRemainingTimes(computeRemainingTimes(tickets));
+            setRemainingTimes(computeRemainingTimes(tickets || []));
         }, 1000);
         return () => clearInterval(intervalId);
     }, [tickets]);
 
     const validTickets = useMemo(
-        () => tickets.filter((ticket) => remainingTimes[ticket._id] !== '00:00:00'),
+        () => (tickets || []).filter((ticket) => remainingTimes[ticket._id] !== '00:00:00'),
         [tickets, remainingTimes]
     );
 
@@ -67,61 +65,90 @@ function TicketSlider({ tickets, onTicketSelect }) {
         }
         if (!validTickets.some((t) => t._id === selectedTicketId)) {
             setSelectedTicketId(validTickets[0]._id);
+            swiperRef.current?.slideTo(0, 0);
         }
     }, [validTickets, selectedTicketId]);
+
+    useEffect(() => {
+        const swiper = swiperRef.current;
+        if (!swiper) return;
+        swiper.update();
+        requestAnimationFrame(() => {
+            swiper.slideTo(swiper.activeIndex, 0);
+        });
+    }, [validTickets.length]);
 
     const handleSlideChange = (swiper) => {
         const ticket = validTickets[swiper.activeIndex];
         if (ticket) setSelectedTicketId(ticket._id);
     };
 
-    const handleTicketClick = (ticket) => {
+    const handleTicketClick = (ticket, index) => {
         if (ticket._id === selectedTicketId) {
             onTicketSelect(ticket);
+            return;
         }
         setSelectedTicketId(ticket._id);
+        swiperRef.current?.slideTo(index);
     };
 
+    if (validTickets.length === 0) {
+        return null;
+    }
+
     return (
-        <Swiper
-            spaceBetween={0}
-            slidesPerView={"auto"}
-            centeredSlides={true}
-            onSlideChange={handleSlideChange}
-            modules={[Navigation, Scrollbar]}
-            className="mySwiper"
-        >
-            {validTickets.map((ticket) => (
-                <SwiperSlide key={ticket._id} className={`ticket-card`} onClick={() => handleTicketClick(ticket)}>
-                    <span className={"time_remaining"}>
-                        {remainingTimes[ticket._id] ? (
-                            <h4 style={{ fontSize: '0.9rem' }}>
-                                Temps restant : {remainingTimes[ticket._id]}
-                            </h4>
-                        ) : (
-                            <>&nbsp;</>
-                        )}
-                    </span>
-                    <div style={{ position: 'relative', margin: '0.5rem 0', display: 'flex' }}>
-                        {remainingTimes[ticket._id] && (
-                            <div
-                                style={{ width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: '15px', position: 'absolute', top: 0, left: 0, boxSizing: 'border-box', border: '4px solid white' }}
-                                className={"fc ai-c jc-c"}
-                            >
-                                <div style={{ width: '2.5rem', height: '2.5rem', display: 'flex', backgroundColor: 'rgba(255,255,255,1)', justifyContent: 'center', alignItems: 'center', borderRadius: '50%' }}>
-                                    <FaLock size={"1.35rem"} fill={"rgb(0,0,0)"} style={{ opacity: 1 }} />
-                                </div>
-                                <h3 style={{ fontSize: '0.9rem', color: 'white', fontWeight: 'bold', textAlign: 'center', margin: '0 1rem' }}>
-                                    Appuyez ici pour voir le Titre en cours
-                                </h3>
+        <div className={"tickets-slider"}>
+            <Swiper
+                slidesPerView={"auto"}
+                centeredSlides={true}
+                spaceBetween={16}
+                slideToClickedSlide={true}
+                watchSlidesProgress={true}
+                onSwiper={(swiper) => {
+                    swiperRef.current = swiper;
+                    requestAnimationFrame(() => swiper.update());
+                }}
+                onSlideChange={handleSlideChange}
+                className="mySwiper"
+            >
+                {validTickets.map((ticket, index) => (
+                    <SwiperSlide key={ticket._id} className={"ticket-card"}>
+                        <button
+                            type="button"
+                            className={"ticket-card__btn"}
+                            onClick={() => handleTicketClick(ticket, index)}
+                        >
+                            <span className={"time_remaining"}>
+                                {remainingTimes[ticket._id] ? (
+                                    <h4 style={{ fontSize: '0.9rem' }}>
+                                        Temps restant : {remainingTimes[ticket._id]}
+                                    </h4>
+                                ) : (
+                                    <>&nbsp;</>
+                                )}
+                            </span>
+                            <div className={"ticket-card__image-wrap"}>
+                                {remainingTimes[ticket._id] && (
+                                    <div className={"ticket-card__lock fc ai-c jc-c"}>
+                                        <div className={"ticket-card__lock-icon"}>
+                                            <FaLock size={"1.35rem"} fill={"rgb(0,0,0)"} />
+                                        </div>
+                                        <h3>
+                                            Appuyez ici pour voir le Titre en cours
+                                        </h3>
+                                    </div>
+                                )}
+                                <img
+                                    src={`/elements/tickets/${ticket.priceId.image}`}
+                                    alt={ticket.priceId.title}
+                                />
                             </div>
-                        )}
-                        <img src={`/elements/tickets/${ticket.priceId.image}`} alt={ticket.priceId.title} style={{ margin: ' 0' }} />
-                    </div>
-                    <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{ticket.priceId.title}</div>
-                </SwiperSlide>
-            ))}
-        </Swiper>
+                            <div className={"ticket-card__title"}>{ticket.priceId.title}</div>
+                        </button>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+        </div>
     );
 }
 
