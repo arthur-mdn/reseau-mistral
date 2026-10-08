@@ -1,25 +1,139 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import {FaBolt} from "react-icons/fa6";
 import Modal from "./Modal.jsx";
 import {FaBackspace} from "react-icons/fa";
 
 const CAMERA_ID_KEY = 'rm-last-camera-id';
+const QR_BOX_MAX = 250;
+const BUTTONS_GAP = 16;
+
+const actionBtnStyle = {
+    backgroundColor: '#fff',
+    color: '#111',
+    width: '56px',
+    height: '56px',
+    minWidth: '56px',
+    minHeight: '56px',
+    maxWidth: '56px',
+    maxHeight: '56px',
+    padding: 0,
+    aspectRatio: '1 / 1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
+    border: '1px solid #ddd',
+    fontWeight: 'bold',
+    flexShrink: 0,
+    boxSizing: 'border-box',
+    lineHeight: 1,
+};
+
+function computeQrBoxSize(viewfinderWidth, viewfinderHeight) {
+    const side = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.7);
+    return Math.max(120, Math.min(QR_BOX_MAX, side));
+}
+
+function measureScanFrame(container) {
+    if (!container) return null;
+
+    const shaded = container.querySelector('#qr-shaded-region');
+    if (shaded) {
+        const containerRect = container.getBoundingClientRect();
+        const shadedRect = shaded.getBoundingClientRect();
+        const style = window.getComputedStyle(shaded);
+        const borderTop = parseFloat(style.borderTopWidth) || 0;
+        const borderBottom = parseFloat(style.borderBottomWidth) || 0;
+        const borderLeft = parseFloat(style.borderLeftWidth) || 0;
+        const borderRight = parseFloat(style.borderRightWidth) || 0;
+
+        const frameTop = shadedRect.top - containerRect.top + borderTop;
+        const frameLeft = shadedRect.left - containerRect.left + borderLeft;
+        const frameWidth = Math.max(0, shadedRect.width - borderLeft - borderRight);
+        const frameHeight = Math.max(0, shadedRect.height - borderTop - borderBottom);
+
+        if (frameWidth > 0 && frameHeight > 0) {
+            return {
+                top: frameTop,
+                left: frameLeft,
+                width: frameWidth,
+                height: frameHeight,
+            };
+        }
+    }
+
+    const size = computeQrBoxSize(container.clientWidth, container.clientHeight);
+    return {
+        top: (container.clientHeight - size) / 2,
+        left: (container.clientWidth - size) / 2,
+        width: size,
+        height: size,
+    };
+}
 
 function Scan({ onScanSuccess, onScanError }) {
+    const rootRef = useRef(null);
     const qrRef = useRef(null);
     const scannerRef = useRef(null);
     const onScanSuccessRef = useRef(onScanSuccess);
     const onScanErrorRef = useRef(onScanError);
     const [isManualScanOpen, setIsManualScanOpen] = useState(false);
     const [cameraError, setCameraError] = useState(null);
+    const [torchOn, setTorchOn] = useState(false);
+    const [torchSupported, setTorchSupported] = useState(false);
     const [code, setCode] = useState("");
     const [codeError, setCodeError] = useState(null);
+    const [buttonsPos, setButtonsPos] = useState(null);
+
+    const syncButtonsPosition = useCallback(() => {
+        const frame = measureScanFrame(rootRef.current);
+        if (!frame) {
+            setButtonsPos(null);
+            return;
+        }
+        setButtonsPos({
+            top: frame.top + frame.height + BUTTONS_GAP,
+            left: frame.left + frame.width / 2,
+        });
+    }, []);
 
     useEffect(() => {
         onScanSuccessRef.current = onScanSuccess;
         onScanErrorRef.current = onScanError;
     }, [onScanSuccess, onScanError]);
+
+    useEffect(() => {
+        const root = rootRef.current;
+        if (!root) return;
+
+        syncButtonsPosition();
+
+        const resizeObserver = new ResizeObserver(() => {
+            syncButtonsPosition();
+        });
+        resizeObserver.observe(root);
+
+        const mutationObserver = new MutationObserver(() => {
+            syncButtonsPosition();
+        });
+        mutationObserver.observe(root, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['style', 'class'],
+        });
+
+        window.addEventListener('resize', syncButtonsPosition);
+        window.addEventListener('orientationchange', syncButtonsPosition);
+
+        return () => {
+            resizeObserver.disconnect();
+            mutationObserver.disconnect();
+            window.removeEventListener('resize', syncButtonsPosition);
+            window.removeEventListener('orientationchange', syncButtonsPosition);
+        };
+    }, [syncButtonsPosition]);
 
     useEffect(() => {
         if (!qrRef.current) return;
@@ -31,7 +145,10 @@ function Scan({ onScanSuccess, onScanError }) {
 
         const config = {
             fps: 15,
-            qrbox: { width: 250, height: 250 },
+            qrbox: (viewfinderWidth, viewfinderHeight) => {
+                const size = computeQrBoxSize(viewfinderWidth, viewfinderHeight);
+                return { width: size, height: size };
+            },
             aspectRatio: 1,
         };
 
@@ -41,6 +158,36 @@ function Scan({ onScanSuccess, onScanError }) {
 
         const handleError = (error) => {
             onScanErrorRef.current?.(error);
+        };
+
+        const detectTorch = async () => {
+            try {
+                const track = scanner.getRunningTrackCameraCapabilities?.();
+                const supported = Boolean(track?.torchFeature?.()?.isSupported?.());
+                if (!cancelled) setTorchSupported(supported);
+            } catch {
+                if (!cancelled) setTorchSupported(false);
+            }
+        };
+
+        const afterStart = async () => {
+            const deviceId = scanner.getRunningTrackSettings?.()?.deviceId;
+            if (deviceId) {
+                localStorage.setItem(CAMERA_ID_KEY, deviceId);
+            }
+
+            const videoElement = qrRef.current?.querySelector('video');
+            if (videoElement) {
+                videoElement.style.width = '100%';
+                videoElement.style.height = '100%';
+                videoElement.style.objectFit = 'cover';
+            }
+            await detectTorch();
+            requestAnimationFrame(() => {
+                syncButtonsPosition();
+                setTimeout(syncButtonsPosition, 50);
+                setTimeout(syncButtonsPosition, 200);
+            });
         };
 
         const startCamera = async () => {
@@ -53,17 +200,7 @@ function Scan({ onScanSuccess, onScanError }) {
                     await scanner.stop().catch(() => {});
                     return;
                 }
-
-                const deviceId = scanner.getRunningTrackSettings?.()?.deviceId;
-                if (deviceId) {
-                    localStorage.setItem(CAMERA_ID_KEY, deviceId);
-                }
-
-                const videoElement = qrRef.current?.querySelector('video');
-                if (videoElement) {
-                    videoElement.style.width = '100%';
-                    videoElement.style.height = '100%';
-                }
+                await afterStart();
             } catch (firstError) {
                 if (cancelled) return;
 
@@ -75,6 +212,7 @@ function Scan({ onScanSuccess, onScanError }) {
                             return;
                         }
                         setCameraError(null);
+                        await afterStart();
                         return;
                     } catch {
                         localStorage.removeItem(CAMERA_ID_KEY);
@@ -107,7 +245,31 @@ function Scan({ onScanSuccess, onScanError }) {
             }
             scannerRef.current = null;
         };
-    }, []);
+    }, [syncButtonsPosition]);
+
+    const toggleTorch = async () => {
+        const scanner = scannerRef.current;
+        if (!scanner) return;
+        try {
+            const next = !torchOn;
+            await scanner.applyVideoConstraints({
+                advanced: [{ torch: next }],
+            });
+            setTorchOn(next);
+        } catch {
+            try {
+                const caps = scanner.getRunningTrackCameraCapabilities?.();
+                const torchFeature = caps?.torchFeature?.();
+                if (torchFeature?.isSupported?.()) {
+                    const next = !torchOn;
+                    await torchFeature.apply(next);
+                    setTorchOn(next);
+                }
+            } catch {
+                setTorchSupported(false);
+            }
+        }
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -142,30 +304,51 @@ function Scan({ onScanSuccess, onScanError }) {
 
     return (
         <>
-            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                <div ref={qrRef} id="qr-code-reader" style={{ width: '100%', height:"100%", backgroundColor:"black", border:"0!important" }} />
+            <div ref={rootRef} style={{ position: 'relative', width: '100%', height: '100%', minHeight: 0, backgroundColor: '#000', overflow: 'hidden' }}>
+                <div ref={qrRef} id="qr-code-reader" style={{ width: '100%', height: '100%', backgroundColor: 'black', border: '0!important' }} />
                 {cameraError && (
-                    <div style={{position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", padding:"1.5rem", textAlign:"center", color:"white", backgroundColor:"rgba(0,0,0,0.75)", zIndex:2}}>
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', textAlign: 'center', color: 'white', backgroundColor: 'rgba(0,0,0,0.75)', zIndex: 2 }}>
                         <p>{cameraError}</p>
                     </div>
                 )}
-                <div style={{position:"absolute", width:"100%", height:"100%", top:0, left:0,display:"flex",justifyContent:"center", alignItems:"center",gap:'1rem', pointerEvents:"none"}}>
-                    <button
-                        type="button"
-                        aria-label="Saisie manuelle du code"
-                        onClick={() => setIsManualScanOpen(true)}
-                        style={{ backgroundColor: 'white', color: 'black', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2rem', pointerEvents: 'all', fontWeight: 'bold' }}
+                {buttonsPos && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: buttonsPos.top,
+                            left: buttonsPos.left,
+                            transform: 'translateX(-50%)',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '1.25rem',
+                            zIndex: 3,
+                            pointerEvents: 'all',
+                        }}
                     >
-                        123
-                    </button>
-                    <button
-                        type="button"
-                        aria-label="Lampe torche"
-                        style={{ backgroundColor: 'white', color: 'black', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2rem', pointerEvents: 'all' }}
-                    >
-                        <FaBolt />
-                    </button>
-                </div>
+                        <button
+                            type="button"
+                            aria-label="Saisie manuelle du code"
+                            onClick={() => setIsManualScanOpen(true)}
+                            style={actionBtnStyle}
+                        >
+                            123
+                        </button>
+                        <button
+                            type="button"
+                            aria-label="Lampe torche"
+                            aria-pressed={torchOn}
+                            onClick={toggleTorch}
+                            title={torchSupported ? 'Lampe torche' : 'Lampe torche (selon appareil)'}
+                            style={{
+                                ...actionBtnStyle,
+                                backgroundColor: torchOn ? '#FFD400' : '#fff',
+                            }}
+                        >
+                            <FaBolt size={22} color="#111" style={{ display: 'block', flexShrink: 0 }} />
+                        </button>
+                    </div>
+                )}
             </div>
             <Modal isOpen={isManualScanOpen} onClose={() => setIsManualScanOpen(false)} title={"Saisir code manuel"}>
                 <form onSubmit={handleSubmit}>
