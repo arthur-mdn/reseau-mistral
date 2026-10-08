@@ -60,8 +60,36 @@ function Menu() {
     const [bannerConfirmOpen, setBannerConfirmOpen] = useState(false);
     const [bannerHidden, setBannerHidden] = useState(() => isDemoBannerHidden());
     const [settingsClickCount, setSettingsClickCount] = useState(0);
+    const [accountsOpen, setAccountsOpen] = useState(false);
+    const [accounts, setAccounts] = useState([]);
+    const [accountsLoading, setAccountsLoading] = useState(false);
+    const [accountsError, setAccountsError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [loadError, setLoadError] = useState(null);
+
+    const formatDateTime = (value) => {
+        if (!value) return 'Jamais';
+        try {
+            return new Date(value).toLocaleString('fr-FR');
+        } catch {
+            return '-';
+        }
+    };
+
+    const openAccounts = () => {
+        setAccountsOpen(true);
+        setAccountsLoading(true);
+        setAccountsError(null);
+        api.get('/user/accounts')
+            .then((response) => {
+                setAccounts(response.data || []);
+            })
+            .catch(() => {
+                setAccountsError('Impossible de charger les comptes');
+                setAccounts([]);
+            })
+            .finally(() => setAccountsLoading(false));
+    };
 
     const handleSettingsPhraseClick = () => {
         const next = settingsClickCount + 1;
@@ -256,7 +284,61 @@ function Menu() {
             )}
 
             <Modal isOpen={servicesOpen} onClose={() => setServicesOpen(false)} title={"Services"}>
-                <p>Services à venir.</p>
+                {userDetails?.userRole === 'superadmin' ? (
+                    <div className={"fc g1"}>
+                        <button
+                            type="button"
+                            onClick={openAccounts}
+                            style={{ width: '100%', padding: '0.85rem 1rem' }}
+                        >
+                            Voir les comptes
+                        </button>
+                    </div>
+                ) : (
+                    <p>Services à venir.</p>
+                )}
+            </Modal>
+
+            <Modal
+                isOpen={accountsOpen}
+                onClose={() => setAccountsOpen(false)}
+                title={"Comptes"}
+                contentOverflowY={"scroll"}
+            >
+                {accountsLoading && <p>Chargement…</p>}
+                {accountsError && <p style={{ color: 'red' }}>{accountsError}</p>}
+                {!accountsLoading && !accountsError && accounts.length === 0 && (
+                    <p>Aucun compte.</p>
+                )}
+                <div className={"fc g1"}>
+                    {accounts.map((account) => (
+                        <div
+                            key={account._id}
+                            style={{
+                                backgroundColor: 'white',
+                                border: '1px solid lightgrey',
+                                borderRadius: '0.5rem',
+                                padding: '0.85rem 1rem',
+                            }}
+                        >
+                            <p style={{ margin: 0, fontWeight: 600, textTransform: 'capitalize' }}>
+                                {account.firstName} {account.lastName}
+                            </p>
+                            <p style={{ margin: '0.25rem 0 0', fontSize: '0.9rem' }}>{account.email}</p>
+                            <p style={{ margin: '0.35rem 0 0', fontSize: '0.8rem', opacity: 0.75 }}>
+                                Créé le {formatDateTime(account.creation)}
+                            </p>
+                            <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', opacity: 0.75 }}>
+                                Dernier login : {formatDateTime(account.lastLogin)}
+                            </p>
+                            {account.userRole === 'superadmin' && (
+                                <p style={{ margin: '0.35rem 0 0', fontSize: '0.75rem', color: '#1E21A4' }}>
+                                    superadmin
+                                </p>
+                            )}
+                        </div>
+                    ))}
+                </div>
             </Modal>
 
             <Modal isOpen={trajetsOpen} onClose={() => setTrajetsOpen(false)} title={"Mes Trajets"}>

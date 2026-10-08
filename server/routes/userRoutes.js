@@ -29,12 +29,26 @@ router.post('/user/profiles/new', verifyToken, asyncHandler(async (req, res) => 
 
 router.get('/user/details', verifyToken, asyncHandler(async (req, res) => {
     const user = await User.findById(req.user.userId)
-        .select('_id email firstName lastName birthDate creation')
+        .select('_id email firstName lastName birthDate creation userRole lastLogin')
         .lean();
     if (!user) {
         return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
     res.json(user);
+}));
+
+router.get('/user/accounts', verifyToken, asyncHandler(async (req, res) => {
+    const current = await User.findById(req.user.userId).select('userRole').lean();
+    if (!current || current.userRole !== 'superadmin') {
+        return res.status(403).json({ message: 'Accès refusé' });
+    }
+
+    const accounts = await User.find()
+        .select('firstName lastName email creation lastLogin userRole')
+        .sort({ creation: -1 })
+        .lean();
+
+    res.json(accounts);
 }));
 
 router.get('/user/profiles', verifyToken, asyncHandler(async (req, res) => {

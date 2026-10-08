@@ -23,5 +23,6 @@ module.exports = {
     port: process.env.PORT || 3000,
     clientUrl: requireEnv('CLIENT_URL'),
     secretKey,
+    superadminAccessCode: (process.env.SUPERADMIN_ACCESS_CODE || '').trim(),
     isProd: process.env.NODE_ENV === 'production',
 };

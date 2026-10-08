@@ -33,6 +33,10 @@ const userSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    lastLogin: {
+        type: Date,
+        default: null,
+    },
     socketId: {
         type: String,
         default: null,
@@ -40,6 +44,7 @@ const userSchema = new Schema({
     userRole: {
         type: String,
         required: true,
+        enum: ['user', 'superadmin'],
         default: 'user',
     },
     tokenVersion: {

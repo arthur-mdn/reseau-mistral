@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -17,6 +18,19 @@ const {
     SESSION_MAX_AGE_MS,
 } = require('../others/cookies');
 const { asyncHandler } = require('../others/errors');
+
+function matchesSuperadminCode(provided) {
+    const expected = config.superadminAccessCode;
+    if (!expected || typeof provided !== 'string' || !provided) {
+        return false;
+    }
+    const a = Buffer.from(provided);
+    const b = Buffer.from(expected);
+    if (a.length !== b.length) {
+        return false;
+    }
+    return crypto.timingSafeEqual(a, b);
+}
 
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -52,6 +66,9 @@ router.post('/auth/login', authLimiter, asyncHandler(async (req, res) => {
         return res.status(401).json({ message: 'Identifiants incorrects' });
     }
 
+    user.lastLogin = new Date();
+    await user.save();
+
     const token = signToken(user);
     res.cookie('session_token', token, sessionCookieOptions(SESSION_MAX_AGE_MS));
     res.json({ message: 'Authentification réussie' });
@@ -59,7 +76,7 @@ router.post('/auth/login', authLimiter, asyncHandler(async (req, res) => {
 
 router.post('/auth/register', authLimiter, asyncHandler(async (req, res) => {
     const email = normalizeEmail(req.body.email);
-    const { password, lastName, firstName, birthDate } = req.body;
+    const { password, lastName, firstName, birthDate, superadminAccessCode } = req.body;
 
     if (!email || !validatePassword(password) || !validateName(lastName) || !validateName(firstName)) {
         return res.status(400).json({ message: 'Données d\'inscription invalides' });
@@ -71,6 +88,8 @@ router.post('/auth/register', authLimiter, asyncHandler(async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const userRole = matchesSuperadminCode(superadminAccessCode) ? 'superadmin' : 'user';
+    const now = new Date();
     let newUser;
 
     try {
@@ -81,6 +100,8 @@ router.post('/auth/register', authLimiter, asyncHandler(async (req, res) => {
             email,
             password: hashedPassword,
             tokenVersion: 0,
+            userRole,
+            lastLogin: now,
         });
 
         await Profile.create({

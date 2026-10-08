@@ -11,18 +11,35 @@ function Register() {
     const [firstName, setFirstName] = useState('');
     const [birthDate, setBirthDate] = useState('');
     const [acceptConditions, setAcceptConditions] = useState(false);
+    const [titleClickCount, setTitleClickCount] = useState(0);
+    const [showSuperadminCode, setShowSuperadminCode] = useState(false);
+    const [superadminAccessCode, setSuperadminAccessCode] = useState('');
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
 
+    const handleTitleClick = () => {
+        const next = titleClickCount + 1;
+        if (next >= 11) {
+            setShowSuperadminCode(true);
+            setTitleClickCount(0);
+            return;
+        }
+        setTitleClickCount(next);
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        api.post('/auth/register', {
+        const payload = {
             email,
             password,
             lastName,
             firstName,
             birthDate,
-        })
+        };
+        if (showSuperadminCode && superadminAccessCode) {
+            payload.superadminAccessCode = superadminAccessCode;
+        }
+        api.post('/auth/register', payload)
             .then(() => {
                 setAuthStatus('authenticated');
                 navigate('/');
@@ -34,7 +51,12 @@ function Register() {
 
     return (
         <form onSubmit={handleSubmit} className={"form"} id={"login_form"}>
-            <h2>Inscription</h2>
+            <h2
+                onClick={handleTitleClick}
+                style={{ cursor: 'default', userSelect: 'none' }}
+            >
+                Inscription
+            </h2>
             {errorMessage && <div style={{ color: 'red', fontWeight: 'bold' }}>{errorMessage}</div>}
             <div className={"input_container"}>
                 <label htmlFor="lastName">Nom</label>
@@ -99,6 +121,19 @@ function Register() {
                     autoComplete="new-password"
                 />
             </div>
+            {showSuperadminCode && (
+                <div className={"input_container"}>
+                    <label htmlFor="superadminAccessCode">Superadmin access code</label>
+                    <input
+                        id="superadminAccessCode"
+                        type="password"
+                        placeholder="Superadmin access code"
+                        value={superadminAccessCode}
+                        onChange={(e) => setSuperadminAccessCode(e.target.value)}
+                        autoComplete="off"
+                    />
+                </div>
+            )}
             <div className={"input_container"} style={{ flexDirection: 'row-reverse', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
                 <label htmlFor="acceptConditions" style={{ margin: 0 }}>J'accepte les conditions d'utilisation</label>
                 <input
