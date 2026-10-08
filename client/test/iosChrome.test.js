@@ -22,4 +22,14 @@ describe('ios chrome', () => {
         assert.match(css, /\.scan-preview-video\s*\{[^}]*object-fit:\s*cover\s*!important/s);
         assert.doesNotMatch(css, /\.scan-preview-video\s*\{[^}]*object-fit:\s*contain/s);
     });
+
+    it('uses a fixed solid top fill to kill iOS PWA status blur', () => {
+        const css = readFileSync(join(root, 'src/index.css'), 'utf8');
+        const app = readFileSync(join(root, 'src/App.jsx'), 'utf8');
+        assert.match(css, /\.ios-status-fill\s*\{[^}]*position:\s*fixed/s);
+        assert.match(css, /\.ios-status-fill\s*\{[^}]*background-color:\s*#1E21A4/s);
+        assert.match(css, /\.ios-status-fill\s*\{[^}]*safe-area-inset-top/s);
+        assert.match(app, /ios-status-fill/);
+        assert.match(css, /html\s*\{[^}]*background-color:\s*#1E21A4/s);
+    });
 });

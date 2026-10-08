@@ -24,6 +24,7 @@ const AuthenticatedApp = () => {
 
     return (
         <Router>
+            <div className="ios-status-fill" aria-hidden="true" />
             <DemoBanner />
             {authStatus === 'loading' ? (
                 <Loading />

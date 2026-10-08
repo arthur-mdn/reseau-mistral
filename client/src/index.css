@@ -3,9 +3,9 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: light;
   color: rgba(0, 0, 0, 0.87);
-  background-color: #ffffff;
+  background-color: #1E21A4;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -147,7 +147,7 @@ html {
   width: 100%;
   height: 100%;
   height: 100dvh;
-  background-color: #ffffff;
+  background-color: #1E21A4;
   overflow: hidden;
 }
 *, *:before, *:after {
@@ -161,7 +161,7 @@ body {
   width: 100%;
   height: 100%;
   height: 100dvh;
-  background-color: #ffffff;
+  background-color: #1E21A4;
   overflow: hidden;
   overscroll-behavior: none;
 }
@@ -174,6 +174,18 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.ios-status-fill {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: max(12px, env(safe-area-inset-top, 0px));
+  background-color: #1E21A4;
+  z-index: 10050;
+  pointer-events: none;
 }
 
 .app-shell {
