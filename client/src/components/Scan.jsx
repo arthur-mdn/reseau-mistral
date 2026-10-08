@@ -166,16 +166,12 @@ function Scan({ onScanSuccess, onScanError }) {
             }
 
             const lastCameraId = onApple ? null : localStorage.getItem(CAMERA_ID_KEY);
-            const baseVideo = {
-                width: { ideal: 1280 },
-                height: { ideal: 720 },
-            };
             const attempts = [];
             if (lastCameraId) {
-                attempts.push({ video: { ...baseVideo, deviceId: { exact: lastCameraId } }, audio: false });
-                attempts.push({ video: { ...baseVideo, deviceId: { ideal: lastCameraId } }, audio: false });
+                attempts.push({ video: { deviceId: { exact: lastCameraId } }, audio: false });
+                attempts.push({ video: { deviceId: { ideal: lastCameraId } }, audio: false });
             }
-            attempts.push({ video: { ...baseVideo, facingMode: { ideal: 'environment' } }, audio: false });
+            attempts.push({ video: { facingMode: { exact: 'environment' } }, audio: false });
             attempts.push({ video: { facingMode: { ideal: 'environment' } }, audio: false });
             attempts.push({ video: true, audio: false });
 
@@ -192,22 +188,25 @@ function Scan({ onScanSuccess, onScanError }) {
 
         const waitForVideoReady = (video) => new Promise((resolve) => {
             let settled = false;
+            const cleanup = () => {
+                video.removeEventListener('loadedmetadata', onReady);
+                video.removeEventListener('loadeddata', onReady);
+                video.removeEventListener('playing', onReady);
+            };
             const finish = () => {
                 if (settled || cancelled) return;
                 if (!video.videoWidth || !video.videoHeight) return;
                 settled = true;
-                video.removeEventListener('loadedmetadata', onMeta);
-                video.removeEventListener('loadeddata', onMeta);
-                video.removeEventListener('playing', onMeta);
-                resolve();
+                cleanup();
+                window.setTimeout(resolve, onApple ? 180 : 80);
             };
-            const onMeta = () => {
+            const onReady = () => {
                 requestAnimationFrame(() => requestAnimationFrame(finish));
             };
-            video.addEventListener('loadedmetadata', onMeta);
-            video.addEventListener('loadeddata', onMeta);
-            video.addEventListener('playing', onMeta);
-            if (video.readyState >= 2 && video.videoWidth) onMeta();
+            video.addEventListener('loadedmetadata', onReady);
+            video.addEventListener('loadeddata', onReady);
+            video.addEventListener('playing', onReady);
+            if (video.readyState >= 2 && video.videoWidth) onReady();
         });
 
         const tick = async () => {
@@ -234,16 +233,19 @@ function Scan({ onScanSuccess, onScanError }) {
         const start = async () => {
             try {
                 setVideoReady(false);
-                const [detector, stream] = await Promise.all([
-                    createQrDetector(getScanEnginePreference()),
-                    openCamera(),
-                ]);
+                syncScanFrame();
+
+                // Laisse finir l'anim d'ouverture de la modale avant d'attacher le flux.
+                await new Promise((resolve) => window.setTimeout(resolve, 420));
+                if (cancelled) return;
+
+                const detectorPromise = createQrDetector(getScanEnginePreference());
+                const stream = await openCamera();
                 if (cancelled) {
                     stream.getTracks().forEach((track) => track.stop());
                     return;
                 }
 
-                detectorRef.current = detector;
                 streamRef.current = stream;
                 const video = videoRef.current;
                 if (!video) return;
@@ -251,11 +253,19 @@ function Scan({ onScanSuccess, onScanError }) {
                 video.setAttribute('playsinline', 'true');
                 video.setAttribute('webkit-playsinline', 'true');
                 video.muted = true;
+                video.defaultMuted = true;
                 video.playsInline = true;
-                video.style.objectFit = 'cover';
-                video.style.objectPosition = 'center center';
                 video.srcObject = stream;
-                await video.play().catch(() => {});
+
+                const playPromise = video.play();
+                const detector = await detectorPromise;
+                if (cancelled) {
+                    stream.getTracks().forEach((track) => track.stop());
+                    return;
+                }
+                detectorRef.current = detector;
+
+                await playPromise.catch(() => {});
                 await waitForVideoReady(video);
                 if (cancelled) return;
 
@@ -266,8 +276,8 @@ function Scan({ onScanSuccess, onScanError }) {
 
                 detectTorch(stream);
                 setCameraError(null);
-                setVideoReady(true);
                 syncScanFrame();
+                setVideoReady(true);
                 timerId = window.setInterval(tick, SCAN_INTERVAL_MS);
             } catch (error) {
                 if (cancelled) return;
@@ -366,22 +376,16 @@ function Scan({ onScanSuccess, onScanError }) {
     return (
         <>
             <div ref={rootRef} style={{ position: 'relative', width: '100%', height: '100%', minHeight: 0, backgroundColor: '#000', overflow: 'hidden' }}>
-                <video
-                    ref={videoRef}
-                    muted
-                    playsInline
-                    style={{
-                        position: 'absolute',
-                        inset: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: 'center center',
-                        backgroundColor: '#000',
-                        opacity: videoReady ? 1 : 0,
-                        transition: 'opacity 0.15s ease-out',
-                    }}
-                />
+                <div className="scan-video-shell" aria-hidden={!videoReady}>
+                    <video
+                        ref={videoRef}
+                        className="scan-video"
+                        muted
+                        playsInline
+                        disablePictureInPicture
+                        style={{ opacity: videoReady ? 1 : 0 }}
+                    />
+                </div>
                 {scanFrame && shadedBorders && (
                     <div
                         aria-hidden="true"
