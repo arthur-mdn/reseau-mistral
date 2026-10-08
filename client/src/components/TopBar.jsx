@@ -11,8 +11,8 @@ const TopBar = () => {
 
     if (!topBarState.isVisible) return null;
     return (
-        <header className={"header-top"}>
-            <div className={"container"} style={{padding:"0 1rem", height:'60px', display:"flex", justifyContent:"space-between", alignItems:"center", position:"relative"}}>
+        <header className={"header-top"} style={{ backgroundColor:"#1E21A4", color:"white" }}>
+            <div className={"container"} style={{padding:"0 1rem", height:'60px', display:"flex", justifyContent:"space-between", alignItems:"center"}}>
                 {topBarState.backLink && (
                     <Link to={topBarState.backLink.link} style={{color:"white"}} className={"fr ai-c g0-5"}>
                         <FaChevronLeft/>
@@ -22,7 +22,7 @@ const TopBar = () => {
                 {!topBarState.backLink && (
                     <div></div>
                 )}
-                <h4 style={{position:"absolute", left:"50%", top:"50%", transform:"translate(-50%, -50%)", fontWeight:"bold", margin:0}}>
+                <h4 style={{position:"absolute", left:"50%", transform:"translateX(-50%)", fontWeight:"bold"}}>
                     {topBarState.title}
                 </h4>
                 {topBarState.actions && topBarState.actions.length > 0 && (
