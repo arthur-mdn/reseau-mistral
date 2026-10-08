@@ -1215,6 +1215,46 @@ body{
   display: none;
 }
 
+#qr-shaded-region > div {
+  display: none !important;
+}
+
+.scan-frame-chevrons {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.scan-frame-chevrons__corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  overflow: visible;
+}
+
+.scan-frame-chevrons__corner--tl {
+  top: 0;
+  left: 0;
+}
+
+.scan-frame-chevrons__corner--tr {
+  top: 0;
+  right: 0;
+  transform: rotate(90deg);
+}
+
+.scan-frame-chevrons__corner--br {
+  bottom: 0;
+  right: 0;
+  transform: rotate(180deg);
+}
+
+.scan-frame-chevrons__corner--bl {
+  bottom: 0;
+  left: 0;
+  transform: rotate(270deg);
+}
+
 .checkout-form {
   display: flex;
   flex-direction: column;

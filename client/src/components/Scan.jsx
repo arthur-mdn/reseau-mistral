@@ -7,6 +7,38 @@ import { CAMERA_ID_KEY } from '../utils/cameraPermission';
 
 const QR_BOX_MAX = 250;
 const BUTTONS_GAP = 16;
+const CHEVRON_OUTSET = 10;
+const CHEVRON_SIZE = 28;
+const CHEVRON_STROKE = 4;
+
+function ScanChevron() {
+    const s = CHEVRON_STROKE;
+    const c = s;
+    const tip = CHEVRON_SIZE - s;
+    return (
+        <svg width={CHEVRON_SIZE} height={CHEVRON_SIZE} viewBox={`0 0 ${CHEVRON_SIZE} ${CHEVRON_SIZE}`} aria-hidden="true">
+            <rect x={c - s / 2} y={c - s / 2} width={s} height={s} fill="#fff" />
+            <line
+                x1={c}
+                y1={tip}
+                x2={c}
+                y2={c + s / 2}
+                stroke="#fff"
+                strokeWidth={s}
+                strokeLinecap="round"
+            />
+            <line
+                x1={c + s / 2}
+                y1={c}
+                x2={tip}
+                y2={c}
+                stroke="#fff"
+                strokeWidth={s}
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+}
 
 const actionBtnStyle = {
     backgroundColor: '#fff',
@@ -84,18 +116,11 @@ function Scan({ onScanSuccess, onScanError }) {
     const [torchSupported, setTorchSupported] = useState(false);
     const [code, setCode] = useState("");
     const [codeError, setCodeError] = useState(null);
-    const [buttonsPos, setButtonsPos] = useState(null);
+    const [scanFrame, setScanFrame] = useState(null);
 
     const syncButtonsPosition = useCallback(() => {
         const frame = measureScanFrame(rootRef.current);
-        if (!frame) {
-            setButtonsPos(null);
-            return;
-        }
-        setButtonsPos({
-            top: frame.top + frame.height + BUTTONS_GAP,
-            left: frame.left + frame.width / 2,
-        });
+        setScanFrame(frame);
     }, []);
 
     useEffect(() => {
@@ -311,43 +336,68 @@ function Scan({ onScanSuccess, onScanError }) {
                         <p>{cameraError}</p>
                     </div>
                 )}
-                {buttonsPos && (
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: buttonsPos.top,
-                            left: buttonsPos.left,
-                            transform: 'translateX(-50%)',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: '1.25rem',
-                            zIndex: 3,
-                            pointerEvents: 'all',
-                        }}
-                    >
-                        <button
-                            type="button"
-                            aria-label="Saisie manuelle du code"
-                            onClick={() => setIsManualScanOpen(true)}
-                            style={actionBtnStyle}
-                        >
-                            123
-                        </button>
-                        <button
-                            type="button"
-                            aria-label="Lampe torche"
-                            aria-pressed={torchOn}
-                            onClick={toggleTorch}
-                            title={torchSupported ? 'Lampe torche' : 'Lampe torche (selon appareil)'}
+                {scanFrame && (
+                    <>
+                        <div
+                            className="scan-frame-chevrons"
+                            aria-hidden="true"
                             style={{
-                                ...actionBtnStyle,
-                                backgroundColor: torchOn ? '#FFD400' : '#fff',
+                                top: scanFrame.top - CHEVRON_OUTSET,
+                                left: scanFrame.left - CHEVRON_OUTSET,
+                                width: scanFrame.width + CHEVRON_OUTSET * 2,
+                                height: scanFrame.height + CHEVRON_OUTSET * 2,
                             }}
                         >
-                            <FaBolt size={22} color="#111" style={{ display: 'block', flexShrink: 0 }} />
-                        </button>
-                    </div>
+                            <span className="scan-frame-chevrons__corner scan-frame-chevrons__corner--tl">
+                                <ScanChevron />
+                            </span>
+                            <span className="scan-frame-chevrons__corner scan-frame-chevrons__corner--tr">
+                                <ScanChevron />
+                            </span>
+                            <span className="scan-frame-chevrons__corner scan-frame-chevrons__corner--br">
+                                <ScanChevron />
+                            </span>
+                            <span className="scan-frame-chevrons__corner scan-frame-chevrons__corner--bl">
+                                <ScanChevron />
+                            </span>
+                        </div>
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: scanFrame.top + scanFrame.height + BUTTONS_GAP,
+                                left: scanFrame.left + scanFrame.width / 2,
+                                transform: 'translateX(-50%)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '1.25rem',
+                                zIndex: 3,
+                                pointerEvents: 'all',
+                            }}
+                        >
+                            <button
+                                type="button"
+                                aria-label="Saisie manuelle du code"
+                                onClick={() => setIsManualScanOpen(true)}
+                                style={actionBtnStyle}
+                            >
+                                123
+                            </button>
+                            <button
+                                type="button"
+                                aria-label="Lampe torche"
+                                aria-pressed={torchOn}
+                                onClick={toggleTorch}
+                                title={torchSupported ? 'Lampe torche' : 'Lampe torche (selon appareil)'}
+                                style={{
+                                    ...actionBtnStyle,
+                                    backgroundColor: torchOn ? '#FFD400' : '#fff',
+                                }}
+                            >
+                                <FaBolt size={22} color="#111" style={{ display: 'block', flexShrink: 0 }} />
+                            </button>
+                        </div>
+                    </>
                 )}
             </div>
             <Modal isOpen={isManualScanOpen} onClose={() => setIsManualScanOpen(false)} title={"Saisir code manuel"}>
