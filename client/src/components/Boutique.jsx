@@ -78,7 +78,7 @@ function Boutique({ onCheckoutConfirmed }) {
                     <button type="button" onClick={handlePurchase} style={{ marginBottom: '1rem' }}>Acheter</button>
                 </div>
             )}
-            <Modal isOpen={isPaymentOpen} onClose={() => setIsPaymentOpen(false)} title={"Paiement"}>
+            <Modal isOpen={isPaymentOpen} onClose={() => setIsPaymentOpen(false)} title={"Paiement"} bgColor={"#FFF"}>
                 <PaiementRecap
                     onCheckoutConfirmed={() => {
                         setIsPaymentOpen(false);
