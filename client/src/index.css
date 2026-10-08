@@ -225,6 +225,96 @@ body {
   position: relative;
 }
 
+.home-stage {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  color: white;
+}
+
+.home-sheet {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #1e22aa;
+  border-radius: 0.5rem 0.5rem 0 0;
+  overflow: hidden;
+  will-change: height;
+  transition: height 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  touch-action: none;
+}
+
+.home-sheet.is-dragging {
+  transition: none;
+}
+
+.home-sheet__grab {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1rem 0.35rem;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.home-sheet__grab:active {
+  cursor: grabbing;
+}
+
+.home-sheet__handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 1rem;
+  background-color: lightgrey;
+}
+
+.home-sheet__content {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 1rem 1.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.home-sheet__inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.home-sheet__search {
+  width: 100%;
+  padding: 0.5rem !important;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem !important;
+  border: none !important;
+  outline: none;
+  background-color: #001269 !important;
+  color: white !important;
+  justify-content: flex-start;
+  box-shadow: none !important;
+}
+
+.home-sheet__search:hover,
+.home-sheet__search:focus,
+.home-sheet__search:focus-visible {
+  opacity: 1;
+  outline: none;
+  border: none !important;
+  background-color: #001269 !important;
+  color: white !important;
+}
+
 .ticket-detail {
   display: flex;
   flex-direction: column;
