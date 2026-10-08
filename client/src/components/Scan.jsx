@@ -1,16 +1,106 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 import {FaBolt} from "react-icons/fa6";
-import ProfileSelection from "./ProfileSelection.jsx";
 import Modal from "./Modal.jsx";
 import {FaBackspace} from "react-icons/fa";
 
-function Scan({ onScanSuccess, onScanError, onClose }) {
+const CAMERA_ID_KEY = 'rm-last-camera-id';
+
+function Scan({ onScanSuccess, onScanError }) {
     const qrRef = useRef(null);
+    const scannerRef = useRef(null);
+    const onScanSuccessRef = useRef(onScanSuccess);
+    const onScanErrorRef = useRef(onScanError);
     const [isManualScanOpen, setIsManualScanOpen] = useState(false);
-    let scanner = null;
-    let [code, setCode] = useState("");
+    const [cameraError, setCameraError] = useState(null);
+    const [code, setCode] = useState("");
     const [codeError, setCodeError] = useState(null);
+
+    useEffect(() => {
+        onScanSuccessRef.current = onScanSuccess;
+        onScanErrorRef.current = onScanError;
+    }, [onScanSuccess, onScanError]);
+
+    useEffect(() => {
+        if (!qrRef.current) return;
+
+        let cancelled = false;
+        const elementId = qrRef.current.id;
+        const scanner = new Html5Qrcode(elementId);
+        scannerRef.current = scanner;
+
+        const config = {
+            fps: 15,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1,
+        };
+
+        const handleSuccess = (decodedText, decodedResult) => {
+            onScanSuccessRef.current?.(decodedText, decodedResult);
+        };
+
+        const handleError = (error) => {
+            onScanErrorRef.current?.(error);
+        };
+
+        const startCamera = async () => {
+            const lastCameraId = localStorage.getItem(CAMERA_ID_KEY);
+            const cameraConfig = lastCameraId || { facingMode: 'environment' };
+
+            try {
+                await scanner.start(cameraConfig, config, handleSuccess, handleError);
+                if (cancelled) {
+                    await scanner.stop().catch(() => {});
+                    return;
+                }
+
+                const deviceId = scanner.getRunningTrackSettings?.()?.deviceId;
+                if (deviceId) {
+                    localStorage.setItem(CAMERA_ID_KEY, deviceId);
+                }
+
+                const videoElement = qrRef.current?.querySelector('video');
+                if (videoElement) {
+                    videoElement.style.width = '100%';
+                    videoElement.style.height = '100%';
+                }
+            } catch (firstError) {
+                if (cancelled) return;
+
+                if (lastCameraId) {
+                    try {
+                        await scanner.start({ facingMode: 'environment' }, config, handleSuccess, handleError);
+                        if (cancelled) {
+                            await scanner.stop().catch(() => {});
+                            return;
+                        }
+                        setCameraError(null);
+                        return;
+                    } catch {
+                        localStorage.removeItem(CAMERA_ID_KEY);
+                    }
+                }
+
+                setCameraError(
+                    firstError?.name === 'NotAllowedError' || /permission|denied|NotAllowed/i.test(String(firstError))
+                        ? "Accès à la caméra refusé. Autorise la caméra dans les réglages du navigateur, puis réouvre le scanner."
+                        : "Impossible d'accéder à la caméra."
+                );
+            }
+        };
+
+        startCamera();
+
+        return () => {
+            cancelled = true;
+            if (scanner.isScanning) {
+                scanner.stop().then(() => scanner.clear()).catch(() => {});
+            } else {
+                scanner.clear().catch(() => {});
+            }
+            scannerRef.current = null;
+        };
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -20,52 +110,17 @@ function Scan({ onScanSuccess, onScanError, onClose }) {
             onScanSuccess(code);
             setIsManualScanOpen(false);
             setCode("");
-            setCodeError(null)
+            setCodeError(null);
         } else {
             setCodeError("Le format du code doit être 'XXX+XXX'.");
         }
-
     };
-
-    useEffect(() => {
-        if (qrRef.current) {
-            const config = {
-                fps: 50,
-                qrbox: 250,
-                aspectRatio: 1
-            };
-
-            scanner = new Html5QrcodeScanner(
-                qrRef.current.id,
-                config,
-                false
-            );
-
-            scanner.render(onScanSuccess, onScanError);
-            const videoElement = qrRef.current.querySelector('video');
-            if (videoElement) {
-                videoElement.style.width = '100%';
-                videoElement.style.height = '100%';
-            }
-        }
-
-        // Fonction de nettoyage
-        return () => {
-            if (scanner) {
-                scanner.clear().then(() => {
-                    console.log('Scanner cleared');
-                }).catch((error) => {
-                    console.error('Error clearing scanner:', error);
-                });
-            }
-        };
-    }, [onScanSuccess, onScanError]);
 
     const handleButtonClick = (value) => {
         if (value === 'effacer') {
-            setCode(code.slice(0, -1)); // Supprime le dernier caractère
+            setCode(code.slice(0, -1));
         } else {
-            setCode(code + value); // Ajoute le caractère cliqué
+            setCode(code + value);
         }
     };
 
@@ -73,7 +128,6 @@ function Scan({ onScanSuccess, onScanError, onClose }) {
         const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', 'effacer'];
         return keys.map(key => (
             <button type={"button"} key={key} onClick={() => handleButtonClick(key)} style={{flex:'1 1 25%',margin:"auto",flexGrow:0,padding:0,backgroundColor:"white", color:"black", width:"50px", height:'50px', display:"flex",alignItems:"center", justifyContent:"center",borderRadius:'2rem',pointerEvents:"all",fontWeight:"bold", boxShadow:"rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"}}>
-
                 {key === 'effacer' ? <FaBackspace/> : key}
             </button>
         ));
@@ -83,6 +137,11 @@ function Scan({ onScanSuccess, onScanError, onClose }) {
         <>
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                 <div ref={qrRef} id="qr-code-reader" style={{ width: '100%', height:"100%", backgroundColor:"black", border:"0!important" }} />
+                {cameraError && (
+                    <div style={{position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", padding:"1.5rem", textAlign:"center", color:"white", backgroundColor:"rgba(0,0,0,0.75)", zIndex:2}}>
+                        <p>{cameraError}</p>
+                    </div>
+                )}
                 <div style={{position:"absolute", width:"100%", height:"100%", top:0, left:0,display:"flex",justifyContent:"center", alignItems:"center",gap:'1rem', pointerEvents:"none"}}>
                     <button onClick={()=>{setIsManualScanOpen(true)}} style={{backgroundColor:"white", color:"black", width:"50px", height:'50px', display:"flex",alignItems:"center", justifyContent:"center",borderRadius:'2rem',pointerEvents:"all",fontWeight:"bold"}}>
                         123
@@ -116,7 +175,6 @@ function Scan({ onScanSuccess, onScanError, onClose }) {
                 </form>
             </Modal>
         </>
-
     );
 }
 
