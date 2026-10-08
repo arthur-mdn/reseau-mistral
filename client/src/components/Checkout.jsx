@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { FaCalendarDays, FaCircleQuestion, FaCreditCard, FaUser } from 'react-icons/fa6';
 import { useCookies } from 'react-cookie';
 import api from '../api';
+import Loading from './Loading.jsx';
+
+const PAYMENT_LOADER_MS = 3000;
+
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function Checkout({ onCheckoutConfirmed, panier }) {
     const [cookies] = useCookies(['selectedProfile']);
@@ -11,23 +18,33 @@ function Checkout({ onCheckoutConfirmed, panier }) {
     const totalPrice = (panier || []).reduce((acc, ticket) => acc + ticket.quantity * ticket.price, 0);
     const totalLabel = totalPrice.toFixed(2).replace('.', ',');
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const processPayment = async () => {
         setError(null);
         setSubmitting(true);
 
-        api.post('/store/buy', {
-            panier,
-            profileId: cookies.selectedProfile,
-        })
-            .then(() => {
-                onCheckoutConfirmed();
-            })
-            .catch((err) => {
-                setError(err.response?.data?.message || 'Erreur lors de l\'achat');
-                setSubmitting(false);
-            });
+        try {
+            await Promise.all([
+                api.post('/store/buy', {
+                    panier,
+                    profileId: cookies.selectedProfile,
+                }),
+                delay(PAYMENT_LOADER_MS),
+            ]);
+            onCheckoutConfirmed();
+        } catch (err) {
+            setError(err.response?.data?.message || 'Erreur lors de l\'achat');
+            setSubmitting(false);
+        }
     };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        processPayment();
+    };
+
+    if (submitting) {
+        return <Loading />;
+    }
 
     return (
         <form onSubmit={handleSubmit} className={"checkout-form"}>
@@ -92,11 +109,16 @@ function Checkout({ onCheckoutConfirmed, panier }) {
             </div>
 
             <button type="submit" disabled={submitting} className={"checkout-pay-btn"}>
-                {submitting ? 'Paiement...' : `PAYER ${totalLabel} €`}
+                {`PAYER ${totalLabel} €`}
             </button>
 
             <p className={"checkout-other-label"}>Autre moyens de paiement :</p>
-            <button type="button" className={"checkout-apple-pay"} disabled={submitting}>
+            <button
+                type="button"
+                className={"checkout-apple-pay"}
+                disabled={submitting}
+                onClick={processPayment}
+            >
                 <img src={"/elements/images/apple-pay.webp"} alt="" className={"checkout-apple-pay__img"} />
                 <span>Apple Pay</span>
             </button>
