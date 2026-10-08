@@ -149,6 +149,7 @@ html {
   height: 100dvh;
   background-color: #1E21A4;
   overflow: hidden;
+  touch-action: manipulation;
 }
 *, *:before, *:after {
   box-sizing: inherit;
@@ -164,6 +165,7 @@ body {
   background-color: #1E21A4;
   overflow: hidden;
   overscroll-behavior: none;
+  touch-action: manipulation;
 }
 
 #root{

@@ -10,6 +10,8 @@ describe('ios chrome', () => {
     it('uses opaque apple status bar and viewport-fit cover', () => {
         const html = readFileSync(join(root, 'index.html'), 'utf8');
         assert.match(html, /viewport-fit=cover/);
+        assert.match(html, /maximum-scale=1/);
+        assert.match(html, /user-scalable=no/);
         assert.match(html, /apple-mobile-web-app-status-bar-style" content="black"/);
         assert.doesNotMatch(html, /black-translucent/);
         assert.match(html, /theme-color" content="#1E21A4"/);
