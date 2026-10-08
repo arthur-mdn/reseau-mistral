@@ -1,152 +1,176 @@
-const Profile = require("../models/Profile");
-const Ticket = require("../models/Ticket");
-const express = require("express");
+const Profile = require('../models/Profile');
+const Ticket = require('../models/Ticket');
+const express = require('express');
 const router = express.Router();
 const verifyToken = require('../others/verifyToken');
-const TicketUsage = require("../models/TicketUsage");
-let ticketLocks = {};
+const TicketUsage = require('../models/TicketUsage');
+const { toObjectId, validateScanData, parseDuration } = require('../others/validate');
+const { assertProfileOwned, resolveProfileId } = require('../others/ownership');
+const { asyncHandler } = require('../others/errors');
 
-function parseDuration(durationString) {
-    const [amount, unit] = durationString.split(' ');
-    switch (unit) {
-        case 'hour':
-        case 'hours':
-            return amount * 60 * 60 * 1000;
-        case 'day':
-        case 'days':
-            return amount * 24 * 60 * 60 * 1000;
-        default:
-            return 0;
+router.post('/tickets/use', verifyToken, asyncHandler(async (req, res) => {
+    const ticketOid = toObjectId(req.body.ticketId);
+    const { scanData } = req.body;
+
+    if (!ticketOid) {
+        return res.status(400).json({ message: 'Identifiant de ticket invalide' });
     }
-}
-
-router.post('/tickets/use', verifyToken, async (req, res) => {
-    const { ticketId, scanData } = req.body;
-
-    if (ticketLocks[ticketId]) {
-        return res.status(429).json({ message: 'Ce ticket est actuellement en cours de traitement' });
+    if (!validateScanData(scanData)) {
+        return res.status(400).json({ message: 'Données de scan invalides' });
     }
-    ticketLocks[ticketId] = true;
 
-    try {
-        const ticket = await Ticket.findById(ticketId).populate('priceId').populate({
-            path: 'usages',
-            options: { sort: { 'date': -1 } }
-        });
-        if (!ticket) {
-            return res.status(404).json({ message: 'Ticket non trouvé' });
-        }
+    const ticket = await Ticket.findById(ticketOid).populate('priceId');
+    if (!ticket || !ticket.priceId) {
+        return res.status(404).json({ message: 'Ticket non trouvé' });
+    }
 
-        if (ticket.usages.length >= ticket.priceId.maxUse) {
-            return res.status(400).json({ message: 'Limite d\'utilisation du ticket atteinte' });
-        }
+    const profile = await Profile.findById(ticket.profileId).lean();
+    if (!profile || profile.userId.toString() !== req.user.userId) {
+        return res.status(403).json({ message: 'Accès non autorisé à ce ticket' });
+    }
 
-        if (ticket.usages.length > 0) {
-            const lastUsageTime = new Date(ticket.usages[0].date).getTime();
-            const currentTime = new Date().getTime();
-            if (currentTime - lastUsageTime < 1000) {
-                return res.status(400).json({ message: 'Un usage a déjà été enregistré récemment' });
-            }
-        }
+    const maxUse = ticket.priceId.maxUse || 1;
+    const maxTime = parseDuration(ticket.priceId.maxTime);
+    const now = new Date();
+    const cutoffTime = new Date(now.getTime() - maxTime);
 
-        const maxTime = parseDuration(ticket.priceId.maxTime);
-        const cutoffTime = new Date(new Date().getTime() - maxTime);
-
+    if (maxTime > 0) {
         const existingUsage = await TicketUsage.findOne({
             ticketId: ticket._id,
-            date: { $gte: cutoffTime }
-        });
-
+            date: { $gte: cutoffTime },
+        }).lean();
         if (existingUsage) {
             return res.status(400).json({ message: 'Usage déjà enregistré dans la période définie' });
         }
-        const newUsage = new TicketUsage({
-            ticketId,
-            scanData
-        });
-        await newUsage.save();
+    }
 
-        await Ticket.findByIdAndUpdate(ticketId, {
-            $push: { usages: newUsage._id }
+    const recentUsage = await TicketUsage.findOne({
+        ticketId: ticket._id,
+        date: { $gte: new Date(now.getTime() - 1000) },
+    }).lean();
+    if (recentUsage) {
+        return res.status(400).json({ message: 'Un usage a déjà été enregistré récemment' });
+    }
+
+    const claimed = await Ticket.findOneAndUpdate(
+        {
+            _id: ticketOid,
+            $expr: {
+                $lt: [
+                    {
+                        $max: [
+                            { $ifNull: ['$usageCount', 0] },
+                            { $size: { $ifNull: ['$usages', []] } },
+                        ],
+                    },
+                    maxUse,
+                ],
+            },
+        },
+        [
+            {
+                $set: {
+                    usageCount: {
+                        $add: [
+                            {
+                                $max: [
+                                    { $ifNull: ['$usageCount', 0] },
+                                    { $size: { $ifNull: ['$usages', []] } },
+                                ],
+                            },
+                            1,
+                        ],
+                    },
+                },
+            },
+        ],
+        { returnDocument: 'after' }
+    );
+
+    if (!claimed) {
+        return res.status(400).json({ message: 'Limite d\'utilisation du ticket atteinte' });
+    }
+
+    try {
+        const newUsage = await TicketUsage.create({
+            ticketId: ticketOid,
+            scanData,
+            date: now,
         });
-        delete ticketLocks[ticketId];
+
+        await Ticket.findByIdAndUpdate(ticketOid, {
+            $push: { usages: newUsage._id },
+        });
+
         res.json({ message: 'Usage enregistré avec succès', usage: newUsage });
     } catch (error) {
-        delete ticketLocks[ticketId];
-        res.status(500).json({ message: 'Erreur serveur: ' + error });
+        await Ticket.findByIdAndUpdate(ticketOid, { $inc: { usageCount: -1 } });
+        throw error;
     }
-});
+}));
 
-
-router.get('/tickets/:ticketId', verifyToken, async (req, res) => {
-    try {
-        const ticketId = req.params.ticketId;
-        const userId = req.user.userId;
-        const profileId = req.cookies['selectedProfile'];
-
-        const ticket = await Ticket.findOne({
-            _id: ticketId,
-            'profileId': profileId
-        }).populate('priceId').populate('usages');
-
-        if (!ticket) {
-            return res.status(404).json({ message: 'Ticket non trouvé ou non associé à ce profil' });
-        }
-        const profile = await Profile.findOne({
-            _id: profileId,
-            'userId': userId
-        });
-
-        if (!profile) {
-            return res.status(404).json({ message: 'Profil non trouvé ou non associé à cet utilisateur' });
-        }
-
-        res.json(ticket);
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur serveur: ' + error });
+router.get('/tickets/:ticketId', verifyToken, asyncHandler(async (req, res) => {
+    const ticketOid = toObjectId(req.params.ticketId);
+    if (!ticketOid) {
+        return res.status(400).json({ message: 'Identifiant de ticket invalide' });
     }
-});
 
-router.delete('/tickets/:ticketId', verifyToken, async (req, res) => {
-    try {
-        const ticketId = req.params.ticketId;
-        const userId = req.user.userId;
-        const profileId = req.cookies['selectedProfile'];
+    const profileId = resolveProfileId(req);
+    const profile = await assertProfileOwned(req.user.userId, profileId);
 
-        const ticket = await Ticket.findById(ticketId);
-        if (!ticket) {
-            return res.status(404).json({ message: 'Ticket non trouvé' });
-        }
+    const ticket = await Ticket.findOne({
+        _id: ticketOid,
+        profileId: profile._id,
+    }).populate('priceId').populate({
+        path: 'usages',
+        options: { sort: { date: -1 }, limit: 50 },
+    }).lean();
 
-        const profile = await Profile.findOne({ _id: profileId, 'userId': userId });
-        if (!profile || ticket.profileId.toString() !== profileId) {
-            return res.status(403).json({ message: 'Accès non autorisé à ce ticket' });
-        }
-
-        await Ticket.findByIdAndDelete(ticketId);
-        res.status(200).json({ message: 'Ticket supprimé avec succès' });
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur serveur: ' + error.message });
+    if (!ticket) {
+        return res.status(404).json({ message: 'Ticket non trouvé ou non associé à ce profil' });
     }
-});
 
-router.delete('/tickets', verifyToken, async (req, res) => {
-    try {
-        const profileId = req.cookies['selectedProfile'];
+    res.json(ticket);
+}));
 
-        const profile = await Profile.findOne({ _id: profileId, 'userId': req.user.userId });
-        if (!profile) {
-            return res.status(403).json({ message: 'Profil non trouvé ou non associé à cet utilisateur' });
-        }
-
-        const result = await Ticket.deleteMany({ profileId: profile._id });
-
-        res.status(200).json({ message: `Tickets supprimés avec succès`, deletedCount: result.deletedCount });
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur serveur: ' + error.message });
+router.delete('/tickets/:ticketId', verifyToken, asyncHandler(async (req, res) => {
+    const ticketOid = toObjectId(req.params.ticketId);
+    if (!ticketOid) {
+        return res.status(400).json({ message: 'Identifiant de ticket invalide' });
     }
-});
 
+    const profileId = resolveProfileId(req);
+    const profile = await assertProfileOwned(req.user.userId, profileId);
 
+    const ticket = await Ticket.findById(ticketOid);
+    if (!ticket) {
+        return res.status(404).json({ message: 'Ticket non trouvé' });
+    }
+
+    if (ticket.profileId.toString() !== profile._id.toString()) {
+        return res.status(403).json({ message: 'Accès non autorisé à ce ticket' });
+    }
+
+    await TicketUsage.deleteMany({ ticketId: ticketOid });
+    await Ticket.findByIdAndDelete(ticketOid);
+    res.status(200).json({ message: 'Ticket supprimé avec succès' });
+}));
+
+router.delete('/tickets', verifyToken, asyncHandler(async (req, res) => {
+    const profileId = resolveProfileId(req);
+    const profile = await assertProfileOwned(req.user.userId, profileId);
+
+    const tickets = await Ticket.find({ profileId: profile._id }).select('_id').lean();
+    const ticketIds = tickets.map((t) => t._id);
+    if (ticketIds.length > 0) {
+        await TicketUsage.deleteMany({ ticketId: { $in: ticketIds } });
+    }
+    const result = await Ticket.deleteMany({ profileId: profile._id });
+
+    res.status(200).json({
+        message: 'Tickets supprimés avec succès',
+        deletedCount: result.deletedCount,
+    });
+}));
 
 module.exports = router;

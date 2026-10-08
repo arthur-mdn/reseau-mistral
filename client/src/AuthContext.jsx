@@ -1,20 +1,25 @@
-import React, {createContext, useState, useContext, useEffect} from 'react';
-import axios from "axios";
-import config from './config';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import api, { setUnauthorizedHandler } from './api';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [authStatus, setAuthStatus] = useState("loading");
+    const [authStatus, setAuthStatus] = useState('loading');
+
     useEffect(() => {
-        axios.get(`${config.serverUrl}/auth/validate-session`, { withCredentials: true })
-            .then(response => {
-                setAuthStatus(response.data.isAuthenticated ? "authenticated" : "unauthenticated");
+        setUnauthorizedHandler(() => {
+            setAuthStatus('unauthenticated');
+        });
+
+        api.get('/auth/validate-session')
+            .then((response) => {
+                setAuthStatus(response.data.isAuthenticated ? 'authenticated' : 'unauthenticated');
             })
             .catch(() => {
-                setAuthStatus("unauthenticated");
+                setAuthStatus('unauthenticated');
             });
     }, []);
+
     return (
         <AuthContext.Provider value={{ authStatus, setAuthStatus }}>
             {children}

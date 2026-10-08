@@ -1,60 +1,66 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import config from "../config.js";
+import api from '../api';
 
 function AddProfile({ onProfileAdded }) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [error, setError] = useState(null);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setError(null);
 
-        axios.post(`${config.serverUrl}/user/profiles/new`, {
-            firstName, lastName, email
-        }, { withCredentials: true })
-            .then(response => {
-                onProfileAdded(response.data)
+        api.post('/user/profiles/new', { firstName, lastName, email })
+            .then((response) => {
+                onProfileAdded?.(response.data);
             })
-            .catch(error => {
-                console.error('Erreur lors de la création du profil:', error);
+            .catch((err) => {
+                setError(err.response?.data?.message || 'Erreur lors de la création du profil');
             });
     };
 
     return (
         <form onSubmit={handleSubmit} className={"fc g1"}>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
-                <label>Prénom</label>
+                <label htmlFor="add-profile-firstName">Prénom</label>
                 <input
+                    id="add-profile-firstName"
                     type="text"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder={"Prénom"}
-                    style={{padding:'1.5rem', borderRadius:'0.5rem'}}
+                    required
+                    style={{ padding: '1.5rem', borderRadius: '0.5rem' }}
                 />
             </div>
             <div>
-                <label>Nom</label>
+                <label htmlFor="add-profile-lastName">Nom</label>
                 <input
+                    id="add-profile-lastName"
                     type="text"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder={"Nom"}
-                    style={{padding:'1.5rem', borderRadius:'0.5rem'}}
+                    required
+                    style={{ padding: '1.5rem', borderRadius: '0.5rem' }}
                 />
             </div>
             <div>
-                <label>Email</label>
+                <label htmlFor="add-profile-email">Email</label>
                 <input
+                    id="add-profile-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={"Email"}
-                    style={{padding:'1.5rem', borderRadius:'0.5rem'}}
+                    required
+                    style={{ padding: '1.5rem', borderRadius: '0.5rem' }}
                 />
             </div>
-            <br/>
-            <button type="submit" style={{width:'100%'}}>Ajouter</button>
+            <br />
+            <button type="submit" style={{ width: '100%' }}>Ajouter</button>
         </form>
     );
 }

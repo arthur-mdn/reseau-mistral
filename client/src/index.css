@@ -323,68 +323,132 @@ button:focus-visible {
 }
 
 
-.profile {
+.profile-selection {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+}
+
+.profile-selection__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  width: 100%;
+  align-content: flex-start;
+}
+
+.profile-selection__footer {
+  margin-top: auto;
+  flex-shrink: 0;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.profile-selection__hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  color: #000;
+  text-align: center;
+}
+
+button.profile,
+button[type=button].profile {
   width: 100%;
   display: flex;
-  gap: 15px;
+  gap: 0.85rem;
   align-items: center;
-  background-color: #ffffff;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
+  justify-content: flex-start;
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  padding: 0.7rem 1rem 0.7rem 0.9rem !important;
+  border-radius: 0.75rem !important;
+  border: 0 !important;
+  box-shadow: none !important;
   cursor: pointer;
   transition: 0.3s background-color;
-  color:black
+  color: #000000 !important;
+  text-align: left;
+  font-size: inherit;
 }
 
-
-input[type="radio"].radio-profile {
-  position:absolute;
-  opacity: 0;
-  -moz-opacity: 0;
-  -webkit-opacity: 0;
-  -o-opacity: 0;
-}
-input[type="radio"].radio-profile + label {
-  position:relative;
-  float:left;
-  width: 15px;
-  height: 15px;
-  text-indent:-9999px;
+button.profile:hover,
+button[type=button].profile:hover,
+button.profile:focus,
+button[type=button].profile:focus {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  opacity: 1;
+  border-color: transparent;
 }
 
-input[type="radio"].radio-profile + label:before {
-  content:"";
-  display:block;
-  position:absolute;
-  top:0px;
-  left:0px;
-  height: 18px;
-  width: 18px;
-  background: white;
-  border-radius: 50px;
-  /*border: 2px solid #fff;*/
-  border: 1px solid #cccccc;
-}
-
-input[type="radio"].radio-profile:checked + label:after {
-  display:block;
-  position:absolute;
-  top:2px;
-  left:4.5px;
-  content: '✓';
-  font-size: 11px;
-  color: #fff;
-  background-color: transparent!important;
-  border:0!important;
-  z-index: 3;
-  text-indent: 0;
+button.profile h4,
+button.profile p {
+  color: #000000;
+  text-align: left;
   margin: 0;
+  width: 100%;
 }
 
-input[type="radio"].radio-profile:checked + label:after, input[type="radio"].radio-profile:checked + label:before {
-  background-color: #1E21A4;
-  border: 1px solid #1E21A4;
+.profile-check {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #cccccc;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
 
+.profile-check--selected {
+  background-color: #1E21A4;
+  border-color: #1E21A4;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.profile-name {
+  font-weight: bold;
+  font-size: 0.95rem;
+  line-height: 1.15;
+  color: #000000;
+  margin-bottom: 0.05rem;
+}
+
+.profile-email {
+  font-size: 0.8rem;
+  font-weight: bold;
+  line-height: 1.15;
+  color: #000000;
+  margin-bottom: 0.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-id {
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #000000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .no_profile_selected, .no_tickets{
@@ -406,33 +470,75 @@ input[type="radio"].radio-profile:checked + label:after, input[type="radio"].rad
 .actual_profile_selector{
   display: flex;
   flex-direction: row;
-  border-radius: 5px;
-  padding: 0.7rem;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0.75rem 1rem;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   justify-content: space-between;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 2;
+}
+
+.actual_profile_selector__info{
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  text-align: left;
+  min-width: 0;
+  flex: 1;
 }
 
 .actual_profile_selector h4{
   font-weight: bold;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  margin: 0;
+  color: #000;
 }
 
-.actual_profile_selector div{
-  border: 1px solid #1E21A4;
+.actual_profile_selector__email{
+  font-size: 0.85rem;
+  font-weight: bold;
+  line-height: 1.2;
+  color: #000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+button.actual_profile_selector__btn{
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.4rem;
-  cursor: pointer;
   padding: 0;
-  background-color: white;
-  color: black;
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: 1px solid #1E21A4;
+  border-radius: 0.4rem;
+  color: #000;
+  cursor: pointer;
+  box-shadow: none;
 }
 
+button.actual_profile_selector__btn:hover,
+button.actual_profile_selector__btn:focus,
+button.actual_profile_selector__btn:focus-visible {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: #1E21A4;
+  opacity: 1;
+  outline: none;
+}
 
 
 .price {

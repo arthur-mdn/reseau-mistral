@@ -46,14 +46,14 @@ const Modal = ({ isOpen, onClose, children, title,actions, bgColor = "#f3f3f3", 
                             {
                                 !hideBg &&
                                 <div className={"over_top_menu jc-sb"} style={{padding:"0 1rem", position:"relative", flexShrink:0}}>
-                                    <button onClick={()=>{onClose()}} style={{padding:'0.5rem 0.5rem', backgroundColor: "transparent", color:"white"}} className={"fc ai-c jc-c"}>
+                                    <button type="button" aria-label="Fermer" onClick={()=>{onClose()}} style={{padding:'0.5rem 0.5rem', backgroundColor: "transparent", color:"white"}} className={"fc ai-c jc-c"}>
                                         <FaTimes/>
                                     </button>
                                     <h4 style={{position:"absolute", left:"50%", transform:"translateX(-50%)", fontWeight:"bold", whiteSpace:'nowrap', wordBreak:"break-word"}}>
                                         {title}
                                     </h4>
                                     {actions && actions.length > 0 && (
-                                        <button onClick={()=>{setActionPopup(!actionPopup)}} style={{padding:'0.5rem 0.5rem', backgroundColor: "transparent", color:"white"}} className={"fc ai-c jc-c"}>
+                                        <button type="button" aria-label="Actions" onClick={()=>{setActionPopup(!actionPopup)}} style={{padding:'0.5rem 0.5rem', backgroundColor: "transparent", color:"white"}} className={"fc ai-c jc-c"}>
                                             <FaEllipsis color={"#ffffff"}/>
                                         </button>
                                     )}

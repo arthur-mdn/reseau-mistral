@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import { useTopBar } from '../TopBarContext';
 import {Link} from "react-router-dom";
 import {FaChevronLeft, FaEllipsis} from "react-icons/fa6";
-import ProfileSelection from "./ProfileSelection.jsx";
 import Modal from "./Modal.jsx";
 
 const TopBar = () => {

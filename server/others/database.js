@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const config = require('./config');
 
-module.exports.connect = () => {
-    return mongoose.connect(config.dbUri)
-        .then(() => console.log('MongoDB Connected'))
-        .catch(err => console.log(err));
-}
+mongoose.set('sanitizeFilter', true);
+
+module.exports.connect = async () => {
+    await mongoose.connect(config.dbUri);
+    console.log('MongoDB Connected');
+};

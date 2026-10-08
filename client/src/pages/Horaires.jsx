@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import {BrowserRouter as Router, Routes, Route, Navigate, Link} from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../AuthContext';
-import {useTopBar} from "../TopBarContext.jsx";
-import {FaSearch} from "react-icons/fa";
+import { useEffect } from 'react';
+import { useTopBar } from '../TopBarContext.jsx';
+import { FaSearch } from 'react-icons/fa';
 
 function Horaires() {
     const { setTopBarState } = useTopBar();

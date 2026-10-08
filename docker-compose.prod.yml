@@ -1,16 +1,22 @@
 services:
   reseau-mistral-mongodb:
     container_name: reseau-mistral-mongodb
-    image: mongo
+    image: mongo:8
     restart: always
     volumes:
       - reseau_mistral_mongodb_data:/data/db
+      - ./mongo/mongod.conf:/etc/mongo/mongod.conf:ro
+    command: ["mongod", "--config", "/etc/mongo/mongod.conf"]
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
 
   reseau-mistral-server:
     container_name: reseau-mistral-server
@@ -20,6 +26,7 @@ services:
     env_file: ./server/.env
     environment:
       DB_URI: mongodb://reseau-mistral-mongodb:27017/reseau-mistral
+      NODE_ENV: production
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.reseau-mistral-server.rule=Host(`api.reseau-mistral.mondon.pro`)"
@@ -29,6 +36,11 @@ services:
     depends_on:
       reseau-mistral-mongodb:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
 
   reseau-mistral-client:
     container_name: reseau-mistral-client
@@ -45,6 +57,10 @@ services:
       - "traefik.http.routers.reseau-mistral-client.tls.certresolver=myresolver"
     depends_on:
       - reseau-mistral-server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
 volumes:
   reseau_mistral_mongodb_data:

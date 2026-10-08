@@ -19,9 +19,9 @@ const ControlModal = ({ isOpen, onClose, children, bgColor = "#f3f3f3", padding=
                         {
                             !hideBg &&
                             <div className={"over_top_menu"} style={{backgroundColor:"transparent", justifyContent:"flex-start",padding:"0 1rem"}}>
-                                <div onClick={()=>{onClose()}} style={{backgroundColor:"white", display:"flex",alignItems:"center",justifyContent:"center",width:"35px",height:"35px",borderRadius:"2rem",zIndex:15}}>
+                                <button type="button" aria-label="Retour" onClick={()=>{onClose()}} style={{backgroundColor:"white", display:"flex",alignItems:"center",justifyContent:"center",width:"35px",height:"35px",borderRadius:"2rem",zIndex:15, border:0, padding:0}}>
                                     <FaChevronLeft fill={"black"} size={"20px"}/>
-                                </div>
+                                </button>
                             </div>
                         }
 

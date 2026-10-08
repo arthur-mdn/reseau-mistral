@@ -1,38 +1,40 @@
-// models/Price.js
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const priceSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
     },
     type: {
         type: String,
-        required: true
+        required: true,
     },
     price: {
         type: Number,
-        required: true
+        required: true,
     },
     multiple: {
         type: Number,
-        default: 1
+        default: 1,
+        min: 1,
+        max: 50,
     },
     maxUse: {
         type: Number,
-        default: 1
+        default: 1,
     },
     maxTime: {
         type: String,
-        required: true
+        required: true,
     },
     description: String,
     image: String,
     status: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
 });
 
 module.exports = mongoose.model('Price', priceSchema);

@@ -1,90 +1,124 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import AddProfile from "./AddProfile.jsx";
-import Modal from './Modal'
-import {FaPlus} from "react-icons/fa6";
-import config from "../config.js";
-function ProfileSelection({ onProfileSelect, onClose, fromProfile= false }) {
+import AddProfile from './AddProfile.jsx';
+import Modal from './Modal';
+import { FaCheck, FaPlus } from 'react-icons/fa6';
+import api from '../api';
+
+function formatAccountNumber(id) {
+    const source = String(id);
+    let digits = source.replace(/\D/g, '');
+    let i = 0;
+    while (digits.length < 7) {
+        digits += String(source.charCodeAt(i % source.length) % 10);
+        i += 1;
+    }
+    return digits.slice(0, 7);
+}
+
+function ProfileSelection({ onProfileSelect, onClose, fromProfile = false }) {
     const [profiles, setProfiles] = useState([]);
     const [cookies, setCookie] = useCookies(['selectedProfile']);
     const selectedProfileId = cookies.selectedProfile;
-
-    const [addProfileOpen, setAddProfileOpen] = useState(false)
-    const [profileSelectionOpen, setProfileSelectionOpen] = useState(false);
+    const [addProfileOpen, setAddProfileOpen] = useState(false);
+    const [loadError, setLoadError] = useState(null);
 
     useEffect(() => {
-        axios.get(`${config.serverUrl}/user/profiles`, { withCredentials: true })
-            .then(response => {
+        const controller = new AbortController();
+        api.get('/user/profiles', { signal: controller.signal })
+            .then((response) => {
                 setProfiles(response.data);
             })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des profils:', error);
+            .catch((error) => {
+                if (error.name !== 'CanceledError') {
+                    setLoadError('Impossible de charger les profils');
+                }
             });
+        return () => controller.abort();
     }, []);
 
-    const handleProfileSelect = (profile) => {
-        setCookie('selectedProfile', profile._id, { path: '/', domain: config.cookieDomain, maxAge: 365 * 24 * 60 * 60 * 1000  });
-        onProfileSelect(profile);
-        onClose();
-    };
-    const handleChange = (profile) => {
-        handleProfileSelect(profile);
+    const selectProfile = (profile) => {
+        setCookie('selectedProfile', profile._id, {
+            path: '/',
+            maxAge: 365 * 24 * 60 * 60,
+        });
+        onProfileSelect?.(profile);
+        onClose?.();
     };
 
     const addProfileCallback = (newProfileData) => {
         setAddProfileOpen(false);
-        setProfiles(currentProfiles => [...currentProfiles, newProfileData]);
-        setCookie('selectedProfile', newProfileData._id, { path: '/', maxAge: 365 * 24 * 60 * 60 * 1000  });
+        setProfiles((currentProfiles) => [...currentProfiles, newProfileData]);
+        setCookie('selectedProfile', newProfileData._id, {
+            path: '/',
+            maxAge: 365 * 24 * 60 * 60,
+        });
+        onProfileSelect?.(newProfileData);
     };
 
     return (
-        <>
-            <div className={"fc g0-5"} style={{width:'100%'}}>
-                {profiles.map(profile => (
-                    <button key={profile._id} onClick={() => handleProfileSelect(profile)} className={"profile"} style={{width:'100%', backgroundColor: fromProfile ? "#f3f3f3" : "white"}}>
-                        <input
-                            type={"radio"}
-                            name={"radio-profile"}
-                            className={"radio-profile"}
-                            id={`radio-profile-${profile._id}`}
-                            checked={profile._id === selectedProfileId}
-                            onChange={() => handleChange(profile)}
-                        />
-                        <label htmlFor={`radio-profile-${profile._id}`}>
-                        </label>
-                        <div style={{textAlign:"left", gap:'0.2rem'}} className={"fc"} >
-                            <h4 style={{fontWeight:"bold", fontSize:'0.9rem'}}>
-                                {profile.prenom} {profile.nom}
-                            </h4>
-                            <p style={{fontSize:'0.8rem', opacity:0.8}}>
-                                N°{profile._id}
-                            </p>
-
-                        </div>
-                    </button>
-                ))}
+        <div className={"profile-selection"}>
+            {loadError && <p style={{ color: 'red' }}>{loadError}</p>}
+            <div className={"profile-selection__list fc g0-5"}>
+                {profiles.map((profile) => {
+                    const isSelected = profile._id === selectedProfileId;
+                    return (
+                        <button
+                            key={profile._id}
+                            type="button"
+                            onClick={() => selectProfile(profile)}
+                            className={"profile"}
+                            style={{ width: '100%', backgroundColor: fromProfile ? '#f3f3f3' : 'white' }}
+                            aria-pressed={isSelected}
+                        >
+                            <span
+                                className={`profile-check${isSelected ? ' profile-check--selected' : ''}`}
+                                aria-hidden="true"
+                            >
+                                {isSelected && <FaCheck size={11} />}
+                            </span>
+                            <div className={"profile-info fc"}>
+                                <h4 className={"profile-name"}>
+                                    {profile.prenom}
+                                </h4>
+                                <p className={"profile-email"}>
+                                    {profile.email || '—'}
+                                </p>
+                                <p className={"profile-id"}>
+                                    N°{formatAccountNumber(profile._id)}
+                                </p>
+                            </div>
+                        </button>
+                    );
+                })}
             </div>
-            <br/>
-            {
-                fromProfile &&
-                <button type={"button"} style={{ backgroundColor: "transparent", color:"#1E21A4",marginRight:"auto", padding:0,marginBottom:'1rem'}} onClick={() => {setAddProfileOpen(true)}}>
-                    <FaPlus/>Ajouter un voyageur
-                </button>
+            <div className={"profile-selection__footer"}>
+                <p className={"profile-selection__hint"}>
+                    Associez votre profil voyageur pour profiter de tarifs personnalisés, ou le profil de vos proches pour créditer leur compte.
+                </p>
+                {fromProfile ? (
+                    <button
+                        type={"button"}
+                        style={{ backgroundColor: 'transparent', color: '#1E21A4', marginRight: 'auto', padding: 0 }}
+                        onClick={() => setAddProfileOpen(true)}
+                    >
+                        <FaPlus /> Ajouter un voyageur
+                    </button>
+                ) : (
+                    <button
+                        type={"button"}
+                        style={{ width: '100%' }}
+                        onClick={() => setAddProfileOpen(true)}
+                    >
+                        Ajouter un voyageur
+                    </button>
+                )}
+            </div>
 
-            }
-            {
-                !fromProfile &&
-                <button type={"button"} style={{width:"100%", marginTop:"auto",marginBottom:'1rem'}} onClick={() => {setAddProfileOpen(true)}}>
-                    Ajouter un voyageur
-                </button>
-            }
-
-
-            <Modal isOpen={addProfileOpen} onClose={() => setAddProfileOpen(false)} title={"Ajouter un profil"} >
-                <AddProfile onClose={() => setAddProfileOpen(false)} />
+            <Modal isOpen={addProfileOpen} onClose={() => setAddProfileOpen(false)} title={"Ajouter un profil"}>
+                <AddProfile onProfileAdded={addProfileCallback} />
             </Modal>
-        </>
+        </div>
     );
 }
 

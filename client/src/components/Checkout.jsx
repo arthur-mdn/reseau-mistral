@@ -1,46 +1,53 @@
-import React from 'react';
-import axios from 'axios';
-import config from "../config.js";
-import {useCookies} from "react-cookie";
-import {FaQuestion} from "react-icons/fa6";
+import React, { useState } from 'react';
+import { FaQuestion } from 'react-icons/fa6';
+import { useCookies } from 'react-cookie';
+import api from '../api';
 
-function Checkout({ onCheckoutConfirmed, panier, onClose }) {
+function Checkout({ onCheckoutConfirmed, panier }) {
+    const [cookies] = useCookies(['selectedProfile']);
+    const [error, setError] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+
     const handleSubmit = (event) => {
         event.preventDefault();
+        setError(null);
+        setSubmitting(true);
 
-        axios.post(`${config.serverUrl}/store/buy`, {
-            panier
-        }, { withCredentials: true })
-            .then(response => {
-                console.log('Tickets achetés avec succès:', response.data);
-                onCheckoutConfirmed()
+        api.post('/store/buy', {
+            panier,
+            profileId: cookies.selectedProfile,
+        })
+            .then(() => {
+                onCheckoutConfirmed();
             })
-            .catch(error => {
-                console.error('Erreur lors de la création du profil:', error);
+            .catch((err) => {
+                setError(err.response?.data?.message || 'Erreur lors de l\'achat');
+                setSubmitting(false);
             });
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{padding:'0 1rem'}} className={"fc g1"}>
+        <form onSubmit={handleSubmit} style={{ padding: '0 1rem' }} className={"fc g1"}>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
-                <label style={{fontWeight:"bold",color:"grey"}}>Numéro de carte</label>
+                <label htmlFor="card-number" style={{ fontWeight: 'bold', color: 'grey' }}>Numéro de carte</label>
                 <div className={"fr g1 ai-c jc-c"}>
                     <input
-                        type="number"
-                        required={true}
-                        style={{backgroundColor:"#f1f1f1",border:'1px solid lightgrey'}}
+                        id="card-number"
+                        type="text"
+                        inputMode="numeric"
+                        required
+                        style={{ backgroundColor: '#f1f1f1', border: '1px solid lightgrey' }}
                     />
-                    <div className={"fc jc-c ai-c"} style={{width:'25px', height:'25px', borderRadius:'4rem', border:'1px solid black'}}>
-                        <FaQuestion/>
+                    <div className={"fc jc-c ai-c"} style={{ width: '25px', height: '25px', borderRadius: '4rem', border: '1px solid black' }} aria-hidden="true">
+                        <FaQuestion />
                     </div>
                 </div>
-
             </div>
             <div>
-                <label  style={{fontWeight:"bold",color:"grey"}}>Expire fin</label>
+                <label htmlFor="card-month" style={{ fontWeight: 'bold', color: 'grey' }}>Expire fin</label>
                 <div className={"fr g1"}>
-                    <select required={true}
-                    style={{backgroundColor:"#f1f1f1",border:'1px solid lightgrey'}}>
+                    <select id="card-month" required style={{ backgroundColor: '#f1f1f1', border: '1px solid lightgrey' }}>
                         <option>01-Janvier</option>
                         <option>02-Février</option>
                         <option>03-Mars</option>
@@ -54,48 +61,29 @@ function Checkout({ onCheckoutConfirmed, panier, onClose }) {
                         <option>11-Novembre</option>
                         <option>12-Décembre</option>
                     </select>
-
-                    <select required={true}
-                    style={{backgroundColor:"#f1f1f1",border:'1px solid lightgrey'}}>
-                        <option>2024</option>
-                        <option>2025</option>
-                        <option>2026</option>
-                        <option>2027</option>
-                        <option>2028</option>
-                        <option>2029</option>
-                        <option>2030</option>
-                        <option>2031</option>
-                        <option>2032</option>
-                        <option>2033</option>
-                        <option>2034</option>
-                        <option>2035</option>
+                    <select id="card-year" required aria-label="Année d'expiration" style={{ backgroundColor: '#f1f1f1', border: '1px solid lightgrey' }}>
+                        {Array.from({ length: 12 }, (_, i) => 2024 + i).map((year) => (
+                            <option key={year}>{year}</option>
+                        ))}
                     </select>
                 </div>
-
             </div>
             <div>
-                <label  style={{fontWeight:"bold",color:"grey"}}>Cryptogramme visuel</label>
+                <label htmlFor="card-cvc" style={{ fontWeight: 'bold', color: 'grey' }}>Cryptogramme visuel</label>
                 <div className={"fr g1 ai-c"}>
                     <input
-                        type="number"
-                        placeholder={"***"}
-                        required={true}
-                        style={{backgroundColor:"#f1f1f1",border:'1px solid lightgrey',width:'100px'}}
+                        id="card-cvc"
+                        type="text"
+                        inputMode="numeric"
+                        required
+                        maxLength={4}
+                        style={{ backgroundColor: '#f1f1f1', border: '1px solid lightgrey', width: '100px' }}
                     />
-                    <div className={"fc jc-c ai-c"} style={{width:'25px', height:'25px', borderRadius:'4rem', border:'1px solid black'}}>
-                        <FaQuestion/>
-                    </div>
                 </div>
             </div>
-
-            <div className={"fr g0-5"}>
-                <input type={"checkbox"} id={"save"} style={{colorScheme:"light"}}/>
-                <label htmlFor={"save"} style={{fontSize:'0.9rem',lineHeight:'1rem'}}>Je souhaite enregistrer les données de mon moyen de paiement pour un futur achat</label>
-            </div>
-
-            <br/>
-            <button type="submit" style={{margin:"auto"}}>VALIDER</button>
-            <img src={"/elements/images/paiments.JPG"} alt={"payment ways"} style={{maxWidth:'300px', margin:'auto', display:"flex"}}/>
+            <button type="submit" disabled={submitting} style={{ width: '100%', marginTop: '1rem' }}>
+                {submitting ? 'Paiement...' : 'Payer'}
+            </button>
         </form>
     );
 }

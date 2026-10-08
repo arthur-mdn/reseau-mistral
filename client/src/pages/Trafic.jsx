@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import {BrowserRouter as Router, Routes, Route, Navigate, Link} from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../AuthContext';
-import {useTopBar} from "../TopBarContext.jsx";
-import {FaExclamation} from "react-icons/fa6";
+import { useEffect } from 'react';
+import { useTopBar } from '../TopBarContext.jsx';
+import { FaExclamation } from 'react-icons/fa6';
 
 function Trafic() {
     const { setTopBarState } = useTopBar();
@@ -38,7 +35,7 @@ function Trafic() {
             </div>
             <h4 style={{padding:'0.5rem 0.5rem 0.5rem 0.8rem'}}>Toutes les lignes concernées</h4>
             <div style={{display:"flex",flexWrap:"wrap", justifyContent:"space-evenly", gap:'1rem', backgroundColor:"white",padding:'0.5rem', borderRadius:'0.5rem'}}>
-                {horairesData.map((item, index) => (
+                {horairesData.map((item) => (
                     <div key={item.BulleId} style={{position:"relative",backgroundColor: item.BulleColor, color:"white", fontWeight:'bold',fontSize:'1.3rem', borderRadius:"4rem", padding:'0.3rem 0.9rem'}}>
                         {item.BulleId}
                         <div style={{position:"absolute", bottom:"-4px", right:"-4px", backgroundColor:'#f5752a', width:'20px', height:'20px', borderRadius:'4rem'}} className={"fr ai-c jc-c"}>

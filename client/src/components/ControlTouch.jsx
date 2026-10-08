@@ -19,7 +19,7 @@ function ControlTouch() {
             container.style.top = `${y - totalContainerHeight / 2}px`;
         }
 
-        function onMouseDown(event) {
+        function onMouseDown() {
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', onMouseUp);
         }

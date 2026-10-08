@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import {Link} from 'react-router-dom';
-import axios from 'axios';
-import {useAuth} from "../AuthContext.jsx";
-import { useNavigate } from 'react-router-dom';
-import config from "../config.js";
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext.jsx';
+import api from '../api';
+
 function Register() {
     const { setAuthStatus } = useAuth();
     const [email, setEmail] = useState('');
@@ -15,62 +14,59 @@ function Register() {
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        axios.post(`${config.serverUrl}/auth/register` , { email,
+        api.post('/auth/register', {
+            email,
             password,
             lastName,
             firstName,
-            birthDate }, { withCredentials: true })
-            .then(response => {
-                setAuthStatus("authenticated");
+            birthDate,
+        })
+            .then(() => {
+                setAuthStatus('authenticated');
                 navigate('/');
             })
-            .catch(error => {
-                if (error.response) {
-                    setErrorMessage(error.response.data.message || 'Erreur lors de l\'inscription');
-                } else {
-                    setErrorMessage('Erreur de connexion');
-                }
+            .catch((error) => {
+                setErrorMessage(error.response?.data?.message || 'Erreur lors de l\'inscription');
             });
-
     };
 
     return (
         <form onSubmit={handleSubmit} className={"form"} id={"login_form"}>
             <h2>Inscription</h2>
-            {errorMessage && <div style={{color:"red",fontWeight:"bold"}}>{errorMessage}</div>}
+            {errorMessage && <div style={{ color: 'red', fontWeight: 'bold' }}>{errorMessage}</div>}
             <div className={"input_container"}>
                 <label htmlFor="lastName">Nom</label>
                 <input
+                    id="lastName"
                     type="text"
                     placeholder="Nom"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     required
-                    minLength={3}
-                    maxLength={32}
-                    pattern="[a-zA-Z\s-]+"
+                    minLength={2}
+                    maxLength={100}
                 />
             </div>
             <div className={"input_container"}>
                 <label htmlFor="firstName">Prénom</label>
                 <input
+                    id="firstName"
                     type="text"
                     placeholder="Prénom"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     required
-                    minLength={3}
-                    maxLength={32}
-                    pattern="[a-zA-Z\s-]+"
+                    minLength={2}
+                    maxLength={100}
                 />
             </div>
             <div className={"input_container"}>
                 <label htmlFor="birthDate">Date de naissance</label>
                 <input
+                    id="birthDate"
                     type="date"
-                    placeholder="Date de naissance"
                     value={birthDate}
                     onChange={(e) => setBirthDate(e.target.value)}
                     required
@@ -79,43 +75,46 @@ function Register() {
             <div className={"input_container"}>
                 <label htmlFor="email">Email</label>
                 <input
+                    id="email"
                     type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    maxLength={64}
+                    maxLength={254}
+                    autoComplete="email"
                 />
             </div>
             <div className={"input_container"}>
                 <label htmlFor="password">Mot de passe</label>
                 <input
+                    id="password"
                     type="password"
                     placeholder="Mot de passe"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    maxLength={32}
+                    minLength={8}
+                    maxLength={128}
+                    autoComplete="new-password"
                 />
             </div>
-            <div className={"input_container"} style={{flexDirection:'row-reverse', justifyContent:'flex-end', alignItems:"center",gap:'10px'}}>
-                <label htmlFor="acceptConditions" style={{margin:0}}>J'accepte les conditions d'utilisation</label>
+            <div className={"input_container"} style={{ flexDirection: 'row-reverse', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
+                <label htmlFor="acceptConditions" style={{ margin: 0 }}>J'accepte les conditions d'utilisation</label>
                 <input
                     id={"acceptConditions"}
                     type="checkbox"
                     checked={acceptConditions}
                     onChange={(e) => setAcceptConditions(e.target.checked)}
                     required
-                    style={{colorScheme:'light'}}
+                    style={{ colorScheme: 'light' }}
                 />
             </div>
             <button type="submit" className={"main_button"}>Inscription</button>
             <p>Vous avez déjà un compte ?</p>
             <Link to={'/login'} className={"sub_button force_button_style"}>Se connecter</Link>
-
         </form>
     );
-
 }
 
 export default Register;

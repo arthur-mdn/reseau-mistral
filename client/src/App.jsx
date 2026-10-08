@@ -1,22 +1,22 @@
-// App.jsx
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import { AuthProvider, useAuth } from './AuthContext';
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import Logout from "./pages/Logout.jsx";
-import BottomBar from "./components/BottomBar.jsx";
+import BottomBar from './components/BottomBar.jsx';
 import { TopBarProvider } from './TopBarContext';
 import TopBar from './components/TopBar';
-import Home from './pages/Home.jsx';
-import Tickets from "./pages/Tickets.jsx";
-import Trafic from "./pages/Trafic.jsx";
-import Menu from "./pages/Menu.jsx";
-import Horaires from "./pages/Horaires.jsx";
-import Ticket from "./pages/Ticket.jsx";
-import Loading from "./components/Loading.jsx";
-import DemoBanner from "./components/DemoBanner.jsx";
+import Loading from './components/Loading.jsx';
+import DemoBanner from './components/DemoBanner.jsx';
+
+const Login = lazy(() => import('./pages/Login.jsx'));
+const Register = lazy(() => import('./pages/Register.jsx'));
+const Logout = lazy(() => import('./pages/Logout.jsx'));
+const Home = lazy(() => import('./pages/Home.jsx'));
+const Tickets = lazy(() => import('./pages/Tickets.jsx'));
+const Trafic = lazy(() => import('./pages/Trafic.jsx'));
+const Menu = lazy(() => import('./pages/Menu.jsx'));
+const Horaires = lazy(() => import('./pages/Horaires.jsx'));
+const Ticket = lazy(() => import('./pages/Ticket.jsx'));
 
 const AuthenticatedApp = () => {
     const { authStatus } = useAuth();
@@ -24,35 +24,34 @@ const AuthenticatedApp = () => {
     return (
         <Router>
             <DemoBanner />
-            {authStatus === "loading" ? (
+            {authStatus === 'loading' ? (
                 <Loading />
             ) : (
                 <>
                     <TopBarProvider>
                         <TopBar />
-                        <Routes>
-                            {authStatus === "unauthenticated" ? (
-                                <>
-                                    {/* Routes publiques */}
-                                    <Route path="/" element={<Login />} />
-                                    <Route path="/login" element={<Login />} />
-                                    <Route path="/register" element={<Register />} />
-                                </>
-                            ) : (
-                                <>
-                                    {/* Routes privées */}
-                                    <Route path="/" element={<Home />} />
-                                    <Route path="/horaires" element={<Horaires />} />
-                                    <Route path="/tickets" element={<Tickets />} />
-                                    <Route path="/tickets/:ticketId" element={<Ticket />} />
-                                    <Route path="/trafic" element={<Trafic />} />
-                                    <Route path="/menu" element={<Menu />} />
-                                    <Route path="/logout" element={<Logout />} />
-                                </>
-                            )}
-
-                            <Route path="*" element={<Navigate to={authStatus === "unauthenticated" ? "/login" : "/"} />} />
-                        </Routes>
+                        <Suspense fallback={<Loading />}>
+                            <Routes>
+                                {authStatus === 'unauthenticated' ? (
+                                    <>
+                                        <Route path="/" element={<Login />} />
+                                        <Route path="/login" element={<Login />} />
+                                        <Route path="/register" element={<Register />} />
+                                    </>
+                                ) : (
+                                    <>
+                                        <Route path="/" element={<Home />} />
+                                        <Route path="/horaires" element={<Horaires />} />
+                                        <Route path="/tickets" element={<Tickets />} />
+                                        <Route path="/tickets/:ticketId" element={<Ticket />} />
+                                        <Route path="/trafic" element={<Trafic />} />
+                                        <Route path="/menu" element={<Menu />} />
+                                        <Route path="/logout" element={<Logout />} />
+                                    </>
+                                )}
+                                <Route path="*" element={<Navigate to={authStatus === 'unauthenticated' ? '/login' : '/'} />} />
+                            </Routes>
+                        </Suspense>
                     </TopBarProvider>
                     <BottomBar />
                 </>

@@ -1,49 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import {useTopBar} from "../TopBarContext.jsx";
-import {useNavigate, useParams} from 'react-router-dom';
-import Modal from "../components/Modal.jsx";
-import ControlModal from "../components/ControlModal.jsx";
-import ControlTouch from "../components/ControlTouch.jsx";
-import {FaBus, FaChevronLeft, FaInfo} from "react-icons/fa6";
+import { useTopBar } from '../TopBarContext.jsx';
+import { useNavigate, useParams } from 'react-router-dom';
+import Modal from '../components/Modal.jsx';
+import ControlModal from '../components/ControlModal.jsx';
+import ControlTouch from '../components/ControlTouch.jsx';
+import { FaBus, FaChevronLeft, FaInfo } from 'react-icons/fa6';
 import { QRCodeSVG } from 'qrcode.react';
-import config from "../config.js";
-import Loading from "../components/Loading.jsx";
+import Loading from '../components/Loading.jsx';
+import api from '../api';
+import { parseDuration } from '../utils/duration.js';
 
 const CONTROL_GREEN = '#348C0D';
 const CONTROL_TITLE_BG = '#C0C0E6';
 
-const decToHex = (dec) => dec.toString(16);
+const decToHex = (dec) => {
+    try {
+        return BigInt(dec).toString(16);
+    } catch {
+        return String(dec);
+    }
+};
 
 function calculateRemainingTime(ticketUseDate, maxTime) {
     const useDate = new Date(ticketUseDate);
     const maxDuration = parseDuration(maxTime);
     const expireDate = new Date(useDate.getTime() + maxDuration);
-    const currentDate = new Date();
-
-    const remainingTime = expireDate - currentDate;
+    const remainingTime = expireDate - new Date();
     if (remainingTime <= 0) {
-        return '00:00:00'; // Temps expiré
+        return '00:00:00';
     }
-
     const hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((remainingTime / (1000 * 60)) % 60);
     const seconds = Math.floor((remainingTime / 1000) % 60);
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
-function parseDuration(durationString) {
-    const [amount, unit] = durationString.split(' ');
-    switch (unit) {
-        case 'hour':
-        case 'hours':
-            return amount * 60 * 60 * 1000;
-        case 'day':
-        case 'days':
-            return amount * 24 * 60 * 60 * 1000;
-        default:
-            return 0;
-    }
 }
 const getLastUsageDate = (usages) => {
     if (usages && usages.length > 0) {
@@ -159,8 +148,7 @@ function Ticket() {
 
     useEffect(() => {
         if (ticketDetails) {
-            // Regrouper les usages par jour
-            const newGroupedUsages = ticketDetails.usages.reduce((acc, usage) => {
+            const newGroupedUsages = (ticketDetails.usages || []).reduce((acc, usage) => {
                 const date = new Date(usage.date).toDateString();
                 if (!acc[date]) {
                     acc[date] = [];
@@ -174,33 +162,44 @@ function Ticket() {
 
 
     useEffect(() => {
-        axios.get(`${config.serverUrl}/tickets/${ticketId}`, { withCredentials: true })
-            .then(response => {
+        const controller = new AbortController();
+        setTicketDetails(null);
+        api.get(`/tickets/${ticketId}`, {
+            signal: controller.signal,
+            params: {},
+            headers: {},
+        })
+            .then((response) => {
                 setTicketDetails(response.data);
                 setTimeRemaining(initializeTimeRemaining(response.data));
             })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des détails du ticket:', error);
+            .catch((error) => {
+                if (error.name !== 'CanceledError') {
+                    console.error('Erreur lors de la récupération des détails du ticket:', error);
+                }
             });
+        return () => controller.abort();
     }, [ticketId]);
 
-    const deleteTicket = () => {
-        axios.delete(`${config.serverUrl}/tickets/${ticketId}`, { withCredentials: true })
-            .then(response => {
-                navigate('/tickets/', { replace: true });
-                console.log('Ticket supprimé avec succès');
-            })
-            .catch(error => {
-                console.error('Erreur lors de la suppression du ticket:', error);
-            });
-    };
-
-
     useEffect(() => {
-        setTopBarState({ backLink:{title:"M-Tickets", link:"/tickets/"}, title: 'Votre voyage', isVisible: true, actions: [{title:"Supprimer le ticket", action: function(){deleteTicket()}}] });
-        // Réinitialiser lors du démontage
+        const deleteTicket = () => {
+            api.delete(`/tickets/${ticketId}`)
+                .then(() => {
+                    navigate('/tickets/', { replace: true });
+                })
+                .catch((error) => {
+                    console.error('Erreur lors de la suppression du ticket:', error);
+                });
+        };
+
+        setTopBarState({
+            backLink: { title: 'M-Tickets', link: '/tickets/' },
+            title: 'Votre voyage',
+            isVisible: true,
+            actions: [{ title: 'Supprimer le ticket', action: deleteTicket }],
+        });
         return () => setTopBarState({ title: '', isVisible: true });
-    }, [setTopBarState]);
+    }, [setTopBarState, ticketId, navigate]);
 
 
     const calculateProgressBarWidth = () => {
@@ -209,7 +208,6 @@ function Ticket() {
         }
         const lastUsageDate = getLastUsageDate(ticketDetails.usages);
         const maxDuration = parseDuration(ticketDetails.priceId.maxTime);
-        const expireTime = new Date(lastUsageDate.getTime() + maxDuration);
         const currentTime = new Date();
         const timePassed = currentTime - lastUsageDate;
 
@@ -273,25 +271,29 @@ function Ticket() {
                             <h5 style={{fontWeight:"bold", opacity:'0.5'}}>Comment prendre une correspondance ?</h5>
                         </div>
                         <div className={"fc g1 w100"} style={{gap:'0.5rem',width:'100%'}}>
-                            <button type={"button"} style={{width:'100%', padding:'0.5rem 0rem', borderRadius:'0.5rem'}} onClick={()=>{setControlModalOpen(true)}}>Afficher mon titre en cours</button>
+                            <button type={"button"} style={{width:'100%', padding:'0.5rem 0rem', borderRadius:'0.5rem'}} disabled={!lastUsage} onClick={()=>{setControlModalOpen(true)}}>Afficher mon titre en cours</button>
                             <button type={"button"} style={{width:'100%', padding:'0.5rem 0rem', borderRadius:'0.5rem'}} onClick={()=>{setCorrespondanceModalOpen(true)}}>Prendre une correspondance</button>
                         </div>
                     </div>
                     <Modal isOpen={correspondanceModalOpen} onClose={() => setCorrespondanceModalOpen(false)} title={""} padding={"0"} hideBg={true}>
                         <div style={{position:"absolute",top:0,left:0, height:"100%", width:'100%', display:"flex", flexDirection:"column"}}>
-                            <div style={{position:"absolute",top:0,left:0, height:"100%", width:'100%', backgroundColor:"rgba(0,0,0,0)", zIndex:9998}} onClick={()=>{setCorrespondanceModalOpen(false)}}>
+                            <div style={{position:"absolute",top:0,left:0, height:"100%", width:'100%', backgroundColor:"rgba(0,0,0,0)", zIndex:9998}} onClick={()=>{setCorrespondanceModalOpen(false)}} role="button" tabIndex={0} aria-label="Fermer" onKeyDown={(e) => e.key === 'Escape' && setCorrespondanceModalOpen(false)}>
                             </div>
                             <div style={{backgroundColor:"white",zIndex:9999,marginTop:"auto", padding:"2rem", borderTopLeftRadius:'1rem', borderTopRightRadius:'1rem'}}>
                                 <h2 style={{fontWeight:"bold"}}>{ticketDetails.priceId.title}</h2>
                                 <h4><span style={{fontWeight:"bold"}}>1</span> Voyage disponible</h4>
-                                <p style={{marginTop:'1rem', color:'#555'}}>
-                                    Du {formatDate(lastUsage.date)} au {formatDate(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}
-                                </p>
+                                {lastUsage ? (
+                                    <p style={{marginTop:'1rem', color:'#555'}}>
+                                        Du {formatDate(lastUsage.date)} au {formatDate(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}
+                                    </p>
+                                ) : (
+                                    <p style={{marginTop:'1rem', color:'#555'}}>Titre jamais utilisé</p>
+                                )}
                                 <button type={"button"} style={{width:"100%", margin:'3rem 0 1rem 0'}} onClick={()=>{}}>Utiliser</button>
                             </div>
                         </div>
                     </Modal>
-                    <ControlModal isOpen={controlModalOpen} onClose={() => setControlModalOpen(false)} bgColor={"#000"}>
+                    <ControlModal isOpen={controlModalOpen && !!lastUsage} onClose={() => setControlModalOpen(false)} bgColor={"#000"}>
                         <div className={"fc h100"} >
                             {isExpired && (
                                 <div className={"fc g1 jc-c ai-c"} style={{marginTop:'30%'}}>

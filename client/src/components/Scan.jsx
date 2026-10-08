@@ -93,10 +93,17 @@ function Scan({ onScanSuccess, onScanError }) {
 
         return () => {
             cancelled = true;
+            const clearScanner = () => {
+                try {
+                    scanner.clear();
+                } catch {
+                    // clear() is synchronous in html5-qrcode
+                }
+            };
             if (scanner.isScanning) {
-                scanner.stop().then(() => scanner.clear()).catch(() => {});
+                scanner.stop().then(clearScanner).catch(clearScanner);
             } else {
-                scanner.clear().catch(() => {});
+                clearScanner();
             }
             scannerRef.current = null;
         };
@@ -143,11 +150,20 @@ function Scan({ onScanSuccess, onScanError }) {
                     </div>
                 )}
                 <div style={{position:"absolute", width:"100%", height:"100%", top:0, left:0,display:"flex",justifyContent:"center", alignItems:"center",gap:'1rem', pointerEvents:"none"}}>
-                    <button onClick={()=>{setIsManualScanOpen(true)}} style={{backgroundColor:"white", color:"black", width:"50px", height:'50px', display:"flex",alignItems:"center", justifyContent:"center",borderRadius:'2rem',pointerEvents:"all",fontWeight:"bold"}}>
+                    <button
+                        type="button"
+                        aria-label="Saisie manuelle du code"
+                        onClick={() => setIsManualScanOpen(true)}
+                        style={{ backgroundColor: 'white', color: 'black', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2rem', pointerEvents: 'all', fontWeight: 'bold' }}
+                    >
                         123
                     </button>
-                    <button style={{backgroundColor:"white", color:"black", width:"50px", height:'50px', display:"flex",alignItems:"center", justifyContent:"center",borderRadius:'2rem',pointerEvents:"all"}}>
-                        <FaBolt/>
+                    <button
+                        type="button"
+                        aria-label="Lampe torche"
+                        style={{ backgroundColor: 'white', color: 'black', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2rem', pointerEvents: 'all' }}
+                    >
+                        <FaBolt />
                     </button>
                 </div>
             </div>

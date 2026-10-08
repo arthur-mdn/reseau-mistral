@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {useTopBar} from "../TopBarContext.jsx";
 import {
     FaChevronRight,
@@ -13,9 +12,8 @@ import {
 import Modal from "../components/Modal.jsx";
 import ProfileSelection from "../components/ProfileSelection.jsx";
 import {FaExternalLinkAlt, FaHome} from "react-icons/fa";
-import config from "../config.js";
 import Loading from "../components/Loading.jsx";
-import {useCookies} from "react-cookie";
+import api from "../api";
 
 function Menu() {
     const { setTopBarState } = useTopBar();
@@ -29,31 +27,25 @@ function Menu() {
     const [isPolitiqueOpen, setIsPolitiqueOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [cookies, setCookie] = useCookies(['hideDemoBanner']);
-    const [isDemoModeDisabled, setIsDemoModeDisabled] = useState(cookies.hideDemoBanner === true);
-
-    const handleDemoModeChange = (event) => {
-        const isChecked = event.target.checked;
-        setIsDemoModeDisabled(isChecked);
-        setCookie('hideDemoBanner', isChecked, { path: '/', maxAge: 365 * 24 * 60 * 60 * 1000  });
-    };
+    const [loadError, setLoadError] = useState(null);
 
     useEffect(() => {
-        axios.get(`${config.serverUrl}/user/details`, { withCredentials: true })
+        const controller = new AbortController();
+        api.get('/user/details', { signal: controller.signal })
             .then(response => {
                 setUserDetails(response.data);
                 setIsLoading(false);
             })
             .catch(error => {
-                console.error('Erreur lors de la récupération des détails:', error);
+                if (error.name === 'CanceledError') return;
+                setLoadError('Impossible de charger le profil');
+                setIsLoading(false);
             });
+        return () => controller.abort();
     }, []);
 
     const deleteAllTickets = () => {
-        axios.delete(`${config.serverUrl}/tickets/`, { withCredentials: true })
-            .then(response => {
-                console.log('Tickets supprimés avec succès');
-            })
+        api.delete('/tickets/')
             .catch(error => {
                 console.error('Erreur lors de la suppression du ticket:', error);
             });
@@ -70,9 +62,10 @@ function Menu() {
     return (
         <>
             <div style={{position:"relative", width:"100%", height:"100%"}}>
+                {loadError && <p style={{color:'red', textAlign:'center', padding:'1rem'}}>{loadError}</p>}
 
                 <div style={{ width: "100%", display: "flex", alignItems: "center",padding:"1rem 0 1rem",justifyContent: "center"}}>
-                    <img src="/elements/favicon.png" style={{width: "65px", borderRadius: "25px"}}/>
+                    <img src="/elements/favicon.png" alt="Réseau Mistral" style={{width: "65px", borderRadius: "25px"}}/>
                 </div>
                 <div style={{padding: 0,margin:"0 1rem", borderRadius: "10px", backgroundColor: "white", boxShadow: "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px", position:"relative", zIndex:1}}>
                     <button onClick={()=>{setProfileOpen(true)}} type={"button"}  className="row-card setting_element" style={{padding:'0.5rem 0.7rem', backgroundColor:"white",color:"black",width:'100%',borderBottom:'1px solid lightgrey'}}>
@@ -278,17 +271,7 @@ function Menu() {
             </Modal>
 
             <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} title={"Paramètres"}>
-                <label className={"fr g0-5 ai-c"}>
-                    <input
-                        type="checkbox"
-                        checked={isDemoModeDisabled}
-                        onChange={handleDemoModeChange}
-                        style={{colorScheme:"light"}}
-                    />
-                    <span>
-                        Désactiver le mode démo
-                    </span>
-                </label>
+                <p>Cette application est une simulation. L'avertissement de démonstration reste toujours visible.</p>
             </Modal>
 
 
