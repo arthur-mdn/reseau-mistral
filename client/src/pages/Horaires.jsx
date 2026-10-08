@@ -16,6 +16,10 @@ function Horaires() {
         { BulleId: '11', BulleColor: '#7c35b1', Titre: 'Blache - Montserrat', Réseau: 'Réseau Mistral' },
         { BulleId: '11B', BulleColor: '#7c35b1', Titre: 'La Baume - Blache', Réseau: 'Réseau Mistral' },
         { BulleId: '12', BulleColor: '#e90000', Titre: 'Portes Oll. - La Seyne', Réseau: 'Réseau Mistral' },
+        { BulleId: '15', BulleColor: '#000000', TextColor: '#e90000', Titre: 'Bas Faron-Port-Liberté-Gare', Réseau: 'Réseau Mistral' },
+        { BulleId: '16', BulleColor: '#7c35b1', Titre: 'Moulin Premier - Maurels', Réseau: 'Réseau Mistral' },
+        { BulleId: '17', BulleColor: '#e90000', Titre: 'L\'oratoire - Lycée Costebelle', Réseau: 'Réseau Mistral' },
+        { BulleId: '18', BulleColor: '#b39ddb', Titre: 'Blache - Sablettes', Réseau: 'Réseau Mistral' },
     ];
 
     useEffect(() => {
@@ -51,7 +55,7 @@ function Horaires() {
 
                 {horairesData.map((item, index) => (
                     <div key={index} className={"fr ai-c g0-5"} style={{padding:'0.5rem', backgroundColor:"white", borderRadius:'0.5rem'}}>
-                        <div style={{backgroundColor: item.BulleColor, color:"white", fontWeight:'bold', borderRadius:"4rem", padding:'0.3rem 0.8rem'}}>
+                        <div style={{backgroundColor: item.BulleColor, color: item.TextColor || 'white', fontWeight:'bold', borderRadius:"4rem", padding:'0.3rem 0.8rem'}}>
                             {item.BulleId}
                         </div>
                         <div>
