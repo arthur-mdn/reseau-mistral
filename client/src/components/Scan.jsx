@@ -107,6 +107,7 @@ function Scan({ onScanSuccess, onScanError }) {
     const [code, setCode] = useState('');
     const [codeError, setCodeError] = useState(null);
     const [scanFrame, setScanFrame] = useState(null);
+    const [videoReady, setVideoReady] = useState(false);
 
     const syncScanFrame = useCallback(() => {
         setScanFrame(measureScanFrame(rootRef.current));
@@ -165,11 +166,16 @@ function Scan({ onScanSuccess, onScanError }) {
             }
 
             const lastCameraId = onApple ? null : localStorage.getItem(CAMERA_ID_KEY);
+            const baseVideo = {
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+            };
             const attempts = [];
             if (lastCameraId) {
-                attempts.push({ video: { deviceId: { exact: lastCameraId } }, audio: false });
-                attempts.push({ video: { deviceId: { ideal: lastCameraId } }, audio: false });
+                attempts.push({ video: { ...baseVideo, deviceId: { exact: lastCameraId } }, audio: false });
+                attempts.push({ video: { ...baseVideo, deviceId: { ideal: lastCameraId } }, audio: false });
             }
+            attempts.push({ video: { ...baseVideo, facingMode: { ideal: 'environment' } }, audio: false });
             attempts.push({ video: { facingMode: { ideal: 'environment' } }, audio: false });
             attempts.push({ video: true, audio: false });
 
@@ -183,6 +189,26 @@ function Scan({ onScanSuccess, onScanError }) {
             }
             throw lastError || new Error('Impossible d\'accéder à la caméra');
         };
+
+        const waitForVideoReady = (video) => new Promise((resolve) => {
+            let settled = false;
+            const finish = () => {
+                if (settled || cancelled) return;
+                if (!video.videoWidth || !video.videoHeight) return;
+                settled = true;
+                video.removeEventListener('loadedmetadata', onMeta);
+                video.removeEventListener('loadeddata', onMeta);
+                video.removeEventListener('playing', onMeta);
+                resolve();
+            };
+            const onMeta = () => {
+                requestAnimationFrame(() => requestAnimationFrame(finish));
+            };
+            video.addEventListener('loadedmetadata', onMeta);
+            video.addEventListener('loadeddata', onMeta);
+            video.addEventListener('playing', onMeta);
+            if (video.readyState >= 2 && video.videoWidth) onMeta();
+        });
 
         const tick = async () => {
             if (cancelled || successLockRef.current || scanningRef.current) return;
@@ -207,13 +233,17 @@ function Scan({ onScanSuccess, onScanError }) {
 
         const start = async () => {
             try {
-                detectorRef.current = await createQrDetector(getScanEnginePreference());
-                const stream = await openCamera();
+                setVideoReady(false);
+                const [detector, stream] = await Promise.all([
+                    createQrDetector(getScanEnginePreference()),
+                    openCamera(),
+                ]);
                 if (cancelled) {
                     stream.getTracks().forEach((track) => track.stop());
                     return;
                 }
 
+                detectorRef.current = detector;
                 streamRef.current = stream;
                 const video = videoRef.current;
                 if (!video) return;
@@ -222,8 +252,12 @@ function Scan({ onScanSuccess, onScanError }) {
                 video.setAttribute('webkit-playsinline', 'true');
                 video.muted = true;
                 video.playsInline = true;
+                video.style.objectFit = 'cover';
+                video.style.objectPosition = 'center center';
                 video.srcObject = stream;
                 await video.play().catch(() => {});
+                await waitForVideoReady(video);
+                if (cancelled) return;
 
                 const deviceId = stream.getVideoTracks?.()?.[0]?.getSettings?.()?.deviceId;
                 if (deviceId && !onApple) {
@@ -232,10 +266,12 @@ function Scan({ onScanSuccess, onScanError }) {
 
                 detectTorch(stream);
                 setCameraError(null);
+                setVideoReady(true);
                 syncScanFrame();
                 timerId = window.setInterval(tick, SCAN_INTERVAL_MS);
             } catch (error) {
                 if (cancelled) return;
+                setVideoReady(false);
                 setCameraError(
                     error?.name === 'NotAllowedError' || /permission|denied|NotAllowed/i.test(String(error))
                         ? 'Accès à la caméra refusé. Autorise la caméra dans les réglages du navigateur, puis réouvre le scanner.'
@@ -334,13 +370,16 @@ function Scan({ onScanSuccess, onScanError }) {
                     ref={videoRef}
                     muted
                     playsInline
-                    autoPlay
                     style={{
+                        position: 'absolute',
+                        inset: 0,
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
                         objectPosition: 'center center',
                         backgroundColor: '#000',
+                        opacity: videoReady ? 1 : 0,
+                        transition: 'opacity 0.15s ease-out',
                     }}
                 />
                 {scanFrame && shadedBorders && (
