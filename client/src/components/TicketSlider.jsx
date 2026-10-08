@@ -6,7 +6,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
-import {FaBan} from "react-icons/fa6";
+import {FaLock} from "react-icons/fa6";
 
 
 function calculateRemainingTime(ticketUseDate, maxTime) {
@@ -158,8 +158,11 @@ function TicketSlider({ tickets, onTicketSelect }) {
                     <div style={{position:"relative", margin:'0.5rem 0', display:"flex"}}>
                         {
                             remainingTimes[ticket._id] && (
-                                <div style={{width:'100%', height:'100%', backgroundColor:'rgba(52,52,52,0.2)',borderRadius:'15px', position:"absolute",top:0,left:0, boxSizing:"border-box", border:"4px solid white" }} className={"fc ai-c jc-c"}>
-                                    <FaBan size={"4rem"} fill={"rgb(80,80,80)"} style={{rotate:"90deg", opacity:0.6}}/>
+                                <div style={{width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.8)',borderRadius:'15px', position:"absolute",top:0,left:0, boxSizing:"border-box", border:"4px solid white" }} className={"fc ai-c jc-c"}>
+                                    <div style={{width:'2.5rem', height:'2.5rem', display:"flex", backgroundColor:'rgba(255,255,255,1)', justifyContent:"center", alignItems:"center", borderRadius:'50%'}}>
+                                        <FaLock size={"1.35rem"} fill={"rgb(0,0,0)"} style={{opacity:1}}/>
+                                    </div>
+                                    <h3 style={{fontSize:'0.9rem', color:'white', fontWeight:'bold', textAlign:'center', margin:'0 1rem'}}>Appuyez ici pour voir le Titre en cours</h3>
                                 </div>
                             )
                         }
