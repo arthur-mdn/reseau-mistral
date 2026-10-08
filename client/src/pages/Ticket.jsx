@@ -126,6 +126,7 @@ function Ticket() {
     const [ticketDetails, setTicketDetails] = useState(null);
     const [timeRemaining, setTimeRemaining] = useState('');
     const [controlModalOpen, setControlModalOpen] = useState(false);
+    const [correspondanceModalOpen, setCorrespondanceModalOpen] = useState(false);
     const [timePassed, setTimePassed] = useState('');
     const [isControlQrOpen, setIsControlQrOpen] = useState(false);
     const [groupedUsages, setGroupedUsages] = useState({});
@@ -252,10 +253,27 @@ function Ticket() {
                             <div className={"fr jc-c ai-c"} style={{backgroundColor:"#1E21A4", width:'20px', height:'20px', borderRadius:'4rem'}}>
                                 <FaInfo fill={"white"} size={"10px"}/>
                             </div>
-                            <h5 style={{fontWeight:"bold"}}>Comment prendre une correspondance ?</h5>
+                            <h5 style={{fontWeight:"bold", opacity:'0.5'}}>Comment prendre une correspondance ?</h5>
                         </div>
-                        <button type={"button"} style={{width:'100%', padding:'0.5rem 0rem', borderRadius:'0.5rem'}} onClick={()=>{setControlModalOpen(true)}}>Afficher mon titre en cours</button>
+                        <div className={"fc g1 w100"} style={{gap:'0.5rem',width:'100%'}}>
+                            <button type={"button"} style={{width:'100%', padding:'0.5rem 0rem', borderRadius:'0.5rem'}} onClick={()=>{setControlModalOpen(true)}}>Afficher mon titre en cours</button>
+                            <button type={"button"} style={{width:'100%', padding:'0.5rem 0rem', borderRadius:'0.5rem'}} onClick={()=>{setCorrespondanceModalOpen(true)}}>Prendre une correspondance</button>
+                        </div>
                     </div>
+                    <Modal isOpen={correspondanceModalOpen} onClose={() => setCorrespondanceModalOpen(false)} title={""} padding={"0"} hideBg={true}>
+                        <div style={{position:"absolute",top:0,left:0, height:"100%", width:'100%', display:"flex", flexDirection:"column"}}>
+                            <div style={{position:"absolute",top:0,left:0, height:"100%", width:'100%', backgroundColor:"rgba(0,0,0,0)", zIndex:9998}} onClick={()=>{setCorrespondanceModalOpen(false)}}>
+                            </div>
+                            <div style={{backgroundColor:"white",zIndex:9999,marginTop:"auto", padding:"2rem", borderTopLeftRadius:'1rem', borderTopRightRadius:'1rem'}}>
+                                <h2 style={{fontWeight:"bold"}}>{ticketDetails.priceId.title}</h2>
+                                <h4><span style={{fontWeight:"bold"}}>1</span> Voyage disponible</h4>
+                                <p style={{marginTop:'1rem', color:'#555'}}>
+                                    Du {formatDate(lastUsage.date)} au {formatDate(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}
+                                </p>
+                                <button type={"button"} style={{width:"100%", margin:'3rem 0 1rem 0'}} onClick={()=>{}}>Utiliser</button>
+                            </div>
+                        </div>
+                    </Modal>
                     <ControlModal isOpen={controlModalOpen} onClose={() => setControlModalOpen(false)} onOpenQrCode={() => setIsControlQrOpen(true)} title={""} bgColor={"rgb(41, 41, 41)"}>
                         <div className={"fc h100"} >
                             {isExpired && (
