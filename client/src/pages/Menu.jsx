@@ -16,6 +16,11 @@ import { FaExternalLinkAlt, FaHome } from 'react-icons/fa';
 import Loading from '../components/Loading.jsx';
 import api from '../api';
 import { isDemoBannerHidden, toggleDemoBannerHidden } from '../utils/demoBanner';
+import {
+    getScanEnginePreference,
+    setScanEnginePreference,
+    SCAN_ENGINES,
+} from '../utils/scanEngine';
 
 const menuIconStyle = {
     width: '40px',
@@ -60,6 +65,7 @@ function Menu() {
     const [bannerConfirmOpen, setBannerConfirmOpen] = useState(false);
     const [bannerHidden, setBannerHidden] = useState(() => isDemoBannerHidden());
     const [settingsClickCount, setSettingsClickCount] = useState(0);
+    const [scanEngine, setScanEngine] = useState(() => getScanEnginePreference());
     const [accountsOpen, setAccountsOpen] = useState(false);
     const [accounts, setAccounts] = useState([]);
     const [accountsLoading, setAccountsLoading] = useState(false);
@@ -571,12 +577,42 @@ function Menu() {
                 }}
                 title={"Paramètres"}
             >
-                <p
-                    onClick={handleSettingsPhraseClick}
-                    style={{ cursor: 'default', userSelect: 'none' }}
-                >
-                    Cette application est une simulation. L'avertissement de démonstration reste toujours visible.
-                </p>
+                <div className={"fc g1"}>
+                    <p
+                        onClick={handleSettingsPhraseClick}
+                        style={{ cursor: 'default', userSelect: 'none' }}
+                    >
+                        Cette application est une simulation. L'avertissement de démonstration reste toujours visible.
+                    </p>
+                    <div className={"fc g0-5"}>
+                        <label htmlFor="scan-engine" style={{ fontWeight: 600 }}>
+                            Moteur de scan QR
+                        </label>
+                        <select
+                            id="scan-engine"
+                            value={scanEngine}
+                            onChange={(e) => {
+                                const next = setScanEnginePreference(e.target.value);
+                                setScanEngine(next);
+                            }}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem 0.85rem',
+                                borderRadius: '0.5rem',
+                                border: '1px solid lightgrey',
+                                backgroundColor: '#fff',
+                                color: '#111',
+                            }}
+                        >
+                            <option value={SCAN_ENGINES.AUTO}>Auto (natif puis ZXing)</option>
+                            <option value={SCAN_ENGINES.NATIVE}>Natif (BarcodeDetector)</option>
+                            <option value={SCAN_ENGINES.ZXING}>ZXing (wasm)</option>
+                        </select>
+                        <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.7 }}>
+                            Sur iPhone, ZXing est souvent plus fiable. Auto choisit le meilleur disponible.
+                        </p>
+                    </div>
+                </div>
             </Modal>
 
             <Modal

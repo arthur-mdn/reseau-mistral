@@ -769,26 +769,6 @@ button.decrement {
   width: 100%;
 }
 
-#html5-qrcode-select-camera{
-  background-color: #474747;
-  color: #b5b5b5;
-}
-#qr-code-reader__dashboard_section_csr div button{
-  margin: auto;
-}
-#qr-code-reader{
-  border:0!important;
-}
-
-#qr-code-reader video {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-  object-position: center center !important;
-  background: #000;
-}
-
-
 .loader {
   width: 48px;
   height: 48px;
@@ -1191,41 +1171,6 @@ body{
   transition: left 0.4s, top 0.4s;
 }
 
-
-#html5-qrcode-button-camera-stop, #html5-qrcode-button-camera-start, #html5-qrcode-select-camera, #html5-qrcode-button-camera-permission, #html5-qrcode-button-file-selection{
-  background-color: #1a1a1a;
-  color: #b5b5b5;
-  border: 0;
-  margin-top: 15px;
-}
-#qr-code-reader__dashboard_section_csr{
-  color: dimgrey;
-}
-#qr-code-reader__dashboard{
-  height: 100%;
-}
-#qr-code-reader__dashboard_section{
-  margin-top: 10%;
-}
-#html5-qrcode-select-camera{
-  width: auto;
-  display: block;
-  margin: auto;
-}
-#html5-qrcode-anchor-scan-type-change{
-  margin-top: 5px;
-}
-#html5-qrcode-anchor-scan-type-change{
-  color: dimgrey;
-}
-
-#qr-code-reader img[alt="Info icon"]{
-  display: none;
-}
-
-#qr-shaded-region > div {
-  display: none !important;
-}
 
 .scan-frame-chevrons {
   position: absolute;
