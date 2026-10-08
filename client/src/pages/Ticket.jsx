@@ -5,10 +5,13 @@ import {useNavigate, useParams} from 'react-router-dom';
 import Modal from "../components/Modal.jsx";
 import ControlModal from "../components/ControlModal.jsx";
 import ControlTouch from "../components/ControlTouch.jsx";
-import {FaChevronLeft, FaInfo} from "react-icons/fa6";
+import {FaChevronLeft, FaInfo, FaUserCheck} from "react-icons/fa6";
 import { QRCodeSVG } from 'qrcode.react';
 import config from "../config.js";
 import Loading from "../components/Loading.jsx";
+
+const CONTROL_GREEN = '#348C0D';
+const CONTROL_TITLE_BG = '#C0C0E6';
 
 const decToHex = (dec) => dec.toString(16);
 
@@ -87,6 +90,11 @@ const formatDateStr = (dateTimeString) => {
 const formatTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
     return dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
+
+const formatDateTime = (dateTimeString) => {
+    const dateTime = new Date(dateTimeString);
+    return `${dateTime.toLocaleDateString('fr-FR')} à ${dateTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
 };
 
 const calculateTimePassed = (usages, maxTime) => {
@@ -274,7 +282,7 @@ function Ticket() {
                             </div>
                         </div>
                     </Modal>
-                    <ControlModal isOpen={controlModalOpen} onClose={() => setControlModalOpen(false)} onOpenQrCode={() => setIsControlQrOpen(true)} title={""} bgColor={"rgb(41, 41, 41)"}>
+                    <ControlModal isOpen={controlModalOpen} onClose={() => setControlModalOpen(false)} bgColor={"rgb(41, 41, 41)"}>
                         <div className={"fc h100"} >
                             {isExpired && (
                                 <div className={"fc g1 jc-c ai-c"} style={{marginTop:'30%'}}>
@@ -294,41 +302,61 @@ function Ticket() {
                                     </div>
                                 </div>
                             )}
-                            <div style={{margin:'auto 0 4rem 0'}}>
-                                <div style={{backgroundColor: isExpired ? "black" : "white",padding:"0.5rem",borderRadius:'1rem'}} className={"fc g1"}>
-                                    <div style={{color: isExpired ? "white" : "black"}}>
-                                        <h2 style={{fontWeight:"bold"}}>{ticketDetails.priceId.title}</h2>
-                                        <h4 style={{textAlign:"center"}}>Période de validité</h4>
-                                        <div className={"fr jc-sb"}>
-                                            <div>
-                                                <h2 style={{fontWeight:"bold",fontSize:'1.5rem',lineHeight:'1.5rem'}}>{formatDate(lastUsage.date)}</h2>
-                                                <h3 style={{textAlign:"center"}}>{formatTime(lastUsage.date)}</h3>
-                                            </div>
-                                            <div>
-                                                <h2 style={{fontWeight:"bold",fontSize:'1.5rem',lineHeight:'1.5rem'}}>{formatDate(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h2>
-                                                <h3 style={{textAlign:"center"}}>{formatTime(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h3>
-                                            </div>
+                            <div style={{margin:'auto 0 2rem 0', display:'flex', flexDirection:'column', gap:'0.75rem', zIndex:20, position:'relative'}}>
+                                <div style={{backgroundColor:'white', borderRadius:'0.75rem', overflow:'hidden', border:'1px solid #949493'}}>
+                                    <div style={{display:'flex', alignItems:'stretch', backgroundColor:CONTROL_TITLE_BG, minHeight:'40px'}}>
+                                        <div style={{backgroundColor:'white', display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.35rem 0.65rem', margin:'0 0.55rem 0 0', borderRadius:'0 0 0.85rem 0', border:'1px solid #949493', borderTop:0,borderLeft:0}}>
+                                            <FaUserCheck size={'1.15rem'} color={'#1E21A4'}/>
+                                            <span style={{fontWeight:900, fontSize:'1.15rem', color:'#1a1a1a', lineHeight:1}}>1</span>
+                                        </div>
+                                        <div style={{flex:1, display:'flex', alignItems:'center', justifyContent:'flex-end', padding:'0 0.85rem'}}>
+                                            <span style={{fontWeight:'bold', fontSize:'1.2rem', color:'#1a1a1a'}}>{ticketDetails.priceId.title}</span>
                                         </div>
                                     </div>
-                                </div>
-                                <br/>
-                                <div style={{backgroundColor:"white",padding:"0.5rem",borderRadius:'1rem'}} className={"fc g1"}>
-                                    <div style={{color: "black"}}>
-                                        <h4 style={{textAlign:"center"}}>Informations de contrôle</h4>
-                                        <div className={"fr jc-sb"}>
-                                            <img src={"/elements/icons/controleur.svg"} style={{width:"45px",marginBottom:"30px"}}/>
-                                            <div>
-                                                <h2 style={{fontWeight:"bold",textAlign:"center"}}>{formatDate(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h2>
-                                                <h3 style={{textAlign:"center",fontSize:'1.3rem',lineHeight:'1.5rem'}}>{formatTime(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h3>
-                                                <h1 style={{fontWeight:"bold", fontSize:"1.3rem",textWrap:"nowrap", textTransform:"uppercase",maxWidth:'225px', overflow:"hidden",textOverflow:"ellipsis", textAlign:"center", whiteSpace:'nowrap', wordBreak:"break-word"}}>{B64_ID}</h1>
+                                    <div style={{display:'flex', padding:'0.75rem 0.85rem', gap:'0.75rem', alignItems:'center'}}>
+                                        <div style={{flex:1, minWidth:0}}>
+                                            <p style={{fontSize:'0.8rem', color:'#666', marginBottom:'0.55rem'}}>Période de validité</p>
+                                            <div style={{display:'flex', alignItems:'center', gap:'0.45rem', marginBottom:'0.4rem'}}>
+                                                <img src={"/elements/icons/calendar-check.png"} alt="" style={{width:'18px', height:'18px', objectFit:'contain'}}/>
+                                                <span style={{fontSize:'0.9rem', color:'#1a1a1a'}}>{formatDateTime(lastUsage.date)}</span>
                                             </div>
-                                            <h1 style={{width:'70px', color:'limegreen',fontSize:"1.5rem", fontWeight:"bold"}}>{timePassed}</h1>
+                                            <div style={{display:'flex', alignItems:'center', gap:'0.45rem'}}>
+                                                <img src={"/elements/icons/calendar-cross.png"} alt="" style={{width:'18px', height:'18px', objectFit:'contain'}}/>
+                                                <span style={{fontSize:'0.9rem', color:'#1a1a1a'}}>{formatDateTime(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</span>
+                                            </div>
                                         </div>
+                                        <div style={{width:'1px', backgroundColor:'#1E21A4', alignSelf:'stretch', flexShrink:0}}/>
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsControlQrOpen(true)}
+                                            style={{background:'transparent', border:'1px solid #000', borderRadius:'0.45rem', padding:'0.35rem', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0}}
+                                            aria-label="Afficher le QR code"
+                                        >
+                                            <img src={"/elements/icons/qr.png"} alt="" style={{width:'52px', height:'52px', objectFit:'contain', display:'block'}}/>
+                                        </button>
                                     </div>
                                 </div>
-                                <br/>
-                                <div id={"progress-container"} style={{width:'100%', backgroundColor:"grey", borderRadius:"1rem", overflow:"hidden"}}>
-                                    <div id={"progress-bar"} style={{width: `${calculateProgressBarWidth()}%`, backgroundColor:"red", height:"10px", borderRadius:"1rem"}}></div>
+
+                                <div style={{backgroundColor:'white', borderRadius:'0.75rem', overflow:'hidden', border:'1px solid #949493'}}>
+                                    <div style={{display:'flex', alignItems:'stretch', backgroundColor:CONTROL_TITLE_BG, minHeight:'40px'}}>
+                                        <div style={{backgroundColor:'white', display:'flex', alignItems:'center', justifyContent:'center', padding:'0.35rem 0.7rem', margin:'0 0.55rem 0 0', borderRadius:'0 0 0.85rem 0', border:'1px solid #949493', borderTop:0,borderLeft:0}}>
+                                            <span style={{fontWeight:700, fontSize:'1.15rem', color:CONTROL_GREEN, fontVariantNumeric:'tabular-nums', lineHeight:1}}>{timePassed || '00:00'}</span>
+                                        </div>
+                                        <div style={{flex:1, display:'flex', alignItems:'center', justifyContent:'flex-end', padding:'0 0.85rem'}}>
+                                            <span style={{fontWeight:'bold', fontSize:'1.2rem', color:'#1a1a1a'}}>Informations de contrôle</span>
+                                        </div>
+                                    </div>
+                                    <div style={{padding:'0.85rem', display:'flex', flexDirection:'column', alignItems:'center', gap:'0.45rem'}}>
+                                        <div style={{display:'flex', alignItems:'center', gap:'0.45rem'}}>
+                                            <img src={"/elements/icons/calendar-check.png"} alt="" style={{width:'18px', height:'18px', objectFit:'contain'}}/>
+                                            <span style={{fontSize:'0.9rem', color:'#1a1a1a'}}>{formatDateTime(lastUsage.date)}</span>
+                                        </div>
+                                        <h1 style={{fontWeight:'bold', fontSize:'1.35rem', textTransform:'uppercase', letterSpacing:'0.02em', textAlign:'center', wordBreak:'break-all', lineHeight:1.2, margin:0}}>{B64_ID}</h1>
+                                    </div>
+                                </div>
+
+                                <div id={"progress-container"} style={{width:'100%', backgroundColor:'#ffffff', borderRadius:'2rem', overflow:'hidden', height:'22px'}}>
+                                    <div id={"progress-bar"} style={{width: `${Math.max(calculateProgressBarWidth(), 2)}%`, backgroundColor:CONTROL_GREEN, height:'100%', borderRadius:'2rem'}}></div>
                                 </div>
                             </div>
                             { !isExpired && (
