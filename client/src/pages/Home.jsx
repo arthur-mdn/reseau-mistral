@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTopBar } from '../TopBarContext.jsx';
 import { FaHome, FaSearch } from 'react-icons/fa';
-import { FaLocationArrow, FaSuitcase } from 'react-icons/fa6';
+import { FaLocationArrow, FaLocationCrosshairs, FaSuitcase } from 'react-icons/fa6';
 import { useCookies } from 'react-cookie';
 import Modal from '../components/Modal.jsx';
 import Loading from '../components/Loading.jsx';
+import ToulonMap from '../components/ToulonMap.jsx';
 import api from '../api';
 import { isTicketActive } from '../utils/duration.js';
 import { requestCameraPermission } from '../utils/cameraPermission';
@@ -40,11 +41,13 @@ function Home() {
 
     const stageRef = useRef(null);
     const sheetRef = useRef(null);
+    const mapRef = useRef(null);
     const contentInnerRef = useRef(null);
     const snapsRef = useRef({ reduit: SHEET_REDUIT, normal: SHEET_REDUIT, etendu: SHEET_REDUIT });
     const dragRef = useRef({ active: false, startY: 0, startH: SHEET_REDUIT });
     const [sheetHeight, setSheetHeight] = useState(SHEET_REDUIT);
     const [dragging, setDragging] = useState(false);
+    const isSheetCollapsed = !dragging && sheetHeight <= SHEET_REDUIT + 2;
 
     const measureSnaps = useCallback(() => {
         const stage = stageRef.current;
@@ -110,6 +113,12 @@ function Home() {
             return nearestSnap(current, snaps);
         });
     };
+
+    const collapseSheet = useCallback(() => {
+        const snaps = measureSnaps();
+        snapsRef.current = snaps;
+        setSheetHeight(snaps.reduit);
+    }, [measureSnaps]);
 
     const handleLogoClick = () => {
         if (logoClickTimerRef.current) {
@@ -181,12 +190,42 @@ function Home() {
 
     return (
         <div className="page-lock-scroll">
-            <img
-                src={"/elements/images/plan.jpg"}
-                alt={"plan du réseau"}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
-            />
+            <ToulonMap ref={mapRef} onUserInteract={collapseSheet} />
             <div ref={stageRef} className="home-stage">
+                {isSheetCollapsed && (
+                    <>
+                        <div
+                            className="home-map-zoom"
+                            style={{ bottom: sheetHeight + 10 }}
+                        >
+                            <button
+                                type="button"
+                                className="home-map-ctrl"
+                                onClick={() => mapRef.current?.zoomIn()}
+                                aria-label="Zoom avant"
+                            >
+                                +
+                            </button>
+                            <button
+                                type="button"
+                                className="home-map-ctrl"
+                                onClick={() => mapRef.current?.zoomOut()}
+                                aria-label="Zoom arrière"
+                            >
+                                −
+                            </button>
+                        </div>
+                        <button
+                            type="button"
+                            className="home-map-ctrl home-map-recenter"
+                            style={{ bottom: sheetHeight + 10 }}
+                            onClick={() => mapRef.current?.recenter()}
+                            aria-label="Recentrer"
+                        >
+                            <FaLocationCrosshairs size={16} />
+                        </button>
+                    </>
+                )}
                 <div
                     ref={sheetRef}
                     className={`home-sheet${dragging ? ' is-dragging' : ''}`}

@@ -1,0 +1,24 @@
+{
+  "appearance" : "light",
+  "attribution" : "Capture Apple Plans · prototype ToulonMap",
+  "bounds" : {
+    "east" : 5.95,
+    "north" : 43.14,
+    "south" : 43.11,
+    "west" : 5.91
+  },
+  "center" : {
+    "latitude" : 43.125,
+    "longitude" : 5.93
+  },
+  "format" : "png",
+  "generatedAt" : "2026-10-08T21:34:10Z",
+  "mapStyle" : "standard",
+  "maxzoom" : 17,
+  "minzoom" : 13,
+  "name" : "toulon",
+  "scheme" : "xyz",
+  "tileCount" : 361,
+  "tileSize" : 256,
+  "tileURLTemplate" : "{z}\/{x}\/{y}.png"
+}
