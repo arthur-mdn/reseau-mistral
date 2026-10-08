@@ -6,7 +6,8 @@ import {FaBackspace} from "react-icons/fa";
 import { CAMERA_ID_KEY } from '../utils/cameraPermission';
 
 const QR_BOX_MAX = 250;
-const BUTTONS_GAP = 16;
+const BUTTONS_GAP = 72;
+const LABEL_GAP = 80;
 const CHEVRON_OUTSET = 10;
 const CHEVRON_SIZE = 28;
 const CHEVRON_STROKE = 4;
@@ -338,6 +339,27 @@ function Scan({ onScanSuccess, onScanError }) {
                 )}
                 {scanFrame && (
                     <>
+                        <p
+                            style={{
+                                position: 'absolute',
+                                top: scanFrame.top - LABEL_GAP,
+                                left: scanFrame.left + scanFrame.width / 2,
+                                transform: 'translate(-50%, -100%)',
+                                width: 'min(90vw, 320px)',
+                                margin: 0,
+                                padding: '0 0.75rem',
+                                color: '#fff',
+                                textAlign: 'center',
+                                fontSize: '0.95rem',
+                                fontWeight: 600,
+                                lineHeight: 1.35,
+                                textShadow: '0 1px 3px rgba(0,0,0,0.65)',
+                                zIndex: 3,
+                                pointerEvents: 'none',
+                            }}
+                        >
+                            Scannez le QR code pour l'utiliser ou saisissez le texte
+                        </p>
                         <div
                             className="scan-frame-chevrons"
                             aria-hidden="true"
