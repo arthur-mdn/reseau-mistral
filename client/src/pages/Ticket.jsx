@@ -77,8 +77,15 @@ const formatDateStr = (dateTimeString) => {
     const dayName = days[date.getDay()];
     const monthName = months[date.getMonth()];
     const dayOfMonth = date.getDate();
+    const formatted = `${dayName} ${dayOfMonth} ${monthName}`;
 
-    return `${dayName} ${dayOfMonth} ${monthName}`;
+    const today = new Date();
+    const isToday =
+        date.getFullYear() === today.getFullYear() &&
+        date.getMonth() === today.getMonth() &&
+        date.getDate() === today.getDate();
+
+    return isToday ? `Aujourd'hui - ${formatted}` : formatted;
 };
 
 const formatTime = (dateTimeString) => {
@@ -249,7 +256,7 @@ function Ticket() {
                             <div className="ticket-detail__sheet">
                                 <div className="ticket-detail__chevron" aria-hidden="true" />
                                 <div className="ticket-detail__sheet-body">
-                                    <h3 style={{ fontWeight: 'bold' }}>Mes validations</h3>
+                                    <h3 style={{ fontWeight: 'bold', width: '100%', textAlign: 'center' }}>Mes validations</h3>
                                     <div style={{ width: '100%' }}>
                                         {Object.keys(groupedUsages).map((date) => (
                                             <div key={date} className={"fc"} style={{ gap: '0.3rem' }}>
@@ -272,7 +279,7 @@ function Ticket() {
                                         <div className={"fr jc-c ai-c"} style={{ backgroundColor: '#1E21A4', width: '20px', height: '20px', borderRadius: '4rem' }}>
                                             <FaInfo fill={"white"} size={"10px"} />
                                         </div>
-                                        <h5 style={{ fontWeight: 'normal', opacity: '0.5' }}>Comment prendre une correspondance ?</h5>
+                                        <h5 style={{ fontWeight: 'normal', opacity: '0.8', fontSize: '0.8rem' }}>Comment prendre une correspondance ?</h5>
                                     </div>
                                     <div className={"fc g1 w100"} style={{ gap: '0.5rem', width: '100%' }}>
                                         <button type={"button"} style={{ width: '100%', padding: '0.5rem 0rem', borderRadius: '0.5rem' }} disabled={!lastUsage} onClick={() => { setControlModalOpen(true); }}>Afficher mon titre en cours</button>
