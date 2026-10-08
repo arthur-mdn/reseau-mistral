@@ -12,7 +12,7 @@ const TopBar = () => {
     if (!topBarState.isVisible) return null;
     return (
         <header className={"header-top"} style={{ backgroundColor:"#1E21A4", color:"white" }}>
-            <div className={"container"} style={{padding:"0 1rem", height:'60px', display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+            <div className={"container header-top__inner"} style={{padding:"0 1rem", height:'60px', display:"flex", justifyContent:"space-between", alignItems:"center", position:"relative"}}>
                 {topBarState.backLink && (
                     <Link to={topBarState.backLink.link} style={{color:"white"}} className={"fr ai-c g0-5"}>
                         <FaChevronLeft/>

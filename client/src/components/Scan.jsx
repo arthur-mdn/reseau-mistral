@@ -2,8 +2,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FaBolt } from 'react-icons/fa6';
 import { FaBackspace } from 'react-icons/fa';
 import Modal from './Modal.jsx';
-import { CAMERA_ID_KEY } from '../utils/cameraPermission';
 import { createQrDetector, getScanEnginePreference } from '../utils/scanEngine';
+import {
+    attachStreamToVideo,
+    openCameraStream,
+    rememberCameraDeviceId,
+    startCameraSession,
+} from '../utils/cameraStart';
 
 const QR_BOX_MAX = 250;
 const BUTTONS_GAP = 72;
@@ -107,7 +112,6 @@ function Scan({ onScanSuccess, onScanError }) {
     const [code, setCode] = useState('');
     const [codeError, setCodeError] = useState(null);
     const [scanFrame, setScanFrame] = useState(null);
-    const [videoReady, setVideoReady] = useState(false);
 
     const syncScanFrame = useCallback(() => {
         setScanFrame(measureScanFrame(rootRef.current));
@@ -160,56 +164,6 @@ function Scan({ onScanSuccess, onScanError }) {
             }
         };
 
-        const openCamera = async () => {
-            if (!navigator.mediaDevices?.getUserMedia) {
-                throw new Error('Caméra non supportée');
-            }
-
-            const lastCameraId = onApple ? null : localStorage.getItem(CAMERA_ID_KEY);
-            const baseVideo = {
-                width: { ideal: 1280 },
-                height: { ideal: 720 },
-            };
-            const attempts = [];
-            if (lastCameraId) {
-                attempts.push({ video: { ...baseVideo, deviceId: { exact: lastCameraId } }, audio: false });
-                attempts.push({ video: { ...baseVideo, deviceId: { ideal: lastCameraId } }, audio: false });
-            }
-            attempts.push({ video: { ...baseVideo, facingMode: { ideal: 'environment' } }, audio: false });
-            attempts.push({ video: { facingMode: { ideal: 'environment' } }, audio: false });
-            attempts.push({ video: true, audio: false });
-
-            let lastError = null;
-            for (const constraints of attempts) {
-                try {
-                    return await navigator.mediaDevices.getUserMedia(constraints);
-                } catch (error) {
-                    lastError = error;
-                }
-            }
-            throw lastError || new Error('Impossible d\'accéder à la caméra');
-        };
-
-        const waitForVideoReady = (video) => new Promise((resolve) => {
-            let settled = false;
-            const finish = () => {
-                if (settled || cancelled) return;
-                if (!video.videoWidth || !video.videoHeight) return;
-                settled = true;
-                video.removeEventListener('loadedmetadata', onMeta);
-                video.removeEventListener('loadeddata', onMeta);
-                video.removeEventListener('playing', onMeta);
-                resolve();
-            };
-            const onMeta = () => {
-                requestAnimationFrame(() => requestAnimationFrame(finish));
-            };
-            video.addEventListener('loadedmetadata', onMeta);
-            video.addEventListener('loadeddata', onMeta);
-            video.addEventListener('playing', onMeta);
-            if (video.readyState >= 2 && video.videoWidth) onMeta();
-        });
-
         const tick = async () => {
             if (cancelled || successLockRef.current || scanningRef.current) return;
             const video = videoRef.current;
@@ -233,50 +187,49 @@ function Scan({ onScanSuccess, onScanError }) {
 
         const start = async () => {
             try {
-                setVideoReady(false);
-                const [detector, stream] = await Promise.all([
-                    createQrDetector(getScanEnginePreference()),
-                    openCamera(),
-                ]);
-                if (cancelled) {
-                    stream.getTracks().forEach((track) => track.stop());
-                    return;
-                }
-
-                detectorRef.current = detector;
-                streamRef.current = stream;
-                const video = videoRef.current;
-                if (!video) return;
-
-                video.setAttribute('playsinline', 'true');
-                video.setAttribute('webkit-playsinline', 'true');
-                video.muted = true;
-                video.playsInline = true;
-                video.style.objectFit = 'cover';
-                video.style.objectPosition = 'center center';
-                video.srcObject = stream;
-                await video.play().catch(() => {});
-                await waitForVideoReady(video);
-                if (cancelled) return;
-
-                const deviceId = stream.getVideoTracks?.()?.[0]?.getSettings?.()?.deviceId;
-                if (deviceId && !onApple) {
-                    localStorage.setItem(CAMERA_ID_KEY, deviceId);
-                }
-
-                detectTorch(stream);
-                setCameraError(null);
-                setVideoReady(true);
-                syncScanFrame();
-                timerId = window.setInterval(tick, SCAN_INTERVAL_MS);
-            } catch (error) {
-                if (cancelled) return;
-                setVideoReady(false);
-                setCameraError(
-                    error?.name === 'NotAllowedError' || /permission|denied|NotAllowed/i.test(String(error))
-                        ? 'Accès à la caméra refusé. Autorise la caméra dans les réglages du navigateur, puis réouvre le scanner.'
-                        : (error?.message || 'Impossible d\'accéder à la caméra.')
-                );
+                await startCameraSession({
+                    openCamera: () => openCameraStream({
+                        skipDeviceId: onApple,
+                        lastCameraId: onApple ? null : localStorage.getItem('rm-last-camera-id'),
+                    }),
+                    createDetector: () => createQrDetector(getScanEnginePreference()),
+                    attachStream: async (stream) => {
+                        if (cancelled) {
+                            stream.getTracks().forEach((track) => track.stop());
+                            return;
+                        }
+                        streamRef.current = stream;
+                        await attachStreamToVideo(videoRef.current, stream);
+                    },
+                    onCameraReady: (stream) => {
+                        if (cancelled) return;
+                        rememberCameraDeviceId(stream, { enabled: !onApple });
+                        detectTorch(stream);
+                        setCameraError(null);
+                        syncScanFrame();
+                        if (!timerId) {
+                            timerId = window.setInterval(tick, SCAN_INTERVAL_MS);
+                        }
+                    },
+                    onDetectorReady: (detector) => {
+                        if (cancelled) return;
+                        detectorRef.current = detector;
+                    },
+                    onError: (error) => {
+                        if (cancelled) return;
+                        if (streamRef.current) {
+                            onScanErrorRef.current?.(error);
+                            return;
+                        }
+                        setCameraError(
+                            error?.name === 'NotAllowedError' || /permission|denied|NotAllowed/i.test(String(error))
+                                ? 'Accès à la caméra refusé. Autorise la caméra dans les réglages du navigateur, puis réouvre le scanner.'
+                                : (error?.message || 'Impossible d\'accéder à la caméra.')
+                        );
+                    },
+                });
+            } catch {
+                // camera error already handled in onError
             }
         };
 
@@ -368,19 +321,9 @@ function Scan({ onScanSuccess, onScanError }) {
             <div ref={rootRef} style={{ position: 'relative', width: '100%', height: '100%', minHeight: 0, backgroundColor: '#000', overflow: 'hidden' }}>
                 <video
                     ref={videoRef}
+                    className="scan-preview-video"
                     muted
                     playsInline
-                    style={{
-                        position: 'absolute',
-                        inset: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: 'center center',
-                        backgroundColor: '#000',
-                        opacity: videoReady ? 1 : 0,
-                        transition: 'opacity 0.15s ease-out',
-                    }}
                 />
                 {scanFrame && shadedBorders && (
                     <div
