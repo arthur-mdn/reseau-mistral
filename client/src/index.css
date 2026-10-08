@@ -449,6 +449,49 @@ body {
   color: #1E21A4 !important;
 }
 
+.trafic-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  background-color: lightgrey;
+  border-radius: 7px;
+}
+
+.trafic-tabs__btn {
+  width: 100%;
+  margin: 0;
+  padding: 0.35rem 0 !important;
+  border: 0 !important;
+  border-radius: 5px !important;
+  background: transparent !important;
+  color: #333 !important;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+.trafic-tabs__btn.is-active {
+  background: #ffffff !important;
+  color: #111 !important;
+  font-weight: 500;
+}
+
+.trafic-tabs__btn:hover,
+.trafic-tabs__btn:focus,
+.trafic-tabs__btn:focus-visible {
+  opacity: 1;
+  outline: none;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.trafic-tabs__btn:not(.is-active):hover {
+  opacity: 0.85;
+}
+
 .bottom-bar {
   position: fixed;
   bottom: 0;

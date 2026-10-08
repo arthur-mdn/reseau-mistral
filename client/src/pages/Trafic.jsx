@@ -1,22 +1,31 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTopBar } from '../TopBarContext.jsx';
 import { FaExclamation } from 'react-icons/fa6';
 import PullToRefresh from '../components/PullToRefresh.jsx';
 
+const LINES_EN_COURS = [
+    { BulleId: 'U', BulleColor: 'orange' },
+    { BulleId: '1', BulleColor: '#0000b7' },
+    { BulleId: '3', BulleColor: '#e90000' },
+    { BulleId: '6', BulleColor: '#009ee9' },
+    { BulleId: '8', BulleColor: '#28677f' },
+    { BulleId: '9', BulleColor: '#66c34f' },
+    { BulleId: '10', BulleColor: '#063951' },
+    { BulleId: '11', BulleColor: '#7c35b1' },
+    { BulleId: '11B', BulleColor: '#7c35b1' },
+    { BulleId: '12', BulleColor: '#e90000' },
+];
+
+const LINES_A_VENIR = [
+    { BulleId: '8M', BulleColor: '#c4a8e8', TextColor: '#ffffff' },
+    { BulleId: '81', BulleColor: '#e90000', TextColor: '#ffffff' },
+];
+
 function Trafic() {
     const { setTopBarState } = useTopBar();
-    const horairesData = [
-        { BulleId: 'U', BulleColor: 'orange', Titre: 'Tech.Mer/Pôle d\'Act. Tln Est', Réseau: 'Réseau Mistral' },
-        { BulleId: '1', BulleColor: '#0000b7', Titre: 'Coupiane - Beaucaire', Réseau: 'Réseau Mistral' },
-        { BulleId: '3', BulleColor: '#e90000', Titre: '4 Ch. des Routes - Mourillon', Réseau: 'Réseau Mistral' },
-        { BulleId: '6', BulleColor: '#009ee9', Titre: 'Ripelle - Terre Promise', Réseau: 'Réseau Mistral' },
-        { BulleId: '8', BulleColor: '#28677f', Titre: 'La Seyne - Blache', Réseau: 'Réseau Mistral' },
-        { BulleId: '9', BulleColor: '#66c34f', Titre: 'Hôpital - Gare Toulon', Réseau: 'Réseau Mistral' },
-        { BulleId: '10', BulleColor: '#063951', Titre: 'Lyautey - Darboussèdes', Réseau: 'Réseau Mistral' },
-        { BulleId: '11', BulleColor: '#7c35b1', Titre: 'Blache - Montserrat', Réseau: 'Réseau Mistral' },
-        { BulleId: '11B', BulleColor: '#7c35b1', Titre: 'La Baume - Blache', Réseau: 'Réseau Mistral' },
-        { BulleId: '12', BulleColor: '#e90000', Titre: 'Portes Oll. - La Seyne', Réseau: 'Réseau Mistral' },
-    ];
+    const [tab, setTab] = useState('en-cours');
+    const lines = tab === 'en-cours' ? LINES_EN_COURS : LINES_A_VENIR;
+
     useEffect(() => {
         setTopBarState({ backLink: '', title: 'Info trafic', isVisible: true, actions: [] });
         return () => setTopBarState({ title: '', isVisible: true });
@@ -25,13 +34,25 @@ function Trafic() {
     return (
         <div className="page-scroll">
             <div className="page-scroll__header" style={{ backgroundColor: '#ebebeb', padding: '0.5rem 0.5rem 0' }}>
-                <div className={"fr ai-c jc-c"} style={{ padding: '0.2rem', backgroundColor: 'lightgrey', borderRadius: '7px' }}>
-                    <div style={{ backgroundColor: 'white', borderRadius: '5px', width: '100%', textAlign: 'center', fontSize: '1rem', padding: '0.2rem 0' }}>
+                <div className="trafic-tabs" role="tablist" aria-label="Infos trafic">
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={tab === 'en-cours'}
+                        className={`trafic-tabs__btn${tab === 'en-cours' ? ' is-active' : ''}`}
+                        onClick={() => setTab('en-cours')}
+                    >
                         En cours
-                    </div>
-                    <div style={{ borderRadius: '5px', width: '100%', backgroundColor: 'lightgrey', textAlign: 'center', fontSize: '1rem', padding: '0.2rem 0' }}>
+                    </button>
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={tab === 'a-venir'}
+                        className={`trafic-tabs__btn${tab === 'a-venir' ? ' is-active' : ''}`}
+                        onClick={() => setTab('a-venir')}
+                    >
                         À venir
-                    </div>
+                    </button>
                 </div>
                 <h4 style={{ padding: '0.5rem 0.5rem 0.5rem 0.8rem' }}>Toutes les lignes concernées</h4>
             </div>
@@ -48,13 +69,13 @@ function Trafic() {
                         border: '1px solid #e6e6e6',
                     }}
                 >
-                    {horairesData.map((item) => (
+                    {lines.map((item) => (
                         <div
                             key={item.BulleId}
                             style={{
                                 position: 'relative',
                                 backgroundColor: item.BulleColor,
-                                color: 'white',
+                                color: item.TextColor || 'white',
                                 fontWeight: 'bold',
                                 fontSize: '1.3rem',
                                 borderRadius: '4rem',
