@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaQuestion } from 'react-icons/fa6';
+import { FaCalendarDays, FaCircleQuestion, FaCreditCard, FaUser } from 'react-icons/fa6';
 import { useCookies } from 'react-cookie';
 import api from '../api';
 
@@ -7,6 +7,9 @@ function Checkout({ onCheckoutConfirmed, panier }) {
     const [cookies] = useCookies(['selectedProfile']);
     const [error, setError] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+
+    const totalPrice = (panier || []).reduce((acc, ticket) => acc + ticket.quantity * ticket.price, 0);
+    const totalLabel = totalPrice.toFixed(2).replace('.', ',');
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -27,62 +30,75 @@ function Checkout({ onCheckoutConfirmed, panier }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ padding: '0 1rem' }} className={"fc g1"}>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div>
-                <label htmlFor="card-number" style={{ fontWeight: 'bold', color: 'grey' }}>Numéro de carte</label>
-                <div className={"fr g1 ai-c jc-c"}>
-                    <input
-                        id="card-number"
-                        type="text"
-                        inputMode="numeric"
-                        required
-                        style={{ backgroundColor: '#f1f1f1', border: '1px solid lightgrey' }}
-                    />
-                    <div className={"fc jc-c ai-c"} style={{ width: '25px', height: '25px', borderRadius: '4rem', border: '1px solid black' }} aria-hidden="true">
-                        <FaQuestion />
-                    </div>
-                </div>
+        <form onSubmit={handleSubmit} className={"checkout-form"}>
+            {error && <p style={{ color: 'red', margin: '0 0 0.75rem' }}>{error}</p>}
+
+            <div className={"checkout-cards-banner"}>
+                <p className={"checkout-cards-banner__title"}>Cartes</p>
+                <img
+                    src={"/elements/images/creditcards.jpg"}
+                    alt={"CB, Mastercard, Maestro, Visa"}
+                    className={"checkout-cards-banner__img"}
+                />
             </div>
-            <div>
-                <label htmlFor="card-month" style={{ fontWeight: 'bold', color: 'grey' }}>Expire fin</label>
-                <div className={"fr g1"}>
-                    <select id="card-month" required style={{ backgroundColor: '#f1f1f1', border: '1px solid lightgrey' }}>
-                        <option>01-Janvier</option>
-                        <option>02-Février</option>
-                        <option>03-Mars</option>
-                        <option>04-Avril</option>
-                        <option>05-Mai</option>
-                        <option>06-Juin</option>
-                        <option>07-Juillet</option>
-                        <option>08-Août</option>
-                        <option>09-Septembre</option>
-                        <option>10-Octobre</option>
-                        <option>11-Novembre</option>
-                        <option>12-Décembre</option>
-                    </select>
-                    <select id="card-year" required aria-label="Année d'expiration" style={{ backgroundColor: '#f1f1f1', border: '1px solid lightgrey' }}>
-                        {Array.from({ length: 12 }, (_, i) => 2024 + i).map((year) => (
-                            <option key={year}>{year}</option>
-                        ))}
-                    </select>
-                </div>
+
+            <div className={"checkout-field"}>
+                <input
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="cc-number"
+                    placeholder="Numéro de carte"
+                    required
+                    aria-label="Numéro de carte"
+                />
+                <FaCreditCard className={"checkout-field__icon"} aria-hidden="true" />
             </div>
-            <div>
-                <label htmlFor="card-cvc" style={{ fontWeight: 'bold', color: 'grey' }}>Cryptogramme visuel</label>
-                <div className={"fr g1 ai-c"}>
-                    <input
-                        id="card-cvc"
-                        type="text"
-                        inputMode="numeric"
-                        required
-                        maxLength={4}
-                        style={{ backgroundColor: '#f1f1f1', border: '1px solid lightgrey', width: '100px' }}
-                    />
-                </div>
+
+            <div className={"checkout-field"}>
+                <input
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="cc-exp"
+                    placeholder="MM/AA"
+                    required
+                    maxLength={5}
+                    aria-label="Date d'expiration"
+                />
+                <FaCalendarDays className={"checkout-field__icon"} aria-hidden="true" />
             </div>
-            <button type="submit" disabled={submitting} style={{ width: '100%', marginTop: '1rem' }}>
-                {submitting ? 'Paiement...' : 'Payer'}
+
+            <div className={"checkout-field"}>
+                <input
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="cc-csc"
+                    placeholder="Code de sécurité"
+                    required
+                    maxLength={4}
+                    aria-label="Code de sécurité"
+                />
+                <FaCircleQuestion className={"checkout-field__icon"} aria-hidden="true" />
+            </div>
+
+            <div className={"checkout-field"}>
+                <input
+                    type="text"
+                    autoComplete="cc-name"
+                    placeholder="Titulaire de la carte"
+                    required
+                    aria-label="Titulaire de la carte"
+                />
+                <FaUser className={"checkout-field__icon"} aria-hidden="true" />
+            </div>
+
+            <button type="submit" disabled={submitting} className={"checkout-pay-btn"}>
+                {submitting ? 'Paiement...' : `PAYER ${totalLabel} €`}
+            </button>
+
+            <p className={"checkout-other-label"}>Autre moyens de paiement :</p>
+            <button type="button" className={"checkout-apple-pay"} disabled={submitting}>
+                <img src={"/elements/images/apple-pay.webp"} alt="" className={"checkout-apple-pay__img"} />
+                <span>Apple Pay</span>
             </button>
         </form>
     );

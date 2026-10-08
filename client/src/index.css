@@ -1107,3 +1107,108 @@ body{
 #qr-code-reader img[alt="Info icon"]{
   display: none;
 }
+
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  height: 100%;
+  padding: 0.5rem 1.1rem 1rem;
+  margin: 0.25rem 0;
+}
+
+.checkout-cards-banner {
+  background-color: #F0F0F0;
+  border: 1px solid #B6B6B6;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.checkout-cards-banner__title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #000;
+}
+
+.checkout-cards-banner__img {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+}
+
+.checkout-field {
+  position: relative;
+  width: 100%;
+}
+
+.checkout-field input {
+  width: 100%;
+  height: 2.75em;
+  padding: 0 2.5rem 0 0.85em !important;
+  border-radius: 0 !important;
+  border: 1.5px solid #b6b6b6 !important;
+  background-color: #fff !important;
+  color: #000;
+  font-size: 16px;
+}
+
+.checkout-field input::placeholder {
+  color: #888;
+  opacity: 1;
+}
+
+.checkout-field__icon {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+.checkout-pay-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+}
+
+.checkout-other-label {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.9rem;
+  color: #000;
+  text-align: left;
+}
+
+button.checkout-apple-pay,
+button[type=button].checkout-apple-pay {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem !important;
+  background: #fff !important;
+  border: 1px solid #b6b6b6 !important;
+  border-radius: 0 !important;
+  color: #000 !important;
+  box-shadow: none !important;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+button.checkout-apple-pay:hover,
+button[type=button].checkout-apple-pay:hover {
+  background: #fff !important;
+  color: #000 !important;
+  opacity: 1;
+}
+
+.checkout-apple-pay__img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
