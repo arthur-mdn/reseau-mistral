@@ -1,6 +1,8 @@
-FROM node:latest
+FROM node:22-alpine
 WORKDIR /app
+RUN apk add --no-cache python3 make g++
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev && apk del python3 make g++
 COPY . .
-RUN npm install
 EXPOSE 3001
-CMD ["npm", "start"]
+CMD ["node", "server.js"]

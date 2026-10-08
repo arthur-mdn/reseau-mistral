@@ -1,36 +1,41 @@
-version: '3'
-
-services: 
+services:
   reseau-mistral-mongodb:
     image: mongo
+    restart: unless-stopped
     volumes:
       - reseau_mistral_mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  reseau-mistral-server:
+    build:
+      context: ./server
+    restart: unless-stopped
+    env_file: ./server/.env
+    environment:
+      DB_URI: mongodb://reseau-mistral-mongodb:27017/reseau-mistral
+      CLIENT_URL: http://localhost:5173
+      PORT: 3001
+    ports:
+      - "127.0.0.1:3001:3001"
+    depends_on:
+      reseau-mistral-mongodb:
+        condition: service_healthy
 
   reseau-mistral-client:
     build:
       context: ./client
       args:
-        VITE_INSTANCE_URL: "https://reseau-mistral.mondon.pro"
-        VITE_SERVER_URL: "https://api.reseau-mistral.mondon.pro"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.reseau-mistral-client.rule=Host(`reseau-mistral.mondon.pro`)"
-      - "traefik.http.routers.reseau-mistral-client.entrypoints=websecure"
-      - "traefik.http.routers.reseau-mistral-client.tls.certresolver=myresolver"
-
-  reseau-mistral-server:
-    build:
-      context: ./server
-    env_file: ./server/.env
-    environment:
-        DB_URI: mongodb://reseau-mistral-mongodb:27017/reseau-mistral
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.reseau-mistral-server.rule=Host(`api.reseau-mistral.mondon.pro`)"
-      - "traefik.http.services.reseau-mistral-server.loadbalancer.server.port=3001"
-      - "traefik.http.routers.reseau-mistral-server.entrypoints=websecure"
-      - "traefik.http.routers.reseau-mistral-server.tls.certresolver=myresolver"
+        VITE_INSTANCE_URL: "http://localhost:5173"
+        VITE_SERVER_URL: "http://localhost:3001"
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5173:80"
+    depends_on:
+      - reseau-mistral-server
 
 volumes:
   reseau_mistral_mongodb_data:
-    driver: local
