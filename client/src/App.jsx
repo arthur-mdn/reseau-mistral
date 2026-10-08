@@ -17,6 +17,7 @@ const Trafic = lazy(() => import('./pages/Trafic.jsx'));
 const Menu = lazy(() => import('./pages/Menu.jsx'));
 const Horaires = lazy(() => import('./pages/Horaires.jsx'));
 const Ticket = lazy(() => import('./pages/Ticket.jsx'));
+const AuthError = lazy(() => import('./pages/AuthError.jsx'));
 
 const AuthenticatedApp = () => {
     const { authStatus } = useAuth();
@@ -26,6 +27,10 @@ const AuthenticatedApp = () => {
             <DemoBanner />
             {authStatus === 'loading' ? (
                 <Loading />
+            ) : authStatus === 'error' ? (
+                <Suspense fallback={<Loading />}>
+                    <AuthError />
+                </Suspense>
             ) : (
                 <>
                     <TopBarProvider>
