@@ -3,8 +3,8 @@ import { Html5Qrcode } from 'html5-qrcode';
 import {FaBolt} from "react-icons/fa6";
 import Modal from "./Modal.jsx";
 import {FaBackspace} from "react-icons/fa";
+import { CAMERA_ID_KEY } from '../utils/cameraPermission';
 
-const CAMERA_ID_KEY = 'rm-last-camera-id';
 const QR_BOX_MAX = 250;
 const BUTTONS_GAP = 16;
 

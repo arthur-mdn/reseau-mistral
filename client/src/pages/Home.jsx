@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTopBar } from '../TopBarContext.jsx';
 import { FaHome, FaSearch } from 'react-icons/fa';
@@ -8,6 +8,7 @@ import Modal from '../components/Modal.jsx';
 import Loading from '../components/Loading.jsx';
 import api from '../api';
 import { isTicketActive } from '../utils/duration.js';
+import { requestCameraPermission } from '../utils/cameraPermission';
 
 function Home() {
     const { setTopBarState } = useTopBar();
@@ -16,6 +17,40 @@ function Home() {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [loadError, setLoadError] = useState(null);
+    const [logoClickCount, setLogoClickCount] = useState(0);
+    const logoClickTimerRef = useRef(null);
+    const cameraWarmupBusyRef = useRef(false);
+
+    const handleLogoClick = () => {
+        if (logoClickTimerRef.current) {
+            clearTimeout(logoClickTimerRef.current);
+        }
+
+        const next = logoClickCount + 1;
+        if (next >= 3) {
+            setLogoClickCount(0);
+            if (cameraWarmupBusyRef.current) return;
+            cameraWarmupBusyRef.current = true;
+            requestCameraPermission()
+                .catch(() => {})
+                .finally(() => {
+                    cameraWarmupBusyRef.current = false;
+                });
+            return;
+        }
+
+        setLogoClickCount(next);
+        logoClickTimerRef.current = setTimeout(() => {
+            setLogoClickCount(0);
+            logoClickTimerRef.current = null;
+        }, 1500);
+    };
+
+    useEffect(() => () => {
+        if (logoClickTimerRef.current) {
+            clearTimeout(logoClickTimerRef.current);
+        }
+    }, []);
 
     useEffect(() => {
         if (!cookies.selectedProfile) {
@@ -74,7 +109,12 @@ function Home() {
                         <div>
                             <div className={"fr jc-sb ai-c"}>
                                 <h4 style={{ fontWeight: 'bold' }}>Titre(s) en cours</h4>
-                                <img src={"/elements/images/reseau_mistral.jpg"} alt={"logo"} style={{ width: '170px' }} />
+                                <img
+                                    src={"/elements/images/reseau_mistral.jpg"}
+                                    alt={"logo"}
+                                    onClick={handleLogoClick}
+                                    style={{ width: '170px', cursor: 'default', userSelect: 'none' }}
+                                />
                             </div>
                             <div>
                                 {ticketsEnCours.map((ticket) => (
@@ -105,7 +145,12 @@ function Home() {
                     <div className={"fr jc-sb ai-c"} style={{ marginTop: '2rem' }}>
                         <h4 style={{ fontWeight: 'bold' }}>On y va ?</h4>
                         {ticketsEnCours.length <= 0 && (
-                            <img src={"/elements/images/reseau_mistral.jpg"} alt={"logo"} style={{ width: '160px' }} />
+                            <img
+                                src={"/elements/images/reseau_mistral.jpg"}
+                                alt={"logo"}
+                                onClick={handleLogoClick}
+                                style={{ width: '160px', cursor: 'default', userSelect: 'none' }}
+                            />
                         )}
                     </div>
                     <div style={{ backgroundColor: 'white', marginTop: '0.25rem', padding: '0.5rem', borderRadius: '0.5rem', color: 'black' }} className={"fc g1"}>
