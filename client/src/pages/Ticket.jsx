@@ -52,12 +52,17 @@ const getLastUsageDate = (usages) => {
     return null;
 };
 
+const parseScanData = (scanData = '') => {
+    const [prefix = '', transport = ''] = String(scanData).split('+');
+    return { prefix, transport };
+};
+
 const getLastUsageFormatted = (usages) => {
     if (usages && usages.length > 0) {
         const lastUsage = usages[usages.length - 1];
-        const scanPart = lastUsage.scanData.split("+")[0];
-        const hexId = decToHex(lastUsage._id);
-        return `${scanPart}-${hexId}`;
+        const { prefix } = parseScanData(lastUsage.scanData);
+        const hexId = decToHex(lastUsage._id).slice(0, 13);
+        return `${prefix}-${hexId}`;
     }
     return '';
 };
@@ -219,7 +224,7 @@ function Ticket() {
     const expireDate = lastUsage && ticketDetails
         ? new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime))
         : null;
-    const transportNumber = lastUsage?.scanData?.split("+")[0] || '';
+    const transportNumber = parseScanData(lastUsage?.scanData).transport;
     return (
         <>
             {ticketDetails ? (
