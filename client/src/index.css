@@ -326,13 +326,13 @@ body {
 
 .ticket-detail__hero {
   position: relative;
-  z-index: 2;
+  z-index: 0;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 1rem 1.25rem;
+  padding: 1rem 1rem 1.6rem;
   background-color: #f1f1f1;
   overflow: visible;
 }
@@ -340,9 +340,9 @@ body {
 .ticket-detail__chevron {
   position: absolute;
   left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 50%);
-  z-index: 5;
+  top: 0;
+  transform: translate(-50%, -100%);
+  z-index: 6;
   width: 0;
   height: 0;
   border-left: 16px solid transparent;
@@ -353,29 +353,45 @@ body {
 
 .ticket-detail__sheet-wrap {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
   width: 100%;
   overflow: visible;
+  padding-top: 7px;
 }
 
 .ticket-detail__sheet-stack {
   position: absolute;
   left: 0;
   right: 0;
-  top: 6px;
+  top: 0;
   bottom: 0;
-  background-color: #e4e4e4;
+  background-color: #ffffff;
   border-radius: 0;
   z-index: 0;
+  box-shadow: none;
 }
 
 .ticket-detail__sheet {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 0;
+  box-shadow:
+    0 -6px 18px rgba(0, 0, 0, 0.16),
+    0 -2px 6px rgba(0, 0, 0, 0.08);
+  overflow: visible;
+}
+
+.ticket-detail__sheet-body {
   flex: 1;
   min-height: 0;
   width: 100%;
@@ -384,10 +400,9 @@ body {
   align-items: flex-start;
   gap: 1rem;
   padding: 1.35rem 1rem 1rem;
-  background-color: #ffffff;
-  border-radius: 0;
-  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .page-scroll {

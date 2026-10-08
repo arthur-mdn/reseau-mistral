@@ -242,40 +242,42 @@ function Ticket() {
                                     <span style={{ fontSize: '1.3rem', lineHeight: '1.8rem', fontWeight: 'bold' }}>{timeRemaining}</span>
                                 </div>
                             </div>
-                            <div className="ticket-detail__chevron" aria-hidden="true" />
                         </div>
 
                         <div className="ticket-detail__sheet-wrap">
                             <div className="ticket-detail__sheet-stack" aria-hidden="true" />
                             <div className="ticket-detail__sheet">
-                                <h3 style={{ fontWeight: 'bold' }}>Mes validations</h3>
-                                <div style={{ width: '100%' }}>
-                                    {Object.keys(groupedUsages).map((date) => (
-                                        <div key={date} className={"fc"} style={{ gap: '0.3rem' }}>
-                                            <span style={{ backgroundColor: '#e9e9e9', padding: '0.1rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.8rem', alignSelf: 'flex-start' }}>{formatDateStr(date)}</span>
-                                            {groupedUsages[date].map((usage) => (
-                                                <div key={usage._id}>
-                                                    <div className={"fr jc-sb"} style={{ border: '1px dashed #e5e5e5', borderLeft: 0, borderRight: 0, padding: '0.4rem 0.5rem 0.3rem' }}>
-                                                        <div>
-                                                            <p style={{ lineHeight: '0.9rem', fontSize: '0.9rem' }}>1 validation</p>
-                                                            <h4 style={{ fontWeight: 'bold', lineHeight: '1.3rem' }}>{ticketDetails.priceId.title}</h4>
+                                <div className="ticket-detail__chevron" aria-hidden="true" />
+                                <div className="ticket-detail__sheet-body">
+                                    <h3 style={{ fontWeight: 'bold' }}>Mes validations</h3>
+                                    <div style={{ width: '100%' }}>
+                                        {Object.keys(groupedUsages).map((date) => (
+                                            <div key={date} className={"fc"} style={{ gap: '0.3rem' }}>
+                                                <span style={{ backgroundColor: '#e9e9e9', padding: '0.1rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.8rem', alignSelf: 'flex-start' }}>{formatDateStr(date)}</span>
+                                                {groupedUsages[date].map((usage) => (
+                                                    <div key={usage._id}>
+                                                        <div className={"fr jc-sb"} style={{ border: '1px dashed #e5e5e5', borderLeft: 0, borderRight: 0, padding: '0.4rem 0.5rem 0.3rem' }}>
+                                                            <div>
+                                                                <p style={{ lineHeight: '0.9rem', fontSize: '0.9rem' }}>1 validation</p>
+                                                                <h4 style={{ fontWeight: 'bold', lineHeight: '1.3rem' }}>{ticketDetails.priceId.title}</h4>
+                                                            </div>
+                                                            <h4 style={{ fontWeight: 'bold' }}>{formatTime(usage.date)}</h4>
                                                         </div>
-                                                        <h4 style={{ fontWeight: 'bold' }}>{formatTime(usage.date)}</h4>
                                                     </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className={"fr g0-5 ai-c"} style={{ margin: 'auto auto 0 0' }}>
-                                    <div className={"fr jc-c ai-c"} style={{ backgroundColor: '#1E21A4', width: '20px', height: '20px', borderRadius: '4rem' }}>
-                                        <FaInfo fill={"white"} size={"10px"} />
+                                                ))}
+                                            </div>
+                                        ))}
                                     </div>
-                                    <h5 style={{ fontWeight: 'normal', opacity: '0.5' }}>Comment prendre une correspondance ?</h5>
-                                </div>
-                                <div className={"fc g1 w100"} style={{ gap: '0.5rem', width: '100%' }}>
-                                    <button type={"button"} style={{ width: '100%', padding: '0.5rem 0rem', borderRadius: '0.5rem' }} disabled={!lastUsage} onClick={() => { setControlModalOpen(true); }}>Afficher mon titre en cours</button>
-                                    <button type={"button"} style={{ width: '100%', padding: '0.5rem 0rem', borderRadius: '0.5rem' }} onClick={() => { setCorrespondanceModalOpen(true); }}>Prendre une correspondance</button>
+                                    <div className={"fr g0-5 ai-c"} style={{ margin: 'auto auto 0 0' }}>
+                                        <div className={"fr jc-c ai-c"} style={{ backgroundColor: '#1E21A4', width: '20px', height: '20px', borderRadius: '4rem' }}>
+                                            <FaInfo fill={"white"} size={"10px"} />
+                                        </div>
+                                        <h5 style={{ fontWeight: 'normal', opacity: '0.5' }}>Comment prendre une correspondance ?</h5>
+                                    </div>
+                                    <div className={"fc g1 w100"} style={{ gap: '0.5rem', width: '100%' }}>
+                                        <button type={"button"} style={{ width: '100%', padding: '0.5rem 0rem', borderRadius: '0.5rem' }} disabled={!lastUsage} onClick={() => { setControlModalOpen(true); }}>Afficher mon titre en cours</button>
+                                        <button type={"button"} style={{ width: '100%', padding: '0.5rem 0rem', borderRadius: '0.5rem' }} onClick={() => { setCorrespondanceModalOpen(true); }}>Prendre une correspondance</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
