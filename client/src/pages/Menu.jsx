@@ -64,6 +64,10 @@ function Menu() {
     const [accounts, setAccounts] = useState([]);
     const [accountsLoading, setAccountsLoading] = useState(false);
     const [accountsError, setAccountsError] = useState(null);
+    const [accountDetailOpen, setAccountDetailOpen] = useState(false);
+    const [accountDetail, setAccountDetail] = useState(null);
+    const [accountDetailLoading, setAccountDetailLoading] = useState(false);
+    const [accountDetailError, setAccountDetailError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [loadError, setLoadError] = useState(null);
 
@@ -89,6 +93,21 @@ function Menu() {
                 setAccounts([]);
             })
             .finally(() => setAccountsLoading(false));
+    };
+
+    const openAccountDetail = (accountId) => {
+        setAccountDetailOpen(true);
+        setAccountDetail(null);
+        setAccountDetailLoading(true);
+        setAccountDetailError(null);
+        api.get(`/user/accounts/${accountId}`)
+            .then((response) => {
+                setAccountDetail(response.data);
+            })
+            .catch(() => {
+                setAccountDetailError('Impossible de charger le détail du compte');
+            })
+            .finally(() => setAccountDetailLoading(false));
     };
 
     const handleSettingsPhraseClick = () => {
@@ -310,10 +329,65 @@ function Menu() {
                 {!accountsLoading && !accountsError && accounts.length === 0 && (
                     <p>Aucun compte.</p>
                 )}
-                <div className={"fc g1"}>
+                <div className={"fc g1"} style={{ width: '100%' }}>
                     {accounts.map((account) => (
-                        <div
+                        <button
+                            type="button"
                             key={account._id}
+                            onClick={() => openAccountDetail(account._id)}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                gap: '0.2rem',
+                                backgroundColor: 'white',
+                                border: '1px solid lightgrey',
+                                borderRadius: '0.5rem',
+                                padding: '0.85rem 1rem',
+                                textAlign: 'left',
+                                width: '100%',
+                                color: '#111',
+                                whiteSpace: 'normal',
+                                lineHeight: 1.35,
+                            }}
+                        >
+                            <span style={{ fontWeight: 600, textTransform: 'capitalize', width: '100%' }}>
+                                {account.firstName} {account.lastName}
+                            </span>
+                            <span style={{ fontSize: '0.9rem', width: '100%', wordBreak: 'break-all' }}>
+                                {account.email}
+                            </span>
+                            <span style={{ fontSize: '0.8rem', opacity: 0.75, width: '100%' }}>
+                                Créé le {formatDateTime(account.creation)}
+                            </span>
+                            <span style={{ fontSize: '0.8rem', opacity: 0.75, width: '100%' }}>
+                                Dernier login : {formatDateTime(account.lastLogin)}
+                            </span>
+                            {account.userRole === 'superadmin' && (
+                                <span style={{ fontSize: '0.75rem', color: '#1E21A4', marginTop: '0.15rem' }}>
+                                    superadmin
+                                </span>
+                            )}
+                        </button>
+                    ))}
+                </div>
+            </Modal>
+
+            <Modal
+                isOpen={accountDetailOpen}
+                onClose={() => {
+                    setAccountDetailOpen(false);
+                    setAccountDetail(null);
+                    setAccountDetailError(null);
+                }}
+                title={"Détail du compte"}
+                contentOverflowY={"scroll"}
+            >
+                {accountDetailLoading && <p>Chargement…</p>}
+                {accountDetailError && <p style={{ color: 'red' }}>{accountDetailError}</p>}
+                {accountDetail && (
+                    <div className={"fc g1"}>
+                        <div
                             style={{
                                 backgroundColor: 'white',
                                 border: '1px solid lightgrey',
@@ -322,23 +396,90 @@ function Menu() {
                             }}
                         >
                             <p style={{ margin: 0, fontWeight: 600, textTransform: 'capitalize' }}>
-                                {account.firstName} {account.lastName}
+                                {accountDetail.account.firstName} {accountDetail.account.lastName}
                             </p>
-                            <p style={{ margin: '0.25rem 0 0', fontSize: '0.9rem' }}>{account.email}</p>
+                            <p style={{ margin: '0.25rem 0 0', fontSize: '0.9rem' }}>
+                                {accountDetail.account.email}
+                            </p>
                             <p style={{ margin: '0.35rem 0 0', fontSize: '0.8rem', opacity: 0.75 }}>
-                                Créé le {formatDateTime(account.creation)}
+                                Créé le {formatDateTime(accountDetail.account.creation)}
                             </p>
                             <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', opacity: 0.75 }}>
-                                Dernier login : {formatDateTime(account.lastLogin)}
+                                Dernier login : {formatDateTime(accountDetail.account.lastLogin)}
                             </p>
-                            {account.userRole === 'superadmin' && (
-                                <p style={{ margin: '0.35rem 0 0', fontSize: '0.75rem', color: '#1E21A4' }}>
-                                    superadmin
+                        </div>
+
+                        <div
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: '1fr 1fr',
+                                gap: '0.75rem',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    backgroundColor: 'white',
+                                    border: '1px solid lightgrey',
+                                    borderRadius: '0.5rem',
+                                    padding: '0.85rem 1rem',
+                                }}
+                            >
+                                <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.7 }}>Tickets achetés</p>
+                                <p style={{ margin: '0.25rem 0 0', fontSize: '1.4rem', fontWeight: 700 }}>
+                                    {accountDetail.stats.ticketsBought}
                                 </p>
+                            </div>
+                            <div
+                                style={{
+                                    backgroundColor: 'white',
+                                    border: '1px solid lightgrey',
+                                    borderRadius: '0.5rem',
+                                    padding: '0.85rem 1rem',
+                                }}
+                            >
+                                <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.7 }}>Tickets utilisés</p>
+                                <p style={{ margin: '0.25rem 0 0', fontSize: '1.4rem', fontWeight: 700 }}>
+                                    {accountDetail.stats.ticketsUsed}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 style={{ margin: '0 0 0.5rem' }}>Historique</h4>
+                            {accountDetail.history.length === 0 ? (
+                                <p style={{ opacity: 0.7 }}>Aucun historique.</p>
+                            ) : (
+                                <div className={"fc g0-5"}>
+                                    {accountDetail.history.map((entry, index) => (
+                                        <div
+                                            key={`${entry.type}-${entry.ticketId}-${index}`}
+                                            style={{
+                                                backgroundColor: 'white',
+                                                border: '1px solid lightgrey',
+                                                borderRadius: '0.5rem',
+                                                padding: '0.75rem 0.9rem',
+                                            }}
+                                        >
+                                            <p style={{ margin: 0, fontWeight: 600 }}>
+                                                {entry.type === 'purchase' ? 'Achat' : 'Validation'}
+                                                {' · '}
+                                                {entry.title}
+                                            </p>
+                                            <p style={{ margin: '0.2rem 0 0', fontSize: '0.8rem', opacity: 0.75 }}>
+                                                {formatDateTime(entry.date)}
+                                            </p>
+                                            {entry.scanData && (
+                                                <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', opacity: 0.75 }}>
+                                                    Scan : {entry.scanData}
+                                                </p>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                             )}
                         </div>
-                    ))}
-                </div>
+                    </div>
+                )}
             </Modal>
 
             <Modal isOpen={trajetsOpen} onClose={() => setTrajetsOpen(false)} title={"Mes Trajets"}>

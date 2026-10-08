@@ -163,7 +163,9 @@ router.delete('/tickets', verifyToken, asyncHandler(async (req, res) => {
     const tickets = await Ticket.find({ profileId: profile._id }).select('_id').lean();
     const ticketIds = tickets.map((t) => t._id);
     if (ticketIds.length > 0) {
-        await TicketUsage.deleteMany({ ticketId: { $in: ticketIds } });
+        await Promise.all(
+            ticketIds.map((ticketId) => TicketUsage.deleteMany({ ticketId }))
+        );
     }
     const result = await Ticket.deleteMany({ profileId: profile._id });
 

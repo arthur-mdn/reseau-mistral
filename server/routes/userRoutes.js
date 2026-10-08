@@ -37,9 +37,13 @@ router.get('/user/details', verifyToken, asyncHandler(async (req, res) => {
     res.json(user);
 }));
 
+async function requireSuperadmin(userId) {
+    const current = await User.findById(userId).select('userRole').lean();
+    return current && current.userRole === 'superadmin';
+}
+
 router.get('/user/accounts', verifyToken, asyncHandler(async (req, res) => {
-    const current = await User.findById(req.user.userId).select('userRole').lean();
-    if (!current || current.userRole !== 'superadmin') {
+    if (!(await requireSuperadmin(req.user.userId))) {
         return res.status(403).json({ message: 'Accès refusé' });
     }
 
@@ -49,6 +53,96 @@ router.get('/user/accounts', verifyToken, asyncHandler(async (req, res) => {
         .lean();
 
     res.json(accounts);
+}));
+
+router.get('/user/accounts/:id', verifyToken, asyncHandler(async (req, res) => {
+    if (!(await requireSuperadmin(req.user.userId))) {
+        return res.status(403).json({ message: 'Accès refusé' });
+    }
+
+    if (!isObjectId(req.params.id)) {
+        return res.status(400).json({ message: 'Identifiant invalide' });
+    }
+
+    const account = await User.findById(req.params.id)
+        .select('firstName lastName email creation lastLogin userRole')
+        .lean();
+    if (!account) {
+        return res.status(404).json({ message: 'Compte non trouvé' });
+    }
+
+    const profiles = await Profile.find({ userId: account._id })
+        .select('_id prenom nom email')
+        .lean();
+    const profileIds = profiles.map((profile) => profile._id);
+
+    let tickets = [];
+    if (profileIds.length > 0) {
+        const ticketGroups = await Promise.all(
+            profileIds.map((profileId) =>
+                Ticket.find({ profileId })
+                    .populate('priceId', 'title price')
+                    .populate({
+                        path: 'usages',
+                        options: { sort: { date: -1 } },
+                    })
+                    .lean()
+            )
+        );
+        tickets = ticketGroups
+            .flat()
+            .sort((a, b) => new Date(b.buyDate) - new Date(a.buyDate));
+    }
+
+    const ticketsBought = tickets.length;
+    const ticketsUsed = tickets.reduce((sum, ticket) => {
+        const byCount = typeof ticket.usageCount === 'number' ? ticket.usageCount : 0;
+        const byUsages = Array.isArray(ticket.usages) ? ticket.usages.length : 0;
+        return sum + Math.max(byCount, byUsages);
+    }, 0);
+
+    const history = [];
+    for (const ticket of tickets) {
+        const title = ticket.priceId?.title || 'Ticket';
+        history.push({
+            type: 'purchase',
+            date: ticket.buyDate,
+            title,
+            ticketId: ticket._id,
+            profileId: ticket.profileId,
+        });
+        for (const usage of ticket.usages || []) {
+            history.push({
+                type: 'usage',
+                date: usage.date,
+                title,
+                ticketId: ticket._id,
+                scanData: usage.scanData,
+                status: usage.status,
+            });
+        }
+    }
+    history.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    res.json({
+        account,
+        profiles,
+        stats: {
+            ticketsBought,
+            ticketsUsed,
+        },
+        tickets: tickets.map((ticket) => ({
+            _id: ticket._id,
+            title: ticket.priceId?.title || 'Ticket',
+            price: ticket.priceId?.price,
+            buyDate: ticket.buyDate,
+            usageCount: ticket.usageCount,
+            usagesCount: Array.isArray(ticket.usages) ? ticket.usages.length : 0,
+            status: ticket.status,
+            profileId: ticket.profileId,
+        })),
+        history,
+    });
 }));
 
 router.get('/user/profiles', verifyToken, asyncHandler(async (req, res) => {
