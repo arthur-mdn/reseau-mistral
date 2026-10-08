@@ -8,6 +8,7 @@ const TicketUsage = require('../models/TicketUsage');
 const { toObjectId, validateScanData, parseDuration } = require('../others/validate');
 const { assertProfileOwned, resolveProfileId } = require('../others/ownership');
 const { asyncHandler } = require('../others/errors');
+const { claimTicketSlot } = require('../others/ticketClaim');
 
 router.post('/tickets/use', verifyToken, asyncHandler(async (req, res) => {
     const ticketOid = toObjectId(req.body.ticketId);
@@ -53,40 +54,7 @@ router.post('/tickets/use', verifyToken, asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'Un usage a déjà été enregistré récemment' });
     }
 
-    const claimed = await Ticket.findOneAndUpdate(
-        mongoose.trusted({
-            _id: ticketOid,
-            $expr: {
-                $lt: [
-                    {
-                        $max: [
-                            { $ifNull: ['$usageCount', 0] },
-                            { $size: { $ifNull: ['$usages', []] } },
-                        ],
-                    },
-                    maxUse,
-                ],
-            },
-        }),
-        [
-            {
-                $set: {
-                    usageCount: {
-                        $add: [
-                            {
-                                $max: [
-                                    { $ifNull: ['$usageCount', 0] },
-                                    { $size: { $ifNull: ['$usages', []] } },
-                                ],
-                            },
-                            1,
-                        ],
-                    },
-                },
-            },
-        ],
-        { returnDocument: 'after' }
-    );
+    const claimed = await claimTicketSlot(ticketOid, maxUse);
 
     if (!claimed) {
         return res.status(400).json({ message: 'Limite d\'utilisation du ticket atteinte' });
