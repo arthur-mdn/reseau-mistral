@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Profile = require('../models/Profile');
 const Ticket = require('../models/Ticket');
 const express = require('express');
@@ -37,7 +38,7 @@ router.post('/tickets/use', verifyToken, asyncHandler(async (req, res) => {
     if (maxTime > 0) {
         const existingUsage = await TicketUsage.findOne({
             ticketId: ticket._id,
-            date: { $gte: cutoffTime },
+            date: mongoose.trusted({ $gte: cutoffTime }),
         }).lean();
         if (existingUsage) {
             return res.status(400).json({ message: 'Usage déjà enregistré dans la période définie' });
@@ -46,14 +47,14 @@ router.post('/tickets/use', verifyToken, asyncHandler(async (req, res) => {
 
     const recentUsage = await TicketUsage.findOne({
         ticketId: ticket._id,
-        date: { $gte: new Date(now.getTime() - 1000) },
+        date: mongoose.trusted({ $gte: new Date(now.getTime() - 1000) }),
     }).lean();
     if (recentUsage) {
         return res.status(400).json({ message: 'Un usage a déjà été enregistré récemment' });
     }
 
     const claimed = await Ticket.findOneAndUpdate(
-        {
+        mongoose.trusted({
             _id: ticketOid,
             $expr: {
                 $lt: [
@@ -66,7 +67,7 @@ router.post('/tickets/use', verifyToken, asyncHandler(async (req, res) => {
                     maxUse,
                 ],
             },
-        },
+        }),
         [
             {
                 $set: {
