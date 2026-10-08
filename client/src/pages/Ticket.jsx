@@ -5,7 +5,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import Modal from "../components/Modal.jsx";
 import ControlModal from "../components/ControlModal.jsx";
 import ControlTouch from "../components/ControlTouch.jsx";
-import {FaChevronLeft, FaInfo, FaUserCheck} from "react-icons/fa6";
+import {FaBus, FaChevronLeft, FaInfo} from "react-icons/fa6";
 import { QRCodeSVG } from 'qrcode.react';
 import config from "../config.js";
 import Loading from "../components/Loading.jsx";
@@ -216,6 +216,10 @@ function Ticket() {
     const isExpired = timeRemaining === '00:00:00';
     const lastUsage = getLastUsage(ticketDetails ? ticketDetails.usages : []);
     const B64_ID = getLastUsageFormatted(ticketDetails ? ticketDetails.usages : []);
+    const expireDate = lastUsage && ticketDetails
+        ? new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime))
+        : null;
+    const transportNumber = lastUsage?.scanData?.split("+")[0] || '';
     return (
         <>
             {ticketDetails ? (
@@ -282,7 +286,7 @@ function Ticket() {
                             </div>
                         </div>
                     </Modal>
-                    <ControlModal isOpen={controlModalOpen} onClose={() => setControlModalOpen(false)} bgColor={"rgb(41, 41, 41)"}>
+                    <ControlModal isOpen={controlModalOpen} onClose={() => setControlModalOpen(false)} bgColor={"#000"}>
                         <div className={"fc h100"} >
                             {isExpired && (
                                 <div className={"fc g1 jc-c ai-c"} style={{marginTop:'30%'}}>
@@ -306,7 +310,7 @@ function Ticket() {
                                 <div style={{backgroundColor:'white', borderRadius:'0.75rem', overflow:'hidden', border:'1px solid #949493'}}>
                                     <div style={{display:'flex', alignItems:'stretch', backgroundColor:CONTROL_TITLE_BG, minHeight:'40px'}}>
                                         <div style={{backgroundColor:'white', display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.35rem 0.65rem', margin:'0 0.55rem 0 0', borderRadius:'0 0 0.85rem 0', border:'1px solid #949493', borderTop:0,borderLeft:0}}>
-                                            <FaUserCheck size={'1.15rem'} color={'#1E21A4'}/>
+                                            <img src={"/elements/icons/user-check.png"} alt="" style={{width:'1.15rem', height:'1.15rem', objectFit:'contain', display:'block'}}/>
                                             <span style={{fontWeight:900, fontSize:'1.15rem', color:'#1a1a1a', lineHeight:1}}>1</span>
                                         </div>
                                         <div style={{flex:1, display:'flex', alignItems:'center', justifyContent:'flex-end', padding:'0 0.85rem'}}>
@@ -365,42 +369,36 @@ function Ticket() {
                         </div>
 
                     </ControlModal>
-                    <Modal isOpen={isControlQrOpen} onClose={() => setIsControlQrOpen(false)} hideBg={true} title={"Paiement"} padding={0}>
-                        <div style={{backgroundColor:"white", width:'100%', height:'100%', color:"black"}}>
-                            <div className={"over_top_menu"} style={{backgroundColor:"transparent", justifyContent:"space-between",padding:"0 1rem"}}>
-                                <div onClick={()=>{setIsControlQrOpen(false)}} style={{backgroundColor:"white", display:"flex",alignItems:"center",justifyContent:"center",width:"35px",height:"35px",borderRadius:"2rem",zIndex:15}}>
-                                    <FaChevronLeft fill={"black"} size={"20px"}/>
-                                </div>
-                            </div>
-                            <div style={{padding:'1rem', display:"flex",flexDirection:"column", alignItems:"center"}}>
-                                <QRCodeSVG value={B64_ID} size={150} level={"H"} width={'60%'} height={'60%'} style={{maxWidth:'450px'}}/>
-                                <h1 style={{fontWeight:"bold", fontSize:"1.2rem",textWrap:"nowrap", textTransform:"uppercase",marginTop:'1rem', textAlign:"center", whiteSpace:'nowrap', wordBreak:"break-word"}}>{B64_ID}</h1>
-                                <h4 style={{marginTop:'1rem'}}>Fin de validation</h4>
-                                <div className={"fr jc-sb"} style={{backgroundColor:"black",color:"white", padding:'0.5rem 1rem', borderRadius:'0.5rem'}}>
-                                    <div>
-                                        <h2 style={{fontWeight:"bold"}}>{formatDate(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h2>
-                                        <h3 style={{textAlign:"center"}}>{formatTime(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h3>
+                    <Modal isOpen={isControlQrOpen} onClose={() => setIsControlQrOpen(false)} hideBg={true} title={""} padding={0}>
+                        <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', position:'relative', overflow:'hidden'}}>
+                            <div style={{height:'58%', backgroundColor:'#2023AE', display:'flex', flexDirection:'column', alignItems:'center', padding:'0.75rem 1rem 1.1rem', boxSizing:'border-box'}}>
+                                <div style={{alignSelf:'flex-start', zIndex:2, flexShrink:0}}>
+                                    <div onClick={()=>{setIsControlQrOpen(false)}} style={{backgroundColor:"white", display:"flex",alignItems:"center",justifyContent:"center",width:"40px",height:"40px",borderRadius:"2rem"}}>
+                                        <FaChevronLeft fill={"#333"} size={"18px"}/>
                                     </div>
                                 </div>
-                                <h4 style={{textAlign:"center",marginTop:'1rem'}}>Période de validité</h4>
-                                <div className={"fr jc-sb g3"} style={{backgroundColor:"black",color:"white", padding:'0.5rem 1rem', borderRadius:'0.5rem'}}>
-                                    <div>
-                                        <h2 style={{fontWeight:"bold"}}>{formatDate(lastUsage.date)}</h2>
-                                        <h3 style={{textAlign:"center"}}>{formatTime(lastUsage.date)}</h3>
+                                <div style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center', marginTop:'0.75rem', minHeight:0}}>
+                                    <div style={{backgroundColor:'white', borderRadius:'1rem', padding:'0.9rem', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 16px rgba(0,0,0,0.12)'}}>
+                                        <QRCodeSVG value={B64_ID} size={320} level={"H"} style={{display:'block', width:'min(78vw, 320px)', height:'min(78vw, 320px)'}}/>
                                     </div>
-                                    <div>
-                                        <h2 style={{fontWeight:"bold"}}>{formatDate(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h2>
-                                        <h3 style={{textAlign:"center"}}>{formatTime(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</h3>
-                                    </div>
-                                </div>
-                                <h4 style={{textAlign:"center",marginTop:'1rem'}}>Transport n°</h4>
-                                <div className={"fr jc-sb"} style={{backgroundColor:"black",color:"white", padding:'0.5rem 1rem', borderRadius:'0.5rem'}}>
-                                    <div>
-                                        <h2 style={{fontWeight:"bold"}}>{lastUsage.scanData.split("+")[0]}</h2>
-                                    </div>
+                                    <h1 style={{fontWeight:700, fontSize:'1.15rem', color:'#fff', textTransform:'uppercase', margin:'0.65rem 0 0', textAlign:'center', letterSpacing:'0.02em', wordBreak:'break-all', lineHeight:1.2}}>
+                                        {B64_ID}
+                                    </h1>
                                 </div>
                             </div>
 
+                            <div style={{position:'absolute', left:'50%', top:'58%', transform:'translate(-50%, -50%)', zIndex:5, backgroundColor:'#fff', borderRadius:'0.5rem', padding:'0.55rem 1rem', display:'flex', alignItems:'center', gap:'0.55rem', boxShadow:'0 2px 10px rgba(0,0,0,0.12)', whiteSpace:'nowrap'}}>
+                                <FaBus size={'1.15rem'} color={'#2023AE'}/>
+                                <span style={{fontWeight:400, fontSize:'0.95rem', color:'#333'}}>Transport n° {transportNumber}</span>
+                            </div>
+
+                            <div style={{height:'42%', backgroundColor:'#F2F2F2', display:'flex', alignItems:'center', justifyContent:'center', padding:'2rem 1.5rem 1.5rem', boxSizing:'border-box'}}>
+                                <p style={{margin:0, textAlign:'center', fontWeight:700, fontSize:'1.35rem', color:'#111', lineHeight:1.35}}>
+                                    Expire le {formatDate(expireDate)}
+                                    <br/>
+                                    à {formatTime(expireDate)}
+                                </p>
+                            </div>
                         </div>
                     </Modal>
                 </>
