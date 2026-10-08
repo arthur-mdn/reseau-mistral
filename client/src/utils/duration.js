@@ -29,3 +29,11 @@ export function isTicketActive(ticket, now = new Date()) {
         return now < new Date(usageDate.getTime() + maxDuration);
     });
 }
+
+export function sortTicketsActiveFirst(tickets, now = new Date()) {
+    return [...(tickets || [])].sort((a, b) => {
+        const aActive = isTicketActive(a, now) ? 1 : 0;
+        const bActive = isTicketActive(b, now) ? 1 : 0;
+        return bActive - aActive;
+    });
+}

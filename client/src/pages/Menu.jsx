@@ -9,6 +9,7 @@ import {
     FaPaperPlane,
     FaPerson,
     FaSuitcase,
+    FaTriangleExclamation,
 } from 'react-icons/fa6';
 import Modal from '../components/Modal.jsx';
 import ProfileSelection from '../components/ProfileSelection.jsx';
@@ -38,13 +39,17 @@ const menuRowStyle = {
     backgroundColor: 'white',
     color: 'black',
     width: '100%',
+    borderRadius: 0,
+    border: 0,
     borderBottom: '1px solid lightgrey',
+    boxShadow: 'none',
+    outline: 'none',
 };
 
-function MenuIconImg({ src, alt }) {
+function MenuIconImg({ src, alt, size = 26 }) {
     return (
         <div style={menuIconStyle}>
-            <img src={src} alt={alt} style={{ width: '26px', height: '26px', objectFit: 'contain' }} />
+            <img src={src} alt={alt} style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain' }} />
         </div>
     );
 }
@@ -169,7 +174,7 @@ function Menu() {
                     <img src="/elements/favicon.png" alt="Réseau Mistral" style={{ width: '65px', borderRadius: '25px' }} />
                 </div>
 
-                <div style={{ padding: 0, margin: '0 1rem', borderRadius: '10px', backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.56) 0px 22px 70px 4px', position: 'relative', zIndex: 1 }}>
+                <div className="menu-settings" style={{ padding: 0, margin: '0 1rem', borderRadius: '10px', backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.56) 0px 22px 70px 4px', position: 'relative', zIndex: 1 }}>
                     <button onClick={() => setProfileOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
                         {userDetails && (
                             <>
@@ -188,66 +193,66 @@ function Menu() {
                                 </div>
                             </>
                         )}
-                        <FaChevronRight style={{ marginLeft: 'auto', flexShrink: 0 }} />
+                        <FaChevronRight color="#444648" style={{ marginLeft: 'auto', flexShrink: 0 }} />
                     </button>
 
                     <button onClick={() => setServicesOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
                         <MenuIconImg src="/elements/menu/services.jpg" alt="" />
                         <span>Services</span>
-                        <FaChevronRight style={{ marginLeft: 'auto' }} />
+                        <FaChevronRight color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
 
                     <button onClick={() => setTrajetsOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
-                        <MenuIconImg src="/elements/menu/mes-trajets.jpg" alt="" />
+                        <MenuIconImg src="/elements/menu/mes-trajets.jpg" alt="" size={30} />
                         <span>Mes Trajets</span>
-                        <FaChevronRight style={{ marginLeft: 'auto' }} />
+                        <FaChevronRight color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
 
                     <button onClick={() => setFavoriteOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
                         <div style={menuIconStyle}>
-                            <FaHeart size={'20px'} />
+                            <FaHeart size={'20px'} color="#444648" />
                         </div>
                         <span>Favoris</span>
-                        <FaChevronRight style={{ marginLeft: 'auto' }} />
+                        <FaChevronRight color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
 
                     <button onClick={() => setIsPlanOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
-                        <MenuIconImg src="/elements/menu/plans-reseaux.jpg" alt="" />
+                        <MenuIconImg src="/elements/menu/plans-reseaux.jpg" alt="" size={30} />
                         <span>Plan des réseaux</span>
-                        <FaChevronRight style={{ marginLeft: 'auto' }} />
+                        <FaChevronRight color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
 
                     <button onClick={() => setIsDocumentsOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
                         <div style={menuIconStyle}>
-                            <FaFile size={'20px'} />
+                            <FaFile size={'20px'} color="#444648" />
                         </div>
                         <span>Mes justificatifs</span>
-                        <FaChevronRight style={{ marginLeft: 'auto' }} />
+                        <FaChevronRight color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
 
                     <button onClick={() => setIsLiensOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
                         <div style={menuIconStyle}>
-                            <FaLink size={'20px'} />
+                            <FaLink size={'20px'} color="#444648" />
                         </div>
                         <span>Liens utiles</span>
-                        <FaChevronRight style={{ marginLeft: 'auto' }} />
+                        <FaChevronRight color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
 
-                    <button onClick={() => setIsContactOpen(true)} type={"button"} className="row-card setting_element" style={{ ...menuRowStyle, borderBottom: 0 }}>
+                    <button onClick={() => setIsContactOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
                         <div style={menuIconStyle}>
-                            <FaEnvelope size={'20px'} />
+                            <FaEnvelope size={'20px'} color="#444648" />
                         </div>
                         <span>Nous contacter</span>
-                        <FaChevronRight size={'20px'} style={{ marginLeft: 'auto' }} />
+                        <FaChevronRight size={'20px'} color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
                 </div>
 
                 <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', position: 'relative', zIndex: 1 }}>
-                    <button onClick={() => setIsPolitiqueOpen(true)} type={"button"} className="row-card setting_element" style={{ padding: '0rem', backgroundColor: 'transparent', color: 'white', marginRight: 'auto', borderBottom: 0 }}>
+                    <button onClick={() => setIsPolitiqueOpen(true)} type={"button"} className="row-card setting_element setting_element--flat" style={{ padding: '0rem', backgroundColor: 'transparent', color: 'white', marginRight: 'auto' }}>
                         Politique de confidentialité
                     </button>
                     <hr style={{ border: '1px solid white', margin: 0, opacity: 0.1 }} />
-                    <button onClick={() => setIsSettingsOpen(true)} type={"button"} className="row-card setting_element" style={{ padding: '0rem', backgroundColor: 'transparent', color: 'white', marginRight: 'auto', borderBottom: 0 }}>
+                    <button onClick={() => setIsSettingsOpen(true)} type={"button"} className="row-card setting_element setting_element--flat" style={{ padding: '0rem', backgroundColor: 'transparent', color: 'white', marginRight: 'auto' }}>
                         Paramètres
                     </button>
                 </div>
@@ -578,30 +583,46 @@ function Menu() {
                 title={"Paramètres"}
             >
                 <div className={"fc g1"}>
-                    <p
+                    <div
                         onClick={handleSettingsPhraseClick}
-                        style={{ cursor: 'default', userSelect: 'none' }}
+                        className="fr g0-5"
+                        style={{
+                            alignItems: 'flex-start',
+                            backgroundColor: '#FFF4E5',
+                            border: '1px solid #F5A623',
+                            borderRadius: '0.5rem',
+                            padding: '0.85rem 1rem',
+                            color: '#8A4B00',
+                            cursor: 'default',
+                            userSelect: 'none',
+                            lineHeight: 1.4,
+                        }}
                     >
-                        Cette application est une simulation. L'avertissement de démonstration reste toujours visible.
-                    </p>
+                        <FaTriangleExclamation
+                            size={18}
+                            color="#F5A623"
+                            style={{ flexShrink: 0, marginTop: '0.15rem' }}
+                        />
+                        <div className="fc" style={{ minWidth: 0, flex: 1 }}>
+                            <p style={{ margin: 0, fontWeight: 600, color: '#B25C00' }}>
+                                Cette application est une simulation.
+                            </p>
+                            <p style={{ margin: '0.35rem 0 0', fontSize: '0.9rem', color: '#8A4B00' }}>
+                                L'avertissement de démonstration reste toujours visible.
+                            </p>
+                        </div>
+                    </div>
                     <div className={"fc g0-5"}>
                         <label htmlFor="scan-engine" style={{ fontWeight: 600 }}>
                             Moteur de scan QR
                         </label>
                         <select
                             id="scan-engine"
+                            className="settings-select"
                             value={scanEngine}
                             onChange={(e) => {
                                 const next = setScanEnginePreference(e.target.value);
                                 setScanEngine(next);
-                            }}
-                            style={{
-                                width: '100%',
-                                padding: '0.75rem 0.85rem',
-                                borderRadius: '0.5rem',
-                                border: '1px solid lightgrey',
-                                backgroundColor: '#fff',
-                                color: '#111',
                             }}
                         >
                             <option value={SCAN_ENGINES.AUTO}>Auto (natif puis ZXing)</option>

@@ -93,9 +93,11 @@ function ProfileSelection({ onProfileSelect, onClose, fromProfile = false }) {
                 })}
             </div>
             <div className={"profile-selection__footer"}>
-                <p className={"profile-selection__hint"}>
-                    Associez votre profil voyageur pour profiter de tarifs personnalisés, ou le profil de vos proches pour créditer leur compte.
-                </p>
+                {!fromProfile && (
+                    <p className={"profile-selection__hint"}>
+                        Associez votre profil voyageur pour profiter de tarifs personnalisés, ou le profil de vos proches pour créditer leur compte.
+                    </p>
+                )}
                 {fromProfile ? (
                     <button
                         type={"button"}

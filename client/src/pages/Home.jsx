@@ -90,10 +90,14 @@ function Home() {
     if (isLoading) return <Loading />;
 
     return (
-        <>
-            <img src={"/elements/images/plan.jpg"} alt={"plan du réseau"} style={{ width: '100%', position: 'absolute', top: 0, zIndex: 1 }} />
-            <div style={{ height: '100%', zIndex: 2, display: 'flex', flexDirection: 'column', color: 'white' }}>
-                <div style={{ backgroundColor: '#1e22aa', marginTop: 'auto', padding: '0.5rem 1rem 2rem 1rem', borderRadius: '0.5rem 0.5rem 0 0' }}>
+        <div className="page-lock-scroll">
+            <img
+                src={"/elements/images/plan.jpg"}
+                alt={"plan du réseau"}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
+            />
+            <div style={{ position: 'relative', zIndex: 1, height: '100%', display: 'flex', flexDirection: 'column', color: 'white', overflow: 'hidden' }}>
+                <div style={{ position: 'relative', zIndex: 2, backgroundColor: '#1e22aa', marginTop: 'auto', padding: '0.5rem 1rem 2rem 1rem', borderRadius: '0.5rem 0.5rem 0 0' }}>
                     <div style={{ backgroundColor: 'lightgrey', width: '30px', height: '4px', margin: 'auto', borderRadius: '1rem', marginBottom: '1rem' }} />
                     {loadError && (
                         <p style={{ color: '#ffb4b4', marginBottom: '1rem' }}>{loadError}</p>
@@ -191,7 +195,7 @@ function Home() {
                     </div>
                 </div>
             </Modal>
-        </>
+        </div>
     );
 }
 

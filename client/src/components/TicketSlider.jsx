@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { FaLock } from 'react-icons/fa6';
-import { parseDuration } from '../utils/duration.js';
+import { parseDuration, sortTicketsActiveFirst } from '../utils/duration.js';
 
 function calculateRemainingTime(ticketUseDate, maxTime) {
     const useDate = new Date(ticketUseDate);
@@ -53,10 +52,10 @@ function TicketSlider({ tickets, onTicketSelect }) {
         return () => clearInterval(intervalId);
     }, [tickets]);
 
-    const validTickets = useMemo(
-        () => (tickets || []).filter((ticket) => remainingTimes[ticket._id] !== '00:00:00'),
-        [tickets, remainingTimes]
-    );
+    const validTickets = useMemo(() => {
+        const sorted = sortTicketsActiveFirst(tickets || []);
+        return sorted.filter((ticket) => remainingTimes[ticket._id] !== '00:00:00');
+    }, [tickets, remainingTimes]);
 
     useEffect(() => {
         if (validTickets.length === 0) {
@@ -130,9 +129,11 @@ function TicketSlider({ tickets, onTicketSelect }) {
                             <div className={"ticket-card__image-wrap"}>
                                 {remainingTimes[ticket._id] && (
                                     <div className={"ticket-card__lock fc ai-c jc-c"}>
-                                        <div className={"ticket-card__lock-icon"}>
-                                            <FaLock size={"1.35rem"} fill={"rgb(0,0,0)"} />
-                                        </div>
+                                        <img
+                                            className={"ticket-card__lock-icon"}
+                                            src={"/elements/icons/lock.png"}
+                                            alt=""
+                                        />
                                         <h3>
                                             Appuyez ici pour voir le Titre en cours
                                         </h3>

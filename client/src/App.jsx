@@ -32,34 +32,38 @@ const AuthenticatedApp = () => {
                     <AuthError />
                 </Suspense>
             ) : (
-                <>
+                <div className="app-shell">
                     <TopBarProvider>
-                        <TopBar />
-                        <Suspense fallback={<Loading />}>
-                            <Routes>
-                                {authStatus === 'unauthenticated' ? (
-                                    <>
-                                        <Route path="/" element={<Login />} />
-                                        <Route path="/login" element={<Login />} />
-                                        <Route path="/register" element={<Register />} />
-                                    </>
-                                ) : (
-                                    <>
-                                        <Route path="/" element={<Home />} />
-                                        <Route path="/horaires" element={<Horaires />} />
-                                        <Route path="/tickets" element={<Tickets />} />
-                                        <Route path="/tickets/:ticketId" element={<Ticket />} />
-                                        <Route path="/trafic" element={<Trafic />} />
-                                        <Route path="/menu" element={<Menu />} />
-                                        <Route path="/logout" element={<Logout />} />
-                                    </>
-                                )}
-                                <Route path="*" element={<Navigate to={authStatus === 'unauthenticated' ? '/login' : '/'} />} />
-                            </Routes>
-                        </Suspense>
+                        <div className="app-shell__body">
+                            <TopBar />
+                            <main className="app-main">
+                                <Suspense fallback={<Loading />}>
+                                    <Routes>
+                                        {authStatus === 'unauthenticated' ? (
+                                            <>
+                                                <Route path="/" element={<Login />} />
+                                                <Route path="/login" element={<Login />} />
+                                                <Route path="/register" element={<Register />} />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Route path="/" element={<Home />} />
+                                                <Route path="/horaires" element={<Horaires />} />
+                                                <Route path="/tickets" element={<Tickets />} />
+                                                <Route path="/tickets/:ticketId" element={<Ticket />} />
+                                                <Route path="/trafic" element={<Trafic />} />
+                                                <Route path="/menu" element={<Menu />} />
+                                                <Route path="/logout" element={<Logout />} />
+                                            </>
+                                        )}
+                                        <Route path="*" element={<Navigate to={authStatus === 'unauthenticated' ? '/login' : '/'} />} />
+                                    </Routes>
+                                </Suspense>
+                            </main>
+                        </div>
                     </TopBarProvider>
                     <BottomBar />
-                </>
+                </div>
             )}
         </Router>
     );

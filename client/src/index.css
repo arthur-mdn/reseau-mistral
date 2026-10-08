@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(0, 0, 0, 0.87);
-  background-color: #1E21A4;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,22 +20,8 @@
   --card-bg-color: #1D1D1D;
   --sub-card-bg-color: #f0f0f0;
   --sub-text-color: #000000;
-}
-/*
-body{
-  overflow: hidden;
-}
-#root{
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-}
- */
-#root{
-  background-color: white;
-  display: flex;
-  flex-direction: column;
+  --bottom-bar-height: calc(78px + env(safe-area-inset-bottom, 0px));
+  --menu-icon-color: #444648;
 }
 .bg-grey{
   background-color: #f1f1f1;
@@ -64,7 +50,88 @@ a:hover {
 }
 .setting_element {
   border-bottom: 1px solid lightgrey;
-  transition: background-color 0.3s;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.menu-settings {
+  overflow: hidden;
+}
+
+button.row-card,
+button.setting_element,
+button[type=button].row-card,
+button[type=button].setting_element {
+  border-radius: 0 !important;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 1px solid lightgrey !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.menu-settings > button.setting_element:first-child,
+.menu-settings > button[type=button].setting_element:first-child {
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
+.menu-settings > button.setting_element:last-child,
+.menu-settings > button[type=button].setting_element:last-child {
+  border-bottom-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+  border-bottom: 0 !important;
+}
+
+button.row-card:hover,
+button.setting_element:hover,
+button[type=button].row-card:hover,
+button[type=button].setting_element:hover,
+button.row-card:focus,
+button.setting_element:focus,
+button[type=button].row-card:focus,
+button[type=button].setting_element:focus,
+button.row-card:focus-visible,
+button.setting_element:focus-visible,
+button[type=button].row-card:focus-visible,
+button[type=button].setting_element:focus-visible {
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 1px solid lightgrey !important;
+  border-color: lightgrey !important;
+  box-shadow: none !important;
+  outline: none !important;
+  opacity: 0.62;
+  color: inherit;
+}
+
+.menu-settings > button.setting_element:first-child:hover,
+.menu-settings > button[type=button].setting_element:first-child:hover,
+.menu-settings > button.setting_element:first-child:focus,
+.menu-settings > button[type=button].setting_element:first-child:focus {
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
+.menu-settings > button.setting_element:last-child:hover,
+.menu-settings > button[type=button].setting_element:last-child:hover,
+.menu-settings > button.setting_element:last-child:focus,
+.menu-settings > button[type=button].setting_element:last-child:focus {
+  border-bottom-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+  border-bottom: 0 !important;
+}
+
+button.setting_element--flat,
+button[type=button].setting_element--flat,
+button.setting_element--flat:hover,
+button[type=button].setting_element--flat:hover,
+button.setting_element--flat:focus,
+button[type=button].setting_element--flat:focus {
+  border: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
 }
 body, h1, h2, h3, h4, h5, h6, p, a, ol, ul {
   margin: 0;
@@ -75,13 +142,13 @@ body, h1, h2, h3, h4, h5, h6, p, a, ol, ul {
   color: inherit;
 }
 
-html{
-  width: 100%;
-  height: 100%;
-  background-color: #1E21A4;
-}
 html {
   box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background-color: #ffffff;
+  overflow: hidden;
 }
 *, *:before, *:after {
   box-sizing: inherit;
@@ -93,17 +160,254 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
-  background-color: #1E21A4;
+  height: 100dvh;
+  background-color: #ffffff;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
-
 
 #root{
   width: 100%;
   height: 100%;
+  height: 100dvh;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background-color: #fff;
 }
 
+.app-shell__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--bottom-bar-height);
+  background-color: #fff;
+}
+
+.app-main > * {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.app-main > .page-lock-scroll,
+.app-main > .page-scroll {
+  overflow: hidden;
+}
+
+.page-lock-scroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  position: relative;
+}
+
+.ticket-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+.ticket-detail__hero {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1rem 1.25rem;
+  background-color: #f1f1f1;
+  overflow: visible;
+}
+
+.ticket-detail__chevron {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  z-index: 5;
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 14px solid #ffffff;
+  pointer-events: none;
+}
+
+.ticket-detail__sheet-wrap {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: visible;
+}
+
+.ticket-detail__sheet-stack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 6px;
+  bottom: 0;
+  background-color: #e4e4e4;
+  border-radius: 0;
+  z-index: 0;
+}
+
+.ticket-detail__sheet {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.35rem 1rem 1rem;
+  background-color: #ffffff;
+  border-radius: 0;
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.page-scroll {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ebebeb;
+}
+
+.page-scroll__header {
+  flex-shrink: 0;
+  background-color: #fff;
+}
+
+.page-scroll__body {
+  flex: 1;
+  min-height: 0;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--bottom-bar-height);
+  background-color: #ffffff;
+  padding: 0.7rem 0 calc(0.85rem + env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06);
+}
+
+.bottom-bar__menu {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bottom-bar__item {
+  flex: 1;
+  text-align: center;
+}
+
+.bottom-bar__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  color: #A8AAAE;
+  text-decoration: none;
+  font-size: 0.7rem;
+  line-height: 1.1;
+}
+
+.bottom-bar__link:hover,
+.bottom-bar__link:focus,
+.bottom-bar__link:focus-visible {
+  color: #A8AAAE;
+  outline: none;
+}
+
+.bottom-bar__link.is-active,
+.bottom-bar__link.is-active:hover,
+.bottom-bar__link.is-active:focus,
+.bottom-bar__link.is-active:focus-visible {
+  color: #6B6D71;
+}
+
+.bottom-bar__icon {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+.bottom-bar__label {
+  display: block;
+}
+
+.pull-to-refresh-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: height 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+.pull-to-refresh-spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #d0d0d0;
+  border-top-color: #1E21A4;
+}
+
+.pull-to-refresh-spinner.is-spinning {
+  animation: pull-to-refresh-spin 0.7s linear infinite;
+}
+
+@keyframes pull-to-refresh-spin {
+  to { transform: rotate(360deg); }
+}
+
 .header-top {
+  flex-shrink: 0;
   padding-top: env(safe-area-inset-top, 0px);
   background-color: #1E21A4;
 }
@@ -171,6 +475,44 @@ input[type=text], input[type=number], input[type=url], input[type=email], input[
   border: 1.5px solid var(--placeholder-text-color);
   font-size: 16px;
   background-color: white;
+}
+
+select.settings-select {
+  width: 100%;
+  height: auto;
+  min-height: 48px;
+  margin: 0;
+  padding: 0.75rem 2.5rem 0.75rem 0.9rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23444648' d='M1.4.6 6 5.2 10.6.6 12 2 6 8 0 2z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 12px 8px;
+  color: #111111;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color-scheme: light;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+}
+
+select.settings-select:focus,
+select.settings-select:focus-visible {
+  border-color: #1E21A4;
+  box-shadow: 0 0 0 2px rgba(30, 33, 164, 0.15);
+  outline: none;
+}
+
+select.settings-select option {
+  color: #111111;
+  background-color: #ffffff;
 }
 
 input[type=checkbox]{
@@ -394,7 +736,7 @@ button[type=button].profile {
   background-color: #ffffff !important;
   background: #ffffff !important;
   padding: 0.7rem 1rem 0.7rem 0.9rem !important;
-  border-radius: 0.75rem !important;
+  border-radius: 0 !important;
   border: 0 !important;
   box-shadow: none !important;
   cursor: pointer;
@@ -407,12 +749,17 @@ button[type=button].profile {
 button.profile:hover,
 button[type=button].profile:hover,
 button.profile:focus,
-button[type=button].profile:focus {
+button[type=button].profile:focus,
+button.profile:focus-visible,
+button[type=button].profile:focus-visible {
   background-color: #ffffff !important;
   background: #ffffff !important;
   color: #000000 !important;
   opacity: 1;
-  border-color: transparent;
+  border: 0 !important;
+  border-radius: 0 !important;
+  border-color: transparent !important;
+  outline: none;
 }
 
 button.profile h4,
@@ -497,14 +844,34 @@ button.profile p {
 }
 
 
+.tickets-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.tickets-page__content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .actual_profile_selector{
   display: flex;
   flex-direction: row;
+  flex: 0 0 70px;
   width: 100%;
+  height: 70px;
+  max-height: 70px;
   margin: 0;
   border: 0;
   border-radius: 0;
-  padding: 0.75rem 1rem;
+  padding: 0 1rem;
   align-items: center;
   gap: 0.75rem;
   justify-content: space-between;
@@ -512,6 +879,8 @@ button.profile p {
   color: #000000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 2;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .actual_profile_selector__info{
@@ -755,16 +1124,21 @@ button.decrement {
   box-sizing: border-box;
   border: 4px solid white;
   z-index: 2;
+  gap: 1.1rem;
 }
 
 .ticket-card__lock-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  display: flex;
-  background-color: #fff;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: block;
+  object-fit: contain;
+  background: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
 }
 
 .ticket-card__lock h3 {
@@ -782,7 +1156,7 @@ button.decrement {
   width: 100%;
 }
 
-.mySwiper .swiper-slide img {
+.mySwiper .swiper-slide .ticket-card__image-wrap > img {
   display: block;
   width: 100%;
   max-width: 100%;

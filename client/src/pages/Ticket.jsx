@@ -224,55 +224,60 @@ function Ticket() {
         : null;
     const transportNumber = parseScanData(lastUsage?.scanData).transport;
     return (
-        <>
+        <div className="page-lock-scroll">
             {ticketDetails ? (
                 <>
-                    <div className={"fc ai-c jc-fs g1 h100"} style={{padding:"1rem"}}>
-                        <div className={"fr g0-5"}>
-                            <h3 style={{fontWeight:"bold"}}>En cours d'utilisation</h3>
-                            <div className={"hourglass"}>
-                                <img src={"/elements/icons/hourglass.png"} alt={"hourglass"}/>
+                    <div className="ticket-detail">
+                        <div className="ticket-detail__hero bg-grey">
+                            <div className={"fr g0-5"}>
+                                <h3 style={{ fontWeight: 'bold' }}>En cours d'utilisation</h3>
+                                <div className={"hourglass"}>
+                                    <img src={"/elements/icons/hourglass.png"} alt={"hourglass"} />
+                                </div>
                             </div>
-                        </div>
-                        <div style={{position:"relative", boxShadow:"rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px", borderRadius:"1.5rem"}}>
-                            <img src={`/elements/tickets/${ticketDetails.priceId.image}`} style={{width:'60vw', maxWidth:'400px', minWidth:'200px', padding:'0 1rem'}}/>
-                            <div style={{position:"absolute", backgroundColor:"rgba(0,0,0,0.9)", bottom:0, left:0, width:"100%", color:"white", display:"flex", padding:"0.5rem 1rem 0.3rem", flexDirection:"column",alignItems:"center", borderBottomLeftRadius:"1.5rem", borderBottomRightRadius:"1.5rem", border:"4px solid white", borderTop:0}}>
-                                <h4 style={{color:"grey", lineHeight:'1rem'}}>Fin de validité :</h4>
-                                <span style={{fontSize:'1.3rem',lineHeight:'1.8rem',fontWeight:"bold"}}>{timeRemaining}</span>
+                            <div style={{ position: 'relative', boxShadow: 'rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px', borderRadius: '1.5rem' }}>
+                                <img src={`/elements/tickets/${ticketDetails.priceId.image}`} style={{ width: '60vw', maxWidth: '400px', minWidth: '200px', padding: '0 1rem' }} alt="" />
+                                <div style={{ position: 'absolute', backgroundColor: 'rgba(0,0,0,0.9)', bottom: 0, left: 0, width: '100%', color: 'white', display: 'flex', padding: '0.5rem 1rem 0.3rem', flexDirection: 'column', alignItems: 'center', borderBottomLeftRadius: '1.5rem', borderBottomRightRadius: '1.5rem', border: '4px solid white', borderTop: 0 }}>
+                                    <h4 style={{ color: 'grey', lineHeight: '1rem' }}>Fin de validité :</h4>
+                                    <span style={{ fontSize: '1.3rem', lineHeight: '1.8rem', fontWeight: 'bold' }}>{timeRemaining}</span>
+                                </div>
                             </div>
+                            <div className="ticket-detail__chevron" aria-hidden="true" />
                         </div>
-                        {/* Afficher les détails du ticket ici */}
-                        <h3 style={{fontWeight:"bold"}}>Mes validations</h3>
-                        <div style={{width:'100%'}}>
-                            {Object.keys(groupedUsages).map((date) => (
-                                <div key={date} className={"fc"} style={{gap:'0.3rem'}}>
-                                    <span style={{backgroundColor:"#e9e9e9", padding:"0.1rem 0.5rem", borderRadius:'0.25rem', fontSize:'0.8rem', alignSelf:'flex-start'}}>{formatDateStr(date)}</span>
-                                    {groupedUsages[date].map((usage) => (
-                                        <div key={usage._id} >
-                                            <div className={"fr jc-sb"} style={{border:"1px dashed #e5e5e5", borderLeft:0,borderRight:0,padding:'0.4rem 0.5rem 0.3rem'}}>
-                                                <div>
-                                                    <p style={{lineHeight:"0.9rem",fontSize:'0.9rem'}}>1 validation</p>
-                                                    <h4 style={{fontWeight:"bold",lineHeight:"1.3rem"}}>{ticketDetails.priceId.title}</h4>
-                                                </div>
-                                                <h4 style={{fontWeight:"bold"}}>{formatTime(usage.date)}</h4>
-                                            </div>
 
+                        <div className="ticket-detail__sheet-wrap">
+                            <div className="ticket-detail__sheet-stack" aria-hidden="true" />
+                            <div className="ticket-detail__sheet">
+                                <h3 style={{ fontWeight: 'bold' }}>Mes validations</h3>
+                                <div style={{ width: '100%' }}>
+                                    {Object.keys(groupedUsages).map((date) => (
+                                        <div key={date} className={"fc"} style={{ gap: '0.3rem' }}>
+                                            <span style={{ backgroundColor: '#e9e9e9', padding: '0.1rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.8rem', alignSelf: 'flex-start' }}>{formatDateStr(date)}</span>
+                                            {groupedUsages[date].map((usage) => (
+                                                <div key={usage._id}>
+                                                    <div className={"fr jc-sb"} style={{ border: '1px dashed #e5e5e5', borderLeft: 0, borderRight: 0, padding: '0.4rem 0.5rem 0.3rem' }}>
+                                                        <div>
+                                                            <p style={{ lineHeight: '0.9rem', fontSize: '0.9rem' }}>1 validation</p>
+                                                            <h4 style={{ fontWeight: 'bold', lineHeight: '1.3rem' }}>{ticketDetails.priceId.title}</h4>
+                                                        </div>
+                                                        <h4 style={{ fontWeight: 'bold' }}>{formatTime(usage.date)}</h4>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     ))}
                                 </div>
-                            ))}
-
-                        </div>
-                        {/* Plus de détails... */}
-                        <div className={"fr g0-5 ai-c"} style={{margin:'auto auto 0 0'}}>
-                            <div className={"fr jc-c ai-c"} style={{backgroundColor:"#1E21A4", width:'20px', height:'20px', borderRadius:'4rem'}}>
-                                <FaInfo fill={"white"} size={"10px"}/>
+                                <div className={"fr g0-5 ai-c"} style={{ margin: 'auto auto 0 0' }}>
+                                    <div className={"fr jc-c ai-c"} style={{ backgroundColor: '#1E21A4', width: '20px', height: '20px', borderRadius: '4rem' }}>
+                                        <FaInfo fill={"white"} size={"10px"} />
+                                    </div>
+                                    <h5 style={{ fontWeight: 'normal', opacity: '0.5' }}>Comment prendre une correspondance ?</h5>
+                                </div>
+                                <div className={"fc g1 w100"} style={{ gap: '0.5rem', width: '100%' }}>
+                                    <button type={"button"} style={{ width: '100%', padding: '0.5rem 0rem', borderRadius: '0.5rem' }} disabled={!lastUsage} onClick={() => { setControlModalOpen(true); }}>Afficher mon titre en cours</button>
+                                    <button type={"button"} style={{ width: '100%', padding: '0.5rem 0rem', borderRadius: '0.5rem' }} onClick={() => { setCorrespondanceModalOpen(true); }}>Prendre une correspondance</button>
+                                </div>
                             </div>
-                            <h5 style={{fontWeight:"bold", opacity:'0.5'}}>Comment prendre une correspondance ?</h5>
-                        </div>
-                        <div className={"fc g1 w100"} style={{gap:'0.5rem',width:'100%'}}>
-                            <button type={"button"} style={{width:'100%', padding:'0.5rem 0rem', borderRadius:'0.5rem'}} disabled={!lastUsage} onClick={()=>{setControlModalOpen(true)}}>Afficher mon titre en cours</button>
-                            <button type={"button"} style={{width:'100%', padding:'0.5rem 0rem', borderRadius:'0.5rem'}} onClick={()=>{setCorrespondanceModalOpen(true)}}>Prendre une correspondance</button>
                         </div>
                     </div>
                     <Modal isOpen={correspondanceModalOpen} onClose={() => setCorrespondanceModalOpen(false)} title={""} padding={"0"} hideBg={true}>
@@ -412,8 +417,7 @@ function Ticket() {
             ) : (
                 <Loading/>
             )}
-
-        </>
+        </div>
     );
 }
 

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useTopBar } from '../TopBarContext.jsx';
 import { FaExclamation } from 'react-icons/fa6';
+import PullToRefresh from '../components/PullToRefresh.jsx';
 
 function Trafic() {
     const { setTopBarState } = useTopBar();
@@ -17,36 +18,70 @@ function Trafic() {
         { BulleId: '12', BulleColor: '#e90000', Titre: 'Portes Oll. - La Seyne', Réseau: 'Réseau Mistral' },
     ];
     useEffect(() => {
-        setTopBarState({ backLink:"", title: 'Info trafic', isVisible: true, actions: [] });
-
-        // Réinitialiser lors du démontage
+        setTopBarState({ backLink: '', title: 'Info trafic', isVisible: true, actions: [] });
         return () => setTopBarState({ title: '', isVisible: true });
     }, [setTopBarState]);
 
     return (
-        <div className={"fc g0-5 jc-fs"} style={{padding:'0.5rem', backgroundColor:"#ebebeb", height:'100%'}}>
-            <div className={"fr ai-c jc-c"} style={{padding:'0.2rem',backgroundColor:"lightgrey",borderRadius:'7px'}}>
-                <div style={{backgroundColor:"white",borderRadius:'5px', width:'100%', textAlign:"center", fontSize:'1rem', padding:'0.2rem 0'}}>
-                    En cours
-                </div>
-                <div style={{borderRadius:'5px', width:'100%',backgroundColor:"lightgrey", textAlign:"center", fontSize:'1rem', padding:'0.2rem 0'}}>
-                    À venir
-                </div>
-            </div>
-            <h4 style={{padding:'0.5rem 0.5rem 0.5rem 0.8rem'}}>Toutes les lignes concernées</h4>
-            <div style={{display:"flex",flexWrap:"wrap", justifyContent:"space-evenly", gap:'1rem', backgroundColor:"white",padding:'0.5rem', borderRadius:'0.5rem'}}>
-                {horairesData.map((item) => (
-                    <div key={item.BulleId} style={{position:"relative",backgroundColor: item.BulleColor, color:"white", fontWeight:'bold',fontSize:'1.3rem', borderRadius:"4rem", padding:'0.3rem 0.9rem'}}>
-                        {item.BulleId}
-                        <div style={{position:"absolute", bottom:"-4px", right:"-4px", backgroundColor:'#f5752a', width:'20px', height:'20px', borderRadius:'4rem'}} className={"fr ai-c jc-c"}>
-                            <FaExclamation size={'15px'}/>
-                        </div>
+        <div className="page-scroll">
+            <div className="page-scroll__header" style={{ backgroundColor: '#ebebeb', padding: '0.5rem 0.5rem 0' }}>
+                <div className={"fr ai-c jc-c"} style={{ padding: '0.2rem', backgroundColor: 'lightgrey', borderRadius: '7px' }}>
+                    <div style={{ backgroundColor: 'white', borderRadius: '5px', width: '100%', textAlign: 'center', fontSize: '1rem', padding: '0.2rem 0' }}>
+                        En cours
                     </div>
-                ))}
+                    <div style={{ borderRadius: '5px', width: '100%', backgroundColor: 'lightgrey', textAlign: 'center', fontSize: '1rem', padding: '0.2rem 0' }}>
+                        À venir
+                    </div>
+                </div>
+                <h4 style={{ padding: '0.5rem 0.5rem 0.5rem 0.8rem' }}>Toutes les lignes concernées</h4>
             </div>
+            <PullToRefresh className="page-scroll__body" style={{ padding: '0 0.5rem 0.5rem', backgroundColor: '#ebebeb' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-evenly',
+                        gap: '1rem',
+                        backgroundColor: 'white',
+                        padding: '0.5rem',
+                        borderRadius: '0.5rem',
+                        border: '1px solid #e6e6e6',
+                    }}
+                >
+                    {horairesData.map((item) => (
+                        <div
+                            key={item.BulleId}
+                            style={{
+                                position: 'relative',
+                                backgroundColor: item.BulleColor,
+                                color: 'white',
+                                fontWeight: 'bold',
+                                fontSize: '1.3rem',
+                                borderRadius: '4rem',
+                                padding: '0.3rem 0.9rem',
+                            }}
+                        >
+                            {item.BulleId}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    bottom: '-4px',
+                                    right: '-4px',
+                                    backgroundColor: '#f5752a',
+                                    width: '20px',
+                                    height: '20px',
+                                    borderRadius: '4rem',
+                                }}
+                                className={"fr ai-c jc-c"}
+                            >
+                                <FaExclamation size={'15px'} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </PullToRefresh>
         </div>
     );
-
 }
 
 export default Trafic;

@@ -110,7 +110,7 @@ function Tickets() {
     if (isLoading) return <Loading />;
 
     return (
-        <>
+        <div className="tickets-page">
             {loadError && (
                 <div style={{ padding: '1rem', textAlign: 'center' }}>
                     <p style={{ color: 'red' }}>{loadError}</p>
@@ -152,7 +152,7 @@ function Tickets() {
                         </div>
                     )}
                     {profileSelected.tickets && profileSelected.tickets.length > 0 && (
-                        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }} className={"bg-grey"}>
+                        <div className="tickets-page__content bg-grey">
                             <h4 style={{ padding: ' 2rem 1rem 1.3rem', fontSize: '0.9rem' }}>SUR MON TÉLÉPHONE</h4>
                             <div className={"tickets"}>
                                 <TicketSlider
@@ -254,7 +254,7 @@ function Tickets() {
                     </button>
                 </div>
             </Modal>
-        </>
+        </div>
     );
 }
 
