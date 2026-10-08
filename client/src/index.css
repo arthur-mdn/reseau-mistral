@@ -735,12 +735,12 @@ button[type=button].profile {
   justify-content: flex-start;
   background-color: #ffffff !important;
   background: #ffffff !important;
-  padding: 0.7rem 1rem 0.7rem 0.9rem !important;
-  border-radius: 0 !important;
-  border: 0 !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid #e6e6e6 !important;
   box-shadow: none !important;
   cursor: pointer;
-  transition: 0.3s background-color;
+  transition: opacity 0.2s ease;
   color: #000000 !important;
   text-align: left;
   font-size: inherit;
@@ -755,10 +755,10 @@ button[type=button].profile:focus-visible {
   background-color: #ffffff !important;
   background: #ffffff !important;
   color: #000000 !important;
-  opacity: 1;
-  border: 0 !important;
-  border-radius: 0 !important;
-  border-color: transparent !important;
+  opacity: 0.88;
+  border: 1px solid #e6e6e6 !important;
+  border-radius: 0.5rem !important;
+  border-color: #e6e6e6 !important;
   outline: none;
 }
 

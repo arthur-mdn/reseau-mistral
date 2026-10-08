@@ -68,7 +68,6 @@ function ProfileSelection({ onProfileSelect, onClose, fromProfile = false }) {
                             type="button"
                             onClick={() => selectProfile(profile)}
                             className={"profile"}
-                            style={{ width: '100%', backgroundColor: fromProfile ? '#f3f3f3' : 'white' }}
                             aria-pressed={isSelected}
                         >
                             <span
