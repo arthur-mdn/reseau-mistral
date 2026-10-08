@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import { Html5Qrcode } from 'html5-qrcode';
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import {FaBolt} from "react-icons/fa6";
 import Modal from "./Modal.jsx";
 import {FaBackspace} from "react-icons/fa";
@@ -11,6 +11,12 @@ const LABEL_GAP = 80;
 const CHEVRON_OUTSET = 10;
 const CHEVRON_SIZE = 28;
 const CHEVRON_STROKE = 4;
+
+function isAppleTouchDevice() {
+    if (typeof navigator === 'undefined') return false;
+    return /iPad|iPhone|iPod/i.test(navigator.userAgent)
+        || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
 
 function ScanChevron() {
     const s = CHEVRON_STROKE;
@@ -169,13 +175,18 @@ function Scan({ onScanSuccess, onScanError }) {
         const scanner = new Html5Qrcode(elementId);
         scannerRef.current = scanner;
 
+        const onApple = isAppleTouchDevice();
         const config = {
-            fps: 15,
+            fps: onApple ? 10 : 15,
             qrbox: (viewfinderWidth, viewfinderHeight) => {
                 const size = computeQrBoxSize(viewfinderWidth, viewfinderHeight);
                 return { width: size, height: size };
             },
-            aspectRatio: 1,
+            formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+            experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true,
+            },
+            disableFlip: false,
         };
 
         const handleSuccess = (decodedText, decodedResult) => {
@@ -196,18 +207,27 @@ function Scan({ onScanSuccess, onScanError }) {
             }
         };
 
+        const prepareVideoElement = () => {
+            const videoElement = qrRef.current?.querySelector('video');
+            if (!videoElement) return;
+            videoElement.setAttribute('playsinline', 'true');
+            videoElement.setAttribute('webkit-playsinline', 'true');
+            videoElement.muted = true;
+            videoElement.playsInline = true;
+            videoElement.style.width = '100%';
+            videoElement.style.height = '100%';
+            videoElement.style.objectFit = 'contain';
+            videoElement.style.objectPosition = 'center center';
+            videoElement.play?.().catch(() => {});
+        };
+
         const afterStart = async () => {
             const deviceId = scanner.getRunningTrackSettings?.()?.deviceId;
-            if (deviceId) {
+            if (deviceId && !onApple) {
                 localStorage.setItem(CAMERA_ID_KEY, deviceId);
             }
 
-            const videoElement = qrRef.current?.querySelector('video');
-            if (videoElement) {
-                videoElement.style.width = '100%';
-                videoElement.style.height = '100%';
-                videoElement.style.objectFit = 'cover';
-            }
+            prepareVideoElement();
             await detectTorch();
             requestAnimationFrame(() => {
                 syncButtonsPosition();
@@ -217,7 +237,7 @@ function Scan({ onScanSuccess, onScanError }) {
         };
 
         const startCamera = async () => {
-            const lastCameraId = localStorage.getItem(CAMERA_ID_KEY);
+            const lastCameraId = onApple ? null : localStorage.getItem(CAMERA_ID_KEY);
             const cameraConfig = lastCameraId || { facingMode: 'environment' };
 
             try {

@@ -780,6 +780,14 @@ button.decrement {
   border:0!important;
 }
 
+#qr-code-reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  background: #000;
+}
+
 
 .loader {
   width: 48px;
