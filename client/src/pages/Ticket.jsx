@@ -308,7 +308,7 @@ function Ticket() {
                             )}
                             <div style={{margin:'auto 0 2rem 0', display:'flex', flexDirection:'column', gap:'0.75rem', zIndex:20, position:'relative'}}>
                                 <div style={{backgroundColor:'white', borderRadius:'0.75rem', overflow:'hidden', border:'1px solid #949493'}}>
-                                    <div style={{display:'flex', alignItems:'stretch', backgroundColor:CONTROL_TITLE_BG, minHeight:'40px'}}>
+                                    <div style={{display:'flex', alignItems:'stretch', backgroundColor:CONTROL_TITLE_BG, minHeight:'35px'}}>
                                         <div style={{backgroundColor:'white', display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.35rem 0.65rem', margin:'0 0.55rem 0 0', borderRadius:'0 0 0.85rem 0', border:'1px solid #949493', borderTop:0,borderLeft:0}}>
                                             <img src={"/elements/icons/user-check.png"} alt="" style={{width:'1.15rem', height:'1.15rem', objectFit:'contain', display:'block'}}/>
                                             <span style={{fontWeight:900, fontSize:'1.15rem', color:'#1a1a1a', lineHeight:1}}>1</span>
@@ -319,8 +319,8 @@ function Ticket() {
                                     </div>
                                     <div style={{display:'flex', padding:'0.75rem 0.85rem', gap:'0.75rem', alignItems:'center'}}>
                                         <div style={{flex:1, minWidth:0}}>
-                                            <p style={{fontSize:'0.8rem', color:'#666', marginBottom:'0.55rem'}}>Période de validité</p>
-                                            <div style={{display:'flex', alignItems:'center', gap:'0.45rem', marginBottom:'0.4rem'}}>
+                                            <p style={{fontSize:'0.8rem', color:'#666'}}>Période de validité</p>
+                                            <div style={{display:'flex', alignItems:'center', gap:'0.45rem'}}>
                                                 <img src={"/elements/icons/calendar-check.png"} alt="" style={{width:'18px', height:'18px', objectFit:'contain'}}/>
                                                 <span style={{fontSize:'0.9rem', color:'#1a1a1a'}}>{formatDateTime(lastUsage.date)}</span>
                                             </div>
@@ -336,13 +336,13 @@ function Ticket() {
                                             style={{background:'transparent', border:'1px solid #000', borderRadius:'0.45rem', padding:'0.35rem', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0}}
                                             aria-label="Afficher le QR code"
                                         >
-                                            <img src={"/elements/icons/qr.png"} alt="" style={{width:'52px', height:'52px', objectFit:'contain', display:'block'}}/>
+                                            <img src={"/elements/icons/qr.png"} alt="" style={{width:'40px', height:'40px', objectFit:'contain', display:'block'}}/>
                                         </button>
                                     </div>
                                 </div>
 
                                 <div style={{backgroundColor:'white', borderRadius:'0.75rem', overflow:'hidden', border:'1px solid #949493'}}>
-                                    <div style={{display:'flex', alignItems:'stretch', backgroundColor:CONTROL_TITLE_BG, minHeight:'40px'}}>
+                                    <div style={{display:'flex', alignItems:'stretch', backgroundColor:CONTROL_TITLE_BG, minHeight:'35px'}}>
                                         <div style={{backgroundColor:'white', display:'flex', alignItems:'center', justifyContent:'center', padding:'0.35rem 0.7rem', margin:'0 0.55rem 0 0', borderRadius:'0 0 0.85rem 0', border:'1px solid #949493', borderTop:0,borderLeft:0}}>
                                             <span style={{fontWeight:700, fontSize:'1.15rem', color:CONTROL_GREEN, fontVariantNumeric:'tabular-nums', lineHeight:1}}>{timePassed || '00:00'}</span>
                                         </div>
