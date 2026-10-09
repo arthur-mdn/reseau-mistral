@@ -30,6 +30,13 @@ export function isTicketActive(ticket, now = new Date()) {
     });
 }
 
+export function isTicketUsable(ticket, now = new Date()) {
+    if (!ticket?.usages?.length) {
+        return true;
+    }
+    return isTicketActive(ticket, now);
+}
+
 export function sortTicketsActiveFirst(tickets, now = new Date()) {
     return [...(tickets || [])].sort((a, b) => {
         const aActive = isTicketActive(a, now) ? 1 : 0;

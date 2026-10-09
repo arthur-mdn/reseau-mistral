@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { parseDuration, sortTicketsActiveFirst } from '../utils/duration.js';
+import { isTicketUsable, parseDuration, sortTicketsActiveFirst } from '../utils/duration.js';
 
 function calculateRemainingTime(ticketUseDate, maxTime) {
     const useDate = new Date(ticketUseDate);
@@ -54,7 +54,7 @@ function TicketSlider({ tickets, onTicketSelect }) {
 
     const validTickets = useMemo(() => {
         const sorted = sortTicketsActiveFirst(tickets || []);
-        return sorted.filter((ticket) => remainingTimes[ticket._id] !== '00:00:00');
+        return sorted.filter((ticket) => isTicketUsable(ticket));
     }, [tickets, remainingTimes]);
 
     useEffect(() => {

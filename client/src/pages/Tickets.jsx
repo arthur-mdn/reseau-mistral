@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Validations from '../components/Validations.jsx';
 import Loading from '../components/Loading.jsx';
 import api from '../api';
+import { isTicketUsable } from '../utils/duration.js';
 
 const Boutique = lazy(() => import('../components/Boutique.jsx'));
 const Scan = lazy(() => import('../components/Scan.jsx'));
@@ -109,7 +110,7 @@ function Tickets() {
 
     if (isSubmitting) return <Loading />;
 
-    const hasTickets = Boolean(profileSelected?.tickets?.length);
+    const hasUsableTickets = (profileSelected?.tickets || []).some((ticket) => isTicketUsable(ticket));
     const showTicketsSkeleton = Boolean(cookies.selectedProfile) && isLoading;
 
     return (
@@ -164,7 +165,7 @@ function Tickets() {
                         </div>
                     )}
 
-                    {!showTicketsSkeleton && profileSelected && !hasTickets && (
+                    {!showTicketsSkeleton && profileSelected && !hasUsableTickets && (
                         <div className="no_tickets">
                             <h3>Aucun titre à utiliser</h3>
                             <p>Vous pouvez acheter des titres pour voyager sur le réseau</p>
@@ -174,7 +175,7 @@ function Tickets() {
                         </div>
                     )}
 
-                    {!showTicketsSkeleton && hasTickets && (
+                    {!showTicketsSkeleton && hasUsableTickets && (
                         <div className="tickets-page__content bg-grey">
                             <h4 className="tickets-page__section-title">SUR MON TÉLÉPHONE</h4>
                             <div className={"tickets"}>

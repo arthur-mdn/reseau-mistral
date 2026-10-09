@@ -1,6 +1,26 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { sortTicketsActiveFirst } from '../src/utils/duration.js';
+import { isTicketUsable, sortTicketsActiveFirst } from '../src/utils/duration.js';
+
+describe('isTicketUsable', () => {
+    const now = new Date('2026-10-08T12:00:00.000Z');
+
+    it('keeps unused and active tickets, drops expired ones', () => {
+        const unused = { usages: [], priceId: { maxTime: '1 hours' } };
+        const active = {
+            usages: [{ date: '2026-10-08T11:30:00.000Z' }],
+            priceId: { maxTime: '1 hours' },
+        };
+        const expired = {
+            usages: [{ date: '2026-10-08T10:00:00.000Z' }],
+            priceId: { maxTime: '1 hours' },
+        };
+
+        assert.equal(isTicketUsable(unused, now), true);
+        assert.equal(isTicketUsable(active, now), true);
+        assert.equal(isTicketUsable(expired, now), false);
+    });
+});
 
 describe('sortTicketsActiveFirst', () => {
     it('puts active tickets before unused ones', () => {
