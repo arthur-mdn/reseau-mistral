@@ -70,6 +70,32 @@ button[type=button].setting_element {
   outline: none !important;
 }
 
+.menu-profile-skeleton__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: #ebebeb;
+}
+
+.menu-profile-skeleton__line {
+  border-radius: 1rem;
+  background-color: #ebebeb;
+}
+
+.menu-profile-skeleton__line--name {
+  width: 55%;
+  height: 12px;
+  margin-bottom: 0.35rem;
+  background-color: #d8d8d8;
+}
+
+.menu-profile-skeleton__line--email {
+  width: 75%;
+  height: 10px;
+  background-color: #e8e8e8;
+}
+
 .menu-settings > button.setting_element:first-child,
 .menu-settings > button[type=button].setting_element:first-child {
   border-top-left-radius: 10px !important;

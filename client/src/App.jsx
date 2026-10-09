@@ -9,13 +9,14 @@ import Loading from './components/Loading.jsx';
 import DemoBanner from './components/DemoBanner.jsx';
 import OrientationLock from './components/OrientationLock.jsx';
 
+import Menu from './pages/Menu.jsx';
+
 const Login = lazy(() => import('./pages/Login.jsx'));
 const Register = lazy(() => import('./pages/Register.jsx'));
 const Logout = lazy(() => import('./pages/Logout.jsx'));
 const Home = lazy(() => import('./pages/Home.jsx'));
 const Tickets = lazy(() => import('./pages/Tickets.jsx'));
 const Trafic = lazy(() => import('./pages/Trafic.jsx'));
-const Menu = lazy(() => import('./pages/Menu.jsx'));
 const Horaires = lazy(() => import('./pages/Horaires.jsx'));
 const Ticket = lazy(() => import('./pages/Ticket.jsx'));
 const AuthError = lazy(() => import('./pages/AuthError.jsx'));

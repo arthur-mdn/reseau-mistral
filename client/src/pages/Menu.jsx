@@ -14,7 +14,6 @@ import {
 import Modal from '../components/Modal.jsx';
 import ProfileSelection from '../components/ProfileSelection.jsx';
 import { FaExternalLinkAlt, FaHome } from 'react-icons/fa';
-import Loading from '../components/Loading.jsx';
 import api from '../api';
 import { isDemoBannerHidden, toggleDemoBannerHidden } from '../utils/demoBanner';
 import {
@@ -163,8 +162,6 @@ function Menu() {
         return () => setTopBarState({ title: '', isVisible: true });
     }, [setTopBarState]);
 
-    if (isLoading) return <Loading />;
-
     return (
         <>
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -176,7 +173,7 @@ function Menu() {
 
                 <div className="menu-settings" style={{ padding: 0, margin: '0 1rem', borderRadius: '10px', backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.56) 0px 22px 70px 4px', position: 'relative', zIndex: 1 }}>
                     <button onClick={() => setProfileOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
-                        {userDetails && (
+                        {userDetails ? (
                             <>
                                 <img
                                     src="/elements/menu/user.jpg"
@@ -192,7 +189,15 @@ function Menu() {
                                     </div>
                                 </div>
                             </>
-                        )}
+                        ) : isLoading ? (
+                            <>
+                                <div className="menu-profile-skeleton__avatar" aria-hidden="true" />
+                                <div style={{ textAlign: 'left', minWidth: 0, flex: 1 }}>
+                                    <div className="menu-profile-skeleton__line menu-profile-skeleton__line--name" />
+                                    <div className="menu-profile-skeleton__line menu-profile-skeleton__line--email" />
+                                </div>
+                            </>
+                        ) : null}
                         <FaChevronRight color="#444648" style={{ marginLeft: 'auto', flexShrink: 0 }} />
                     </button>
 
