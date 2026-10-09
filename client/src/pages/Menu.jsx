@@ -65,7 +65,6 @@ function Menu() {
     const [isDocumentsOpen, setIsDocumentsOpen] = useState(false);
     const [isLiensOpen, setIsLiensOpen] = useState(false);
     const [isContactOpen, setIsContactOpen] = useState(false);
-    const [isPolitiqueOpen, setIsPolitiqueOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [bannerConfirmOpen, setBannerConfirmOpen] = useState(false);
     const [bannerHidden, setBannerHidden] = useState(() => isDemoBannerHidden());
@@ -254,7 +253,12 @@ function Menu() {
                 </div>
 
                 <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', position: 'relative', zIndex: 1 }}>
-                    <button onClick={() => setIsPolitiqueOpen(true)} type={"button"} className="row-card setting_element setting_element--flat" style={{ padding: '0rem', backgroundColor: 'transparent', color: 'white', marginRight: 'auto' }}>
+                    <button
+                        type="button"
+                        className="row-card setting_element setting_element--flat"
+                        style={{ padding: '0rem', backgroundColor: 'transparent', color: 'white', marginRight: 'auto' }}
+                        onClick={() => window.open('https://www.reseaumistral.com/politique-de-confidentialite', '_blank', 'noopener,noreferrer')}
+                    >
                         Politique de confidentialité
                     </button>
                     <hr style={{ border: '1px solid white', margin: 0, opacity: 0.1 }} />
@@ -640,7 +644,6 @@ function Menu() {
             </Modal>
 
             <Modal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} title={"Nous contacter"} />
-            <Modal isOpen={isPolitiqueOpen} onClose={() => setIsPolitiqueOpen(false)} title={"Politique de confidentialité"} />
             <Modal
                 isOpen={isSettingsOpen}
                 onClose={() => {
