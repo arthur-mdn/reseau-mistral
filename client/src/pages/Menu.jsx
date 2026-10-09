@@ -59,6 +59,7 @@ function Menu() {
     const [profileOpen, setProfileOpen] = useState(false);
     const [servicesOpen, setServicesOpen] = useState(false);
     const [trajetsOpen, setTrajetsOpen] = useState(false);
+    const [trajetsTab, setTrajetsTab] = useState('planifies');
     const [favoriteOpen, setFavoriteOpen] = useState(false);
     const [favoriteTab, setFavoriteTab] = useState('lieux');
     const [isPlanOpen, setIsPlanOpen] = useState(false);
@@ -533,8 +534,50 @@ function Menu() {
                 )}
             </Modal>
 
-            <Modal isOpen={trajetsOpen} onClose={() => setTrajetsOpen(false)} title={"Mes Trajets"}>
-                <p>Aucun trajet enregistré.</p>
+            <Modal
+                isOpen={trajetsOpen}
+                onClose={() => {
+                    setTrajetsOpen(false);
+                    setTrajetsTab('planifies');
+                }}
+                title={"Mes Trajets"}
+                padding={"0"}
+                bgColor={"#F1F3F4"}
+            >
+                <div className="menu-favoris">
+                    <div className="menu-favoris__tabs" role="tablist" aria-label="Mes trajets">
+                        <button
+                            type="button"
+                            role="tab"
+                            aria-selected={trajetsTab === 'planifies'}
+                            className={`menu-favoris__tab${trajetsTab === 'planifies' ? ' is-active' : ''}`}
+                            onClick={() => setTrajetsTab('planifies')}
+                        >
+                            Planifiés
+                        </button>
+                        <button
+                            type="button"
+                            role="tab"
+                            aria-selected={trajetsTab === 'passes'}
+                            className={`menu-favoris__tab${trajetsTab === 'passes' ? ' is-active' : ''}`}
+                            onClick={() => setTrajetsTab('passes')}
+                        >
+                            Passés
+                        </button>
+                    </div>
+                    <div className="horaires-empty horaires-empty--favoris menu-favoris__empty">
+                        <img
+                            src="/elements/icons/empty_trajets.png"
+                            alt=""
+                            className="horaires-empty__image horaires-empty__image--favoris"
+                            width={160}
+                            height={160}
+                        />
+                        <h3 className="horaires-empty__title">
+                            {trajetsTab === 'planifies' ? 'Aucun trajet planifié' : 'Aucun trajet passé'}
+                        </h3>
+                    </div>
+                </div>
             </Modal>
 
             <Modal
