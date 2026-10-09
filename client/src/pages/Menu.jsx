@@ -240,7 +240,7 @@ function Menu() {
                         <div style={menuIconStyle}>
                             <FaLink size={'20px'} color="#444648" />
                         </div>
-                        <span>Liens utiles</span>
+                        <span>Liens utiles : Achat, Appel Bus, PV...</span>
                         <FaChevronRight color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
 
@@ -597,37 +597,43 @@ function Menu() {
                 </div>
             </Modal>
 
-            <Modal isOpen={isLiensOpen} onClose={() => setIsLiensOpen(false)} title={"Liens utiles"}>
-                <div>
-                    <div style={{ borderBottom: '1px solid lightgrey', marginTop: '1rem' }}>
-                        <h3>Site officiel du réseau Mistral</h3>
-                        <p>J'organise mes déplacements sur la Métropole Toulon Provence Méditerranée</p>
-                        <button type={"button"} style={{ color: '#1E21A4', padding: 0, backgroundColor: 'transparent', margin: '1rem 1rem 1rem auto' }}>
-                            <FaExternalLinkAlt /> En savoir plus
+            <Modal
+                isOpen={isLiensOpen}
+                onClose={() => setIsLiensOpen(false)}
+                title={"Liens utiles : Achat, Appel Bus, PV..."}
+            >
+                <div className="liens-utiles">
+                    <div className="liens-utiles__item">
+                        <h3 className="liens-utiles__title">Site officiel du réseau Mistral</h3>
+                        <p className="liens-utiles__text">
+                            J&apos;organise mes déplacements sur la Métropole Toulon Provence Méditerranée
+                        </p>
+                        <button type="button" className="liens-utiles__btn">
+                            <FaExternalLinkAlt size={11} /> En savoir plus
                         </button>
                     </div>
-                    <div style={{ borderBottom: '1px solid lightgrey', marginTop: '1rem' }}>
-                        <h3>Accueil commerciaux</h3>
-                        <button type={"button"} style={{ color: '#1E21A4', padding: 0, backgroundColor: 'transparent', margin: '1rem 1rem 1rem auto' }}>
-                            <FaExternalLinkAlt /> En savoir plus
+                    <div className="liens-utiles__item">
+                        <h3 className="liens-utiles__title">Accueil commerciaux</h3>
+                        <button type="button" className="liens-utiles__btn">
+                            <FaExternalLinkAlt size={11} /> En savoir plus
                         </button>
                     </div>
-                    <div style={{ borderBottom: '1px solid lightgrey', marginTop: '1rem' }}>
-                        <h3>Appel Bus (TAD)</h3>
-                        <button type={"button"} style={{ color: '#1E21A4', padding: 0, backgroundColor: 'transparent', margin: '1rem 1rem 1rem auto' }}>
-                            <FaExternalLinkAlt /> En savoir plus
+                    <div className="liens-utiles__item">
+                        <h3 className="liens-utiles__title">Appel Bus (TAD)</h3>
+                        <button type="button" className="liens-utiles__btn">
+                            <FaExternalLinkAlt size={11} /> En savoir plus
                         </button>
                     </div>
-                    <div style={{ borderBottom: '1px solid lightgrey', marginTop: '1rem' }}>
-                        <h3>Règlement PV</h3>
-                        <button type={"button"} style={{ color: '#1E21A4', padding: 0, backgroundColor: 'transparent', margin: '1rem 1rem 1rem auto' }}>
-                            <FaExternalLinkAlt /> En savoir plus
+                    <div className="liens-utiles__item">
+                        <h3 className="liens-utiles__title">Règlement PV</h3>
+                        <button type="button" className="liens-utiles__btn">
+                            <FaExternalLinkAlt size={11} /> En savoir plus
                         </button>
                     </div>
-                    <div style={{ borderBottom: '1px solid lightgrey', marginTop: '1rem' }}>
-                        <h3>Service PMR</h3>
-                        <button type={"button"} style={{ color: '#1E21A4', padding: 0, backgroundColor: 'transparent', margin: '1rem 1rem 1rem auto' }}>
-                            <FaExternalLinkAlt /> En savoir plus
+                    <div className="liens-utiles__item">
+                        <h3 className="liens-utiles__title">Service PMR</h3>
+                        <button type="button" className="liens-utiles__btn">
+                            <FaExternalLinkAlt size={11} /> En savoir plus
                         </button>
                     </div>
                 </div>

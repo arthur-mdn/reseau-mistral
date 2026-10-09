@@ -71,6 +71,69 @@ button[type=button].setting_element {
   outline: none !important;
 }
 
+.liens-utiles {
+  font-size: 0.88rem;
+}
+
+.liens-utiles__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: 1px solid lightgrey;
+  padding: 0.85rem 0 0.65rem;
+}
+
+.liens-utiles__item:first-child {
+  padding-top: 0.35rem;
+}
+
+.liens-utiles__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #424242;
+  line-height: 1.3;
+}
+
+.liens-utiles__text {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: #555;
+}
+
+button.liens-utiles__btn,
+button[type=button].liens-utiles__btn {
+  display: inline-flex !important;
+  align-items: center;
+  align-self: flex-end;
+  gap: 0.35rem;
+  width: auto !important;
+  margin: 0.55rem 0 0.15rem 0 !important;
+  padding: 0.35rem 0.55rem !important;
+  border: 0 !important;
+  border-radius: 0.35rem !important;
+  background: transparent !important;
+  color: #1E21A4 !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+button.liens-utiles__btn:hover,
+button[type=button].liens-utiles__btn:hover,
+button.liens-utiles__btn:focus,
+button[type=button].liens-utiles__btn:focus {
+  background: transparent !important;
+  color: #1E21A4 !important;
+  opacity: 0.85 !important;
+  outline: none;
+  border: 0 !important;
+}
+
 .plans-reseau-card {
   display: flex;
   align-items: center;
