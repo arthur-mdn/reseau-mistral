@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { isTicketUsable, parseDuration, sortTicketsActiveFirst } from '../utils/duration.js';
+import { getTicketImageSrc } from '../utils/ticketImage.js';
 
 function calculateRemainingTime(ticketUseDate, maxTime) {
     const useDate = new Date(ticketUseDate);
@@ -140,7 +141,7 @@ function TicketSlider({ tickets, onTicketSelect }) {
                                     </div>
                                 )}
                                 <img
-                                    src={`/elements/tickets/${ticket.priceId.image}`}
+                                    src={getTicketImageSrc(ticket.priceId.image)}
                                     alt={ticket.priceId.title}
                                 />
                             </div>

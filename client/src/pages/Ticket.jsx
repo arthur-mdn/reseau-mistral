@@ -9,6 +9,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import Loading from '../components/Loading.jsx';
 import api from '../api';
 import { parseDuration } from '../utils/duration.js';
+import { getTicketImageSrc } from '../utils/ticketImage.js';
 
 const CONTROL_GREEN = '#348C0D';
 const CONTROL_TITLE_BG = '#C0C0E6';
@@ -243,7 +244,7 @@ function Ticket() {
                                 </div>
                             </div>
                             <div style={{ position: 'relative', boxShadow: 'rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px', borderRadius: '1.5rem' }}>
-                                <img src={`/elements/tickets/${ticketDetails.priceId.image}`} style={{ width: '60vw', maxWidth: '400px', minWidth: '200px', padding: '0 1rem' }} alt="" />
+                                <img src={getTicketImageSrc(ticketDetails.priceId.image)} style={{ width: '60vw', maxWidth: '400px', minWidth: '200px', padding: '0 1rem' }} alt="" />
                                 <div style={{ position: 'absolute', backgroundColor: 'rgba(0,0,0,0.9)', bottom: 0, left: 0, width: '100%', color: 'white', display: 'flex', padding: '0.5rem 1rem 0.3rem', flexDirection: 'column', alignItems: 'center', borderBottomLeftRadius: '1.5rem', borderBottomRightRadius: '1.5rem', border: '4px solid white', borderTop: 0 }}>
                                     <h4 style={{ color: 'grey', lineHeight: '1rem' }}>Fin de validité :</h4>
                                     <span style={{ fontSize: '1.3rem', lineHeight: '1.8rem', fontWeight: 'bold' }}>{timeRemaining}</span>
