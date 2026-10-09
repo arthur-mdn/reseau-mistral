@@ -25,7 +25,7 @@ function AuthError() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '2rem 1.5rem',
-                backgroundColor: '#1E21A4',
+                backgroundColor: '#1B1F9C',
                 color: '#fff',
                 textAlign: 'center',
                 boxSizing: 'border-box',
@@ -49,7 +49,7 @@ function AuthError() {
                     border: 0,
                     borderRadius: '0.5rem',
                     backgroundColor: '#fff',
-                    color: '#1E21A4',
+                    color: '#1B1F9C',
                     fontWeight: 700,
                     opacity: retrying ? 0.7 : 1,
                 }}

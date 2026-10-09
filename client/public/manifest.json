@@ -4,8 +4,8 @@
   "start_url": "https://reseau-mistral.mondon.pro/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#1E21A4",
-  "theme_color": "#1E21A4",
+  "background_color": "#1B1F9C",
+  "theme_color": "#1B1F9C",
   "icons": [
     {
       "src": "/elements/favicon.png",

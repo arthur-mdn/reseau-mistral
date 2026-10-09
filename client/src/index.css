@@ -5,17 +5,17 @@
 
   color-scheme: light;
   color: rgba(0, 0, 0, 0.87);
-  background-color: #1E21A4;
+  background-color: #1B1F9C;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --activated-color: #1E21A4;
+  --activated-color: #1B1F9C;
   --text-color: #FFFFFF;
   --second-text-color: #ffffff;
   --placeholder-text-color: #cfcfcf;
-  --bg-color: #1E21A4;
+  --bg-color: #1B1F9C;
   --bg-white: #F5F5F6;
   --bg-grey: #F1F3F4;
   --card-bg-color: #1D1D1D;
@@ -135,7 +135,7 @@ button[type=button].liens-utiles__btn {
   border: 0 !important;
   border-radius: 0.35rem !important;
   background: transparent !important;
-  color: #1E21A4 !important;
+  color: #1B1F9C !important;
   font-size: 0.72rem !important;
   font-weight: 600 !important;
   letter-spacing: 0.02em;
@@ -149,7 +149,7 @@ button[type=button].liens-utiles__btn:hover,
 button.liens-utiles__btn:focus,
 button[type=button].liens-utiles__btn:focus {
   background: transparent !important;
-  color: #1E21A4 !important;
+  color: #1B1F9C !important;
   opacity: 0.85 !important;
   outline: none;
   border: 0 !important;
@@ -191,7 +191,7 @@ button[type=button].liens-utiles__btn:focus {
 
 .plans-reseau-card__eye {
   flex-shrink: 0;
-  color: #1E21A4;
+  color: #1B1F9C;
   font-size: 1.15rem;
 }
 
@@ -205,7 +205,7 @@ button[type=button].liens-utiles__btn:focus {
 .menu-favoris__tabs {
   display: flex;
   align-items: stretch;
-  background-color: #1E21A4;
+  background-color: #1B1F9C;
 }
 
 button.menu-favoris__tab,
@@ -330,15 +330,15 @@ button[type=button].services-unlinked__btn {
 button.services-unlinked__btn--secondary,
 button[type=button].services-unlinked__btn--secondary {
   background: #fff !important;
-  color: #1E21A4 !important;
-  border: 1.5px solid #1E21A4 !important;
+  color: #1B1F9C !important;
+  border: 1.5px solid #1B1F9C !important;
 }
 
 button.services-unlinked__btn--primary,
 button[type=button].services-unlinked__btn--primary {
-  background: #1E21A4 !important;
+  background: #1B1F9C !important;
   color: #fff !important;
-  border: 1.5px solid #1E21A4 !important;
+  border: 1.5px solid #1B1F9C !important;
 }
 
 button.services-unlinked__btn:hover,
@@ -458,7 +458,7 @@ html {
   width: 100%;
   height: 100%;
   height: 100dvh;
-  background-color: #1E21A4;
+  background-color: #1B1F9C;
   overflow: hidden;
   touch-action: manipulation;
 }
@@ -473,7 +473,7 @@ body {
   width: 100%;
   height: 100%;
   height: 100dvh;
-  background-color: #1E21A4;
+  background-color: #1B1F9C;
   overflow: hidden;
   overscroll-behavior: none;
   touch-action: manipulation;
@@ -496,7 +496,7 @@ body {
   right: 0;
   width: 100%;
   height: max(12px, env(safe-area-inset-top, 0px));
-  background-color: #1E21A4;
+  background-color: #1B1F9C;
   z-index: 10050;
   pointer-events: none;
 }
@@ -512,7 +512,7 @@ body {
   gap: 0.5rem;
   padding: 2rem;
   text-align: center;
-  background-color: #1E21A4;
+  background-color: #1B1F9C;
   color: #fff;
 }
 
@@ -706,7 +706,7 @@ button.home-map-ctrl svg {
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #1e22aa;
+  background-color: #1B1F9C;
   border-radius: 1.15rem 1.15rem 0 0;
   overflow: hidden;
   will-change: height;
@@ -931,7 +931,7 @@ button[type=button].home-sheet__search:focus-visible {
 .horaires-tabs {
   display: flex;
   align-items: stretch;
-  background-color: #1E21A4;
+  background-color: #1B1F9C;
   color: rgba(255, 255, 255, 0.55);
   text-align: center;
   padding: 0;
@@ -1042,8 +1042,8 @@ button[type=button].horaires-tabs__btn:focus-visible {
 }
 
 .horaires-place-card__badge--bus {
-  color: #1E21A4;
-  border: 1.5px solid #1E21A4;
+  color: #1B1F9C;
+  border: 1.5px solid #1B1F9C;
 }
 
 .horaires-place-card__badge--train {
@@ -1171,7 +1171,7 @@ button[type=button].horaires-tabs__btn:focus-visible {
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
-  color: #1E21A4 !important;
+  color: #1B1F9C !important;
   font-size: 1rem;
   font-weight: 600;
   box-shadow: none !important;
@@ -1185,7 +1185,7 @@ button[type=button].horaires-tabs__btn:focus-visible {
   outline: none;
   border: 0 !important;
   background: transparent !important;
-  color: #1E21A4 !important;
+  color: #1B1F9C !important;
 }
 
 .trafic-tabs {
@@ -1306,7 +1306,7 @@ button[type=button].horaires-tabs__btn:focus-visible {
   height: 22px;
   border-radius: 50%;
   border: 2px solid #d0d0d0;
-  border-top-color: #1E21A4;
+  border-top-color: #1B1F9C;
 }
 
 .pull-to-refresh-spinner.is-spinning {
@@ -1320,7 +1320,7 @@ button[type=button].horaires-tabs__btn:focus-visible {
 .header-top {
   flex-shrink: 0;
   padding-top: env(safe-area-inset-top, 0px);
-  background-color: #1E21A4;
+  background-color: #1B1F9C;
 }
 
 .scan-preview-video {
@@ -1416,7 +1416,7 @@ select.settings-select {
 
 select.settings-select:focus,
 select.settings-select:focus-visible {
-  border-color: #1E21A4;
+  border-color: #1B1F9C;
   box-shadow: 0 0 0 2px rgba(30, 33, 164, 0.15);
   outline: none;
 }
@@ -1583,7 +1583,7 @@ button:focus-visible {
   height: calc(60px + env(safe-area-inset-top, 0px));
   top: 0;
   left: 0;
-  background-color: #1E21A4;
+  background-color: #1B1F9C;
   color: white;
   align-items: flex-end;
   padding: env(safe-area-inset-top, 0px) 1rem 0;
@@ -1705,8 +1705,8 @@ button.profile p {
 }
 
 .profile-check--selected {
-  background-color: #1E21A4;
-  border-color: #1E21A4;
+  background-color: #1B1F9C;
+  border-color: #1B1F9C;
 }
 
 .profile-info {
@@ -1948,7 +1948,7 @@ button.actual_profile_selector__btn{
   padding: 0;
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border: 1px solid #1E21A4;
+  border: 1px solid #1B1F9C;
   border-radius: 0.4rem;
   color: #000;
   cursor: pointer;
@@ -1960,7 +1960,7 @@ button.actual_profile_selector__btn:focus,
 button.actual_profile_selector__btn:focus-visible {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #1E21A4;
+  border-color: #1B1F9C;
   opacity: 1;
   outline: none;
 }
@@ -2006,7 +2006,7 @@ button.actual_profile_selector__btn:focus-visible {
 }
 
 button.increment, button.decrement {
-  background: #1E21A4;
+  background: #1B1F9C;
   border-radius: 50px;
   padding: 0;
   width: 25px;

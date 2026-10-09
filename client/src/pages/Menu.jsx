@@ -270,7 +270,7 @@ function Menu() {
                 <div className="row-card" style={{ backgroundColor: 'transparent', position: 'absolute', bottom: '10px', right: 0, width: '220px', zIndex: 1 }}>
                     <img src="/elements/images/transports.webp" style={{ width: '100%' }} alt={"transports"} />
                 </div>
-                <div style={{ backgroundColor: '#1E21A4', height: '75%', position: 'absolute', width: '100%', zIndex: 0, bottom: 0 }} />
+                <div style={{ backgroundColor: '#1B1F9C', height: '75%', position: 'absolute', width: '100%', zIndex: 0, bottom: 0 }} />
             </div>
 
             {userDetails && (
@@ -286,7 +286,7 @@ function Menu() {
                     ]}
                 >
                     <>
-                        <div style={{ backgroundColor: '#1E21A4', color: 'white', paddingBottom: '1rem' }} className={"fc ai-c g0-5"}>
+                        <div style={{ backgroundColor: '#1B1F9C', color: 'white', paddingBottom: '1rem' }} className={"fc ai-c g0-5"}>
                             <img
                                 src="/elements/menu/user.jpg"
                                 alt=""
@@ -409,7 +409,7 @@ function Menu() {
                                 Dernier login : {formatDateTime(account.lastLogin)}
                             </span>
                             {account.userRole === 'superadmin' && (
-                                <span style={{ fontSize: '0.75rem', color: '#1E21A4', marginTop: '0.15rem' }}>
+                                <span style={{ fontSize: '0.75rem', color: '#1B1F9C', marginTop: '0.15rem' }}>
                                     superadmin
                                 </span>
                             )}

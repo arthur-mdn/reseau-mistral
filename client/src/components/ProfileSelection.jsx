@@ -100,7 +100,7 @@ function ProfileSelection({ onProfileSelect, onClose, fromProfile = false }) {
                 {fromProfile ? (
                     <button
                         type={"button"}
-                        style={{ backgroundColor: 'transparent', color: '#1E21A4', marginRight: 'auto', padding: 0 }}
+                        style={{ backgroundColor: 'transparent', color: '#1B1F9C', marginRight: 'auto', padding: 0 }}
                         onClick={() => setAddProfileOpen(true)}
                     >
                         <FaPlus /> Ajouter un voyageur

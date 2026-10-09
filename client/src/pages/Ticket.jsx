@@ -276,7 +276,7 @@ function Ticket() {
                                         ))}
                                     </div>
                                     <div className={"fr g0-5 ai-c"} style={{ margin: 'auto auto 0 0' }}>
-                                        <div className={"fr jc-c ai-c"} style={{ backgroundColor: '#1E21A4', width: '20px', height: '20px', borderRadius: '4rem' }}>
+                                        <div className={"fr jc-c ai-c"} style={{ backgroundColor: '#1B1F9C', width: '20px', height: '20px', borderRadius: '4rem' }}>
                                             <FaInfo fill={"white"} size={"10px"} />
                                         </div>
                                         <h5 style={{ fontWeight: 'normal', opacity: '0.8', fontSize: '0.8rem' }}>Comment prendre une correspondance ?</h5>
@@ -350,7 +350,7 @@ function Ticket() {
                                                 <span style={{fontSize:'0.9rem', color:'#1a1a1a'}}>{formatDateTime(new Date(new Date(lastUsage.date).getTime() + parseDuration(ticketDetails.priceId.maxTime)))}</span>
                                             </div>
                                         </div>
-                                        <div style={{width:'1px', backgroundColor:'#1E21A4', alignSelf:'stretch', flexShrink:0}}/>
+                                        <div style={{width:'1px', backgroundColor:'#1B1F9C', alignSelf:'stretch', flexShrink:0}}/>
                                         <button
                                             type="button"
                                             onClick={() => setIsControlQrOpen(true)}
