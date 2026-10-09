@@ -201,7 +201,11 @@ function Tickets() {
 
             <Modal isOpen={isProfileSelectionOpen} onClose={() => setIsProfileSelectionOpen(false)} title={"Changer de voyageur"}>
                 <ProfileSelection
-                    onProfileSelect={(profile) => setProfileSelected(profile)}
+                    onProfileSelect={(profile) => {
+                        if (profile?._id) {
+                            loadProfile(profile._id);
+                        }
+                    }}
                     onClose={() => setIsProfileSelectionOpen(false)}
                 />
             </Modal>

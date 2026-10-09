@@ -449,6 +449,12 @@ button.home-map-ctrl svg {
   cursor: grabbing;
 }
 
+.home-sheet.is-collapsed .home-sheet__content {
+  overflow-y: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
 .home-sheet__grab {
   flex-shrink: 0;
   display: flex;
@@ -1766,7 +1772,7 @@ button.decrement {
 .loader {
   width: 48px;
   height: 48px;
-  border: 5px solid #646464;
+  border: 2px solid #646464;
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;

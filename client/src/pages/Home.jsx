@@ -85,12 +85,17 @@ function Home() {
         if (event.button != null && event.button !== 0) return;
         const snaps = measureSnaps();
         snapsRef.current = snaps;
+        const collapsed = sheetHeight <= SHEET_REDUIT + 2;
+        if (collapsed && contentScrollRef.current) {
+            contentScrollRef.current.scrollTop = 0;
+        }
         dragRef.current = {
             pending: true,
             active: false,
             startY: event.clientY,
             startH: sheetHeight,
             pointerId: event.pointerId,
+            collapsed,
         };
     };
 
@@ -104,7 +109,7 @@ function Home() {
             if (Math.abs(delta) < 8) return;
 
             const content = contentScrollRef.current;
-            if (content && content.scrollTop > 0) {
+            if (!drag.collapsed && content && content.scrollTop > 0) {
                 drag.pending = false;
                 return;
             }
@@ -250,7 +255,7 @@ function Home() {
                 )}
                 <div
                     ref={sheetRef}
-                    className={`home-sheet${dragging ? ' is-dragging' : ''}`}
+                    className={`home-sheet${dragging ? ' is-dragging' : ''}${isSheetCollapsed ? ' is-collapsed' : ''}`}
                     style={{ height: sheetHeight }}
                     onPointerDown={onSheetPointerDown}
                     onPointerMove={onSheetPointerMove}
