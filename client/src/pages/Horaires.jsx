@@ -224,7 +224,7 @@ function Horaires() {
                                             />
                                         )}
                                         <span className="horaires-place-card__badge horaires-place-card__badge--bus" aria-hidden="true">
-                                            <FaBus size={14} />
+                                            <FaBus size={11} />
                                         </span>
                                     </div>
                                 </div>
@@ -249,7 +249,7 @@ function Horaires() {
                                     </div>
                                     <div className="horaires-place-card__icons">
                                         <span className="horaires-place-card__badge horaires-place-card__badge--train" aria-hidden="true">
-                                            <FaTrain size={14} />
+                                            <FaTrain size={11} />
                                         </span>
                                     </div>
                                 </div>

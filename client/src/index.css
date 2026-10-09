@@ -710,7 +710,8 @@ button[type=button].horaires-tabs__btn:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.6rem;
+  padding: 0.4rem 0.6rem;
 }
 
 .horaires-place-card__text {
@@ -720,7 +721,7 @@ button[type=button].horaires-tabs__btn:focus-visible {
 
 .horaires-place-card__text h4 {
   margin: 0;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 0.95rem;
   color: #111;
   line-height: 1.25;
@@ -736,31 +737,32 @@ button[type=button].horaires-tabs__btn:focus-visible {
 .horaires-place-card__icons {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.45rem;
   flex-shrink: 0;
 }
 
 .horaires-place-card__access {
   color: #222;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
 }
 
 .horaires-place-card__badge {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  background-color: #fff;
+  box-sizing: border-box;
 }
 
 .horaires-place-card__badge--bus {
-  background-color: #1E21A4;
+  color: #1E21A4;
+  border: 1.5px solid #1E21A4;
 }
 
 .horaires-place-card__badge--train {
-  background-color: #fff;
   color: #8b1e3f;
   border: 1.5px solid #8b1e3f;
 }
