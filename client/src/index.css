@@ -643,6 +643,127 @@ button[type=button].home-sheet__search:focus-visible {
   min-height: 0;
 }
 
+.horaires-tabs {
+  display: flex;
+  align-items: stretch;
+  background-color: #1E21A4;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+  padding: 0;
+}
+
+button.horaires-tabs__btn,
+button[type=button].horaires-tabs__btn {
+  flex: 1;
+  position: relative;
+  margin: 0 !important;
+  padding: 0.55rem 0.25rem 0.7rem !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  opacity: 1 !important;
+}
+
+button.horaires-tabs__btn.is-active,
+button[type=button].horaires-tabs__btn.is-active {
+  color: #fff !important;
+}
+
+button.horaires-tabs__btn.is-active::after,
+button[type=button].horaires-tabs__btn.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background-color: #fff;
+}
+
+button.horaires-tabs__btn:hover,
+button[type=button].horaires-tabs__btn:hover,
+button.horaires-tabs__btn:focus,
+button[type=button].horaires-tabs__btn:focus,
+button.horaires-tabs__btn:focus-visible,
+button[type=button].horaires-tabs__btn:focus-visible {
+  background: transparent !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  outline: none;
+  border: 0 !important;
+}
+
+.horaires-list-card {
+  padding: 0.65rem 0.75rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  border: 1px solid #e6e6e6;
+}
+
+.horaires-place-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.horaires-place-card__text {
+  min-width: 0;
+  flex: 1;
+}
+
+.horaires-place-card__text h4 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #111;
+  line-height: 1.25;
+}
+
+.horaires-place-card__text p {
+  margin: 0.1rem 0 0;
+  color: #8a8a8a;
+  font-size: 0.82rem;
+  line-height: 1.25;
+}
+
+.horaires-place-card__icons {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-shrink: 0;
+}
+
+.horaires-place-card__access {
+  color: #222;
+  font-size: 1.05rem;
+}
+
+.horaires-place-card__badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.horaires-place-card__badge--bus {
+  background-color: #1E21A4;
+}
+
+.horaires-place-card__badge--train {
+  background-color: #fff;
+  color: #8b1e3f;
+  border: 1.5px solid #8b1e3f;
+}
+
 .horaires-search {
   position: relative;
   display: flex;
@@ -731,6 +852,14 @@ button[type=button].home-sheet__search:focus-visible {
   height: auto;
   margin-bottom: 0.5rem;
   object-fit: contain;
+}
+
+.horaires-empty__image--favoris {
+  width: min(150px, 46vw);
+}
+
+.horaires-empty--favoris {
+  min-height: 70%;
 }
 
 .horaires-empty__title {
