@@ -374,15 +374,18 @@ button.home-map-ctrl svg {
   display: flex;
   flex-direction: column;
   background-color: #1e22aa;
-  border-radius: 0.5rem 0.5rem 0 0;
+  border-radius: 1.15rem 1.15rem 0 0;
   overflow: hidden;
   will-change: height;
   transition: height 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   touch-action: none;
+  cursor: grab;
+  user-select: none;
 }
 
 .home-sheet.is-dragging {
   transition: none;
+  cursor: grabbing;
 }
 
 .home-sheet__grab {
@@ -391,17 +394,11 @@ button.home-map-ctrl svg {
   align-items: center;
   justify-content: center;
   padding: 0.65rem 1rem 0.35rem;
-  cursor: grab;
-  touch-action: none;
-  user-select: none;
-}
-
-.home-sheet__grab:active {
-  cursor: grabbing;
+  pointer-events: none;
 }
 
 .home-sheet__handle {
-  width: 36px;
+  width: 30px;
   height: 4px;
   border-radius: 1rem;
   background-color: lightgrey;
@@ -423,23 +420,59 @@ button.home-map-ctrl svg {
   width: 100%;
 }
 
-.home-sheet__search {
+button.home-sheet__search,
+button[type=button].home-sheet__search {
+  position: relative;
   width: 100%;
-  padding: 0.5rem !important;
-  margin-bottom: 1rem;
+  min-height: 52px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start !important;
+  gap: 0.65rem;
+  padding: 0.9rem 1rem !important;
+  margin: 0 0 1rem !important;
   border-radius: 0.5rem !important;
   border: none !important;
   outline: none;
   background-color: #001269 !important;
   color: white !important;
-  justify-content: flex-start;
+  text-align: left !important;
   box-shadow: none !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  cursor: pointer;
+  user-select: none;
 }
 
-.home-sheet__search:hover,
-.home-sheet__search:focus,
-.home-sheet__search:focus-visible {
-  opacity: 1;
+button.home-sheet__search::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.55rem;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+button.home-sheet__search span {
+  flex: 1;
+  text-align: left;
+}
+
+button.home-sheet__search svg {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+button.home-sheet__search:hover,
+button[type=button].home-sheet__search:hover,
+button.home-sheet__search:focus,
+button[type=button].home-sheet__search:focus,
+button.home-sheet__search:focus-visible,
+button[type=button].home-sheet__search:focus-visible {
+  opacity: 1 !important;
   outline: none;
   border: none !important;
   background-color: #001269 !important;

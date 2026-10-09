@@ -42,9 +42,10 @@ function Home() {
     const stageRef = useRef(null);
     const sheetRef = useRef(null);
     const mapRef = useRef(null);
+    const contentScrollRef = useRef(null);
     const contentInnerRef = useRef(null);
     const snapsRef = useRef({ reduit: SHEET_REDUIT, normal: SHEET_REDUIT, etendu: SHEET_REDUIT });
-    const dragRef = useRef({ active: false, startY: 0, startH: SHEET_REDUIT });
+    const dragRef = useRef({ pending: false, active: false, startY: 0, startH: SHEET_REDUIT });
     const [sheetHeight, setSheetHeight] = useState(SHEET_REDUIT);
     const [dragging, setDragging] = useState(false);
     const isSheetCollapsed = !dragging && sheetHeight <= SHEET_REDUIT + 2;
@@ -85,27 +86,48 @@ function Home() {
         const snaps = measureSnaps();
         snapsRef.current = snaps;
         dragRef.current = {
-            active: true,
+            pending: true,
+            active: false,
             startY: event.clientY,
             startH: sheetHeight,
+            pointerId: event.pointerId,
         };
-        setDragging(true);
-        event.currentTarget.setPointerCapture?.(event.pointerId);
     };
 
     const onSheetPointerMove = (event) => {
-        if (!dragRef.current.active) return;
-        const delta = dragRef.current.startY - event.clientY;
+        const drag = dragRef.current;
+        if (!drag.pending && !drag.active) return;
+
+        const delta = drag.startY - event.clientY;
+
+        if (!drag.active) {
+            if (Math.abs(delta) < 8) return;
+
+            const content = contentScrollRef.current;
+            if (content && content.scrollTop > 0) {
+                drag.pending = false;
+                return;
+            }
+
+            drag.active = true;
+            drag.pending = false;
+            setDragging(true);
+            sheetRef.current?.setPointerCapture?.(drag.pointerId);
+        }
+
         const next = Math.min(
             snapsRef.current.etendu,
-            Math.max(snapsRef.current.reduit, dragRef.current.startH + delta)
+            Math.max(snapsRef.current.reduit, drag.startH + delta)
         );
         setSheetHeight(next);
     };
 
     const onSheetPointerUp = () => {
-        if (!dragRef.current.active) return;
-        dragRef.current.active = false;
+        const drag = dragRef.current;
+        const wasDragging = drag.active;
+        drag.pending = false;
+        drag.active = false;
+        if (!wasDragging) return;
         setDragging(false);
         setSheetHeight((current) => {
             const snaps = measureSnaps();
@@ -230,17 +252,15 @@ function Home() {
                     ref={sheetRef}
                     className={`home-sheet${dragging ? ' is-dragging' : ''}`}
                     style={{ height: sheetHeight }}
+                    onPointerDown={onSheetPointerDown}
+                    onPointerMove={onSheetPointerMove}
+                    onPointerUp={onSheetPointerUp}
+                    onPointerCancel={onSheetPointerUp}
                 >
-                    <div
-                        className="home-sheet__grab"
-                        onPointerDown={onSheetPointerDown}
-                        onPointerMove={onSheetPointerMove}
-                        onPointerUp={onSheetPointerUp}
-                        onPointerCancel={onSheetPointerUp}
-                    >
+                    <div className="home-sheet__grab">
                         <div className="home-sheet__handle" />
                     </div>
-                    <div className="home-sheet__content">
+                    <div ref={contentScrollRef} className="home-sheet__content">
                         <div ref={contentInnerRef} className="home-sheet__inner">
                             {loadError && (
                                 <p style={{ color: '#ffb4b4', marginBottom: '1rem' }}>{loadError}</p>
@@ -250,7 +270,8 @@ function Home() {
                                 className="home-sheet__search"
                                 onClick={() => setIsSearchOpen(true)}
                             >
-                                <FaSearch /> Rechercher un itinéraire
+                                <FaSearch aria-hidden="true" />
+                                <span>Rechercher un itinéraire</span>
                             </button>
                             {ticketsEnCours.length > 0 && (
                                 <div>
@@ -289,13 +310,14 @@ function Home() {
                                 </div>
                             )}
 
-                            <div className={"fr jc-sb ai-c"} style={{ marginTop: '2rem' }}>
+                            <div className={"fr jc-sb ai-fs"} style={{ marginTop: '0.5rem' }}>
                                 <h4 style={{ fontWeight: 'bold' }}>On y va ?</h4>
                                 {ticketsEnCours.length <= 0 && (
                                     <img
                                         src={"/elements/images/reseau_mistral.jpg"}
                                         alt={"logo"}
                                         onClick={handleLogoClick}
+                                        draggable={false}
                                         style={{ width: '160px', cursor: 'default', userSelect: 'none' }}
                                     />
                                 )}
