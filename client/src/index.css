@@ -773,7 +773,7 @@ button[type=button].home-sheet__search {
   border-radius: 0.5rem !important;
   border: none !important;
   outline: none;
-  background-color: #001269 !important;
+  background-color: #14166E !important;
   color: white !important;
   text-align: left !important;
   box-shadow: none !important;
@@ -814,7 +814,7 @@ button[type=button].home-sheet__search:focus-visible {
   opacity: 1 !important;
   outline: none;
   border: none !important;
-  background-color: #001269 !important;
+  background-color: #14166E !important;
   color: white !important;
 }
 
