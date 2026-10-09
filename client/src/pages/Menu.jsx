@@ -8,12 +8,11 @@ import {
     FaLink,
     FaPaperPlane,
     FaPerson,
-    FaSuitcase,
     FaTriangleExclamation,
 } from 'react-icons/fa6';
 import Modal from '../components/Modal.jsx';
 import ProfileSelection from '../components/ProfileSelection.jsx';
-import { FaExternalLinkAlt, FaHome } from 'react-icons/fa';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import api from '../api';
 import { isDemoBannerHidden, toggleDemoBannerHidden } from '../utils/demoBanner';
 import {
@@ -60,6 +59,7 @@ function Menu() {
     const [servicesOpen, setServicesOpen] = useState(false);
     const [trajetsOpen, setTrajetsOpen] = useState(false);
     const [favoriteOpen, setFavoriteOpen] = useState(false);
+    const [favoriteTab, setFavoriteTab] = useState('lieux');
     const [isPlanOpen, setIsPlanOpen] = useState(false);
     const [isDocumentsOpen, setIsDocumentsOpen] = useState(false);
     const [isLiensOpen, setIsLiensOpen] = useState(false);
@@ -526,29 +526,49 @@ function Menu() {
                 <p>Aucun trajet enregistré.</p>
             </Modal>
 
-            <Modal isOpen={favoriteOpen} onClose={() => setFavoriteOpen(false)} title={"Favoris"} padding={"0"} bgColor={"#F5F5F6"}>
-                <div style={{ backgroundColor: 'white', marginTop: '0.25rem', padding: '0.5rem', borderRadius: '0.5rem', color: 'black' }} className={"fc g1"}>
-                    <div className={"fr jc-sb ai-c"}>
-                        <div className={"fr ai-c g0-5 jc-c"}>
-                            <div style={{ backgroundColor: 'grey', padding: '0.5rem', borderRadius: '4rem', display: 'flex', flexDirection: 'row' }}>
-                                <FaHome fill={"white"} />
-                            </div>
-                            <h4>Maison</h4>
-                        </div>
-                        <div style={{ border: '1px solid lightgrey', padding: '0.1rem 0.6rem', fontSize: '0.8rem', fontWeight: 'bold', borderRadius: '0.25rem' }}>
-                            Définir
-                        </div>
+            <Modal
+                isOpen={favoriteOpen}
+                onClose={() => {
+                    setFavoriteOpen(false);
+                    setFavoriteTab('lieux');
+                }}
+                title={"Favoris"}
+                padding={"0"}
+                bgColor={"#F1F3F4"}
+            >
+                <div className="menu-favoris">
+                    <div className="menu-favoris__tabs" role="tablist" aria-label="Favoris">
+                        <button
+                            type="button"
+                            role="tab"
+                            aria-selected={favoriteTab === 'lieux'}
+                            className={`menu-favoris__tab${favoriteTab === 'lieux' ? ' is-active' : ''}`}
+                            onClick={() => setFavoriteTab('lieux')}
+                        >
+                            Lieux
+                        </button>
+                        <button
+                            type="button"
+                            role="tab"
+                            aria-selected={favoriteTab === 'lignes'}
+                            className={`menu-favoris__tab${favoriteTab === 'lignes' ? ' is-active' : ''}`}
+                            onClick={() => setFavoriteTab('lignes')}
+                        >
+                            Lignes favorites
+                        </button>
                     </div>
-                    <div className={"fr jc-sb ai-c"}>
-                        <div className={"fr ai-c g0-5 jc-c"}>
-                            <div style={{ backgroundColor: 'grey', padding: '0.5rem', borderRadius: '4rem', display: 'flex', flexDirection: 'row' }}>
-                                <FaSuitcase fill={"white"} />
-                            </div>
-                            <h4>Travail</h4>
-                        </div>
-                        <div style={{ border: '1px solid lightgrey', padding: '0.1rem 0.6rem', fontSize: '0.8rem', fontWeight: 'bold', borderRadius: '0.25rem' }}>
-                            Définir
-                        </div>
+                    <div className="horaires-empty horaires-empty--favoris menu-favoris__empty">
+                        <img
+                            src="/elements/icons/empty-favorite.svg"
+                            alt=""
+                            className="horaires-empty__image horaires-empty__image--favoris"
+                        />
+                        <h3 className="horaires-empty__title">Vous n&apos;avez aucun favori</h3>
+                        <p className="horaires-empty__text">
+                            {favoriteTab === 'lieux'
+                                ? "Effectuez vos recherches d'itinéraires plus facilement en enregistrant vos lieux préférés !"
+                                : 'Gardez un oeil sur vos lignes en les ajoutant à vos favoris !'}
+                        </p>
                     </div>
                 </div>
             </Modal>

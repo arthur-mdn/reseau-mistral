@@ -71,6 +71,68 @@ button[type=button].setting_element {
   outline: none !important;
 }
 
+.menu-favoris {
+  display: flex;
+  flex-direction: column;
+  min-height: 60vh;
+  background-color: #F1F3F4;
+}
+
+.menu-favoris__tabs {
+  display: flex;
+  align-items: stretch;
+  background-color: #1E21A4;
+}
+
+button.menu-favoris__tab,
+button[type=button].menu-favoris__tab {
+  flex: 1;
+  position: relative;
+  margin: 0 !important;
+  padding: 0.65rem 0.5rem 0.8rem !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  opacity: 1 !important;
+}
+
+button.menu-favoris__tab.is-active,
+button[type=button].menu-favoris__tab.is-active {
+  color: #fff !important;
+}
+
+button.menu-favoris__tab.is-active::after,
+button[type=button].menu-favoris__tab.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background-color: #fff;
+}
+
+button.menu-favoris__tab:hover,
+button[type=button].menu-favoris__tab:hover,
+button.menu-favoris__tab:focus,
+button[type=button].menu-favoris__tab:focus {
+  background: transparent !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  outline: none;
+  border: 0 !important;
+}
+
+.menu-favoris__empty {
+  flex: 1;
+  min-height: 0;
+}
+
 .services-panel {
   display: flex;
   flex-direction: column;
