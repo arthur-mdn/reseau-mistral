@@ -286,7 +286,7 @@ function Home() {
                                             src={"/elements/images/reseau_mistral.svg"}
                                             alt={"logo"}
                                             onClick={handleLogoClick}
-                                            style={{ width: '170px', cursor: 'default', userSelect: 'none' }}
+                                            style={{ width: '170px', cursor: 'default', userSelect: 'none', paddingBottom: '0.5rem' }}
                                         />
                                     </div>
                                     <div>
@@ -323,7 +323,7 @@ function Home() {
                                         alt={"logo"}
                                         onClick={handleLogoClick}
                                         draggable={false}
-                                        style={{ width: '160px', cursor: 'default', userSelect: 'none' }}
+                                        style={{ width: '160px', cursor: 'default', userSelect: 'none', paddingBottom: '0.5rem' }}
                                     />
                                 )}
                             </div>
