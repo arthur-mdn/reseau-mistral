@@ -9,7 +9,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 describe('layout shell', () => {
     it('locks viewport height and paints bottom safe-area white via navbar', () => {
         const css = readFileSync(join(root, 'src/index.css'), 'utf8');
-        assert.match(css, /--bottom-bar-height:\s*calc\(78px \+ env\(safe-area-inset-bottom/);
+        assert.match(css, /--bottom-bar-height:\s*calc\(66px \+ env\(safe-area-inset-bottom/);
         assert.match(css, /\.bottom-bar\s*\{[^}]*safe-area-inset-bottom/s);
         assert.match(css, /\.bottom-bar\s*\{[^}]*background-color:\s*#ffffff/s);
         assert.match(css, /html\s*\{[^}]*100dvh/s);
