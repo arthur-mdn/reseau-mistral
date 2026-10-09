@@ -7,6 +7,7 @@ import {
     FaHeart,
     FaLink,
     FaPaperPlane,
+    FaEye,
     FaPerson,
     FaTriangleExclamation,
 } from 'react-icons/fa6';
@@ -223,7 +224,7 @@ function Menu() {
 
                     <button onClick={() => setIsPlanOpen(true)} type={"button"} className="row-card setting_element" style={menuRowStyle}>
                         <MenuIconImg src="/elements/menu/plans-reseaux.jpg" alt="" size={30} />
-                        <span>Plan des réseaux</span>
+                        <span>Plans des réseaux</span>
                         <FaChevronRight color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
 
@@ -573,8 +574,19 @@ function Menu() {
                 </div>
             </Modal>
 
-            <Modal isOpen={isPlanOpen} onClose={() => setIsPlanOpen(false)} title={"Plan des réseaux"}>
-                <p>Contenu du plan des réseaux ici</p>
+            <Modal isOpen={isPlanOpen} onClose={() => setIsPlanOpen(false)} title={"Plans des réseaux"} bgColor={"#F1F3F4"} padding={"0.5rem"}>
+                <a
+                    className="plans-reseau-card"
+                    href="/elements/others/plan-reseau.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <div className="plans-reseau-card__text">
+                        <span className="plans-reseau-card__title">Plan général du réseau</span>
+                        <span className="plans-reseau-card__meta">PDF</span>
+                    </div>
+                    <FaEye className="plans-reseau-card__eye" aria-label="Ouvrir le PDF" />
+                </a>
             </Modal>
 
             <Modal isOpen={isDocumentsOpen} onClose={() => setIsDocumentsOpen(false)} title={"Renseignez vos justificatifs"}>
