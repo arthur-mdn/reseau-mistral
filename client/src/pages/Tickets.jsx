@@ -107,7 +107,10 @@ function Tickets() {
             });
     };
 
-    if (isLoading) return <Loading />;
+    if (isSubmitting) return <Loading />;
+
+    const hasTickets = Boolean(profileSelected?.tickets?.length);
+    const showTicketsSkeleton = Boolean(cookies.selectedProfile) && isLoading;
 
     return (
         <div className="tickets-page">
@@ -120,7 +123,7 @@ function Tickets() {
                 </div>
             )}
 
-            {!profileSelected && (
+            {!cookies.selectedProfile && !profileSelected && (
                 <div className={"no_profile_selected"} style={{ textAlign: 'center' }}>
                     <h3>Aucun voyageur sélectionné</h3>
                     <p>Veuillez sélectionner un voyageur pour visualiser vos titres.</p>
@@ -128,12 +131,12 @@ function Tickets() {
                 </div>
             )}
 
-            {profileSelected && (
+            {(profileSelected || showTicketsSkeleton) && (
                 <>
                     <div className={"actual_profile_selector"}>
                         <div className={"actual_profile_selector__info"}>
-                            <h4>{profileSelected.prenom}</h4>
-                            <span className={"actual_profile_selector__email"}>{profileSelected.email}</span>
+                            <h4>{profileSelected?.prenom || '…'}</h4>
+                            <span className={"actual_profile_selector__email"}>{profileSelected?.email || ''}</span>
                         </div>
                         <button
                             type="button"
@@ -144,23 +147,47 @@ function Tickets() {
                             <img src={"/elements/icons/arrows.svg"} style={{ width: '15px' }} alt="" />
                         </button>
                     </div>
-                    {(!profileSelected.tickets || profileSelected.tickets.length === 0) && (
-                        <div className={"no_tickets"}>
-                            <h3>Aucun titre à utiliser.</h3>
-                            <p>Vous pouvez acheter des titres pour voyager sur le réseau</p>
-                            <button type={"button"} onClick={() => setIsBoutiqueOpen(true)}>Acheter des titres</button>
+
+                    {showTicketsSkeleton && (
+                        <div className="tickets-page__content bg-grey" aria-busy="true" aria-label="Chargement des titres">
+                            <h4 className="tickets-page__section-title">SUR MON TÉLÉPHONE</h4>
+                            <div className="tickets-skeleton">
+                                <div className="tickets-skeleton__card" />
+                                <div className="tickets-skeleton__lines">
+                                    <div className="tickets-skeleton__line tickets-skeleton__line--short" />
+                                    <div className="tickets-skeleton__line tickets-skeleton__line--long" />
+                                </div>
+                            </div>
+                            <button type="button" className="tickets-buy-btn tickets-buy-btn--disabled" disabled>
+                                Acheter
+                            </button>
                         </div>
                     )}
-                    {profileSelected.tickets && profileSelected.tickets.length > 0 && (
+
+                    {!showTicketsSkeleton && profileSelected && !hasTickets && (
+                        <div className="no_tickets">
+                            <h3>Aucun titre à utiliser</h3>
+                            <p>Vous pouvez acheter des titres pour voyager sur le réseau</p>
+                            <button type="button" onClick={() => setIsBoutiqueOpen(true)}>
+                                Acheter des titres
+                            </button>
+                        </div>
+                    )}
+
+                    {!showTicketsSkeleton && hasTickets && (
                         <div className="tickets-page__content bg-grey">
-                            <h4 style={{ padding: ' 2rem 1rem 1.3rem', fontSize: '0.9rem' }}>SUR MON TÉLÉPHONE</h4>
+                            <h4 className="tickets-page__section-title">SUR MON TÉLÉPHONE</h4>
                             <div className={"tickets"}>
                                 <TicketSlider
                                     tickets={profileSelected.tickets}
                                     onTicketSelect={handleTicketSelect}
                                 />
                             </div>
-                            <button type={"button"} style={{ margin: 'auto 1rem 1rem 1rem' }} onClick={() => setIsBoutiqueOpen(true)}>
+                            <button
+                                type="button"
+                                className="tickets-buy-btn"
+                                onClick={() => setIsBoutiqueOpen(true)}
+                            >
                                 <FaCartShopping /> Acheter des titres
                             </button>
                         </div>
