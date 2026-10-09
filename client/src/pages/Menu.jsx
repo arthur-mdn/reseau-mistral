@@ -240,7 +240,7 @@ function Menu() {
                         <div style={menuIconStyle}>
                             <FaLink size={'20px'} color="#444648" />
                         </div>
-                        <span>Liens utiles : Achat, Appel Bus, PV...</span>
+                        <span className="menu-settings__label">Liens utiles : Achat, Appel Bus, PV...</span>
                         <FaChevronRight color="#444648" style={{ marginLeft: 'auto' }} />
                     </button>
 
@@ -600,7 +600,7 @@ function Menu() {
             <Modal
                 isOpen={isLiensOpen}
                 onClose={() => setIsLiensOpen(false)}
-                title={"Liens utiles : Achat, Appel Bus, PV..."}
+                title={"Liens utiles"}
             >
                 <div className="liens-utiles">
                     <div className="liens-utiles__item">

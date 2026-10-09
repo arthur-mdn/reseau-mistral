@@ -58,6 +58,27 @@ a:hover {
   overflow: hidden;
 }
 
+.menu-settings > button.row-card,
+.menu-settings > button[type=button].row-card {
+  text-align: left !important;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.menu-settings__label {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left !important;
+}
+
+.menu-settings > button.row-card > svg:last-child {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
 button.row-card,
 button.setting_element,
 button[type=button].row-card,
@@ -1575,13 +1596,18 @@ button:focus-visible {
   align-items: center;
 }
 .over_top_menu h2,
-.over_top_menu h4{
+.over_top_menu h4,
+.over_top_menu__title {
   position: absolute;
   left: 50%;
   top: calc(env(safe-area-inset-top, 0px) + 30px);
   transform: translate(-50%, -50%);
-  text-wrap: nowrap;
   margin: 0;
+  max-width: calc(100% - 6.5rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
 }
 
 
@@ -1619,6 +1645,7 @@ button:focus-visible {
 button.profile,
 button[type=button].profile {
   width: 100%;
+  min-width: 0;
   display: flex;
   gap: 0.85rem;
   align-items: center;
@@ -1634,6 +1661,7 @@ button[type=button].profile {
   color: #000000 !important;
   text-align: left;
   font-size: inherit;
+  overflow: hidden;
 }
 
 button.profile:hover,
@@ -1657,7 +1685,10 @@ button.profile p {
   color: #000000;
   text-align: left;
   margin: 0;
-  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .profile-check {
@@ -1685,7 +1716,20 @@ button.profile p {
   justify-content: center;
   gap: 0;
   min-width: 0;
-  flex: 1;
+  flex: 1 1 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+.profile-name,
+.profile-email,
+.profile-id {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-align: left;
 }
 
@@ -1703,9 +1747,6 @@ button.profile p {
   line-height: 1.15;
   color: #000000;
   margin-bottom: 0.2rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .profile-id {
@@ -1713,9 +1754,6 @@ button.profile p {
   font-weight: 400;
   line-height: 1.2;
   color: #000000;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .no_profile_selected, .no_tickets{
@@ -1865,11 +1903,12 @@ button[type=button].tickets-buy-btn--disabled:disabled {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.4rem;
   text-align: left;
   min-width: 0;
-  flex: 1;
+  flex: 1 1 0;
+  overflow: hidden;
 }
 
 .actual_profile_selector h4{
@@ -1878,6 +1917,12 @@ button[type=button].tickets-buy-btn--disabled:disabled {
   line-height: 1.2;
   margin: 0;
   color: #000;
+  flex-shrink: 0;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .actual_profile_selector__email{
@@ -1885,9 +1930,12 @@ button[type=button].tickets-buy-btn--disabled:disabled {
   font-weight: bold;
   line-height: 1.2;
   color: #000;
+  min-width: 0;
+  flex: 1 1 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: left;
 }
 
 button.actual_profile_selector__btn{
