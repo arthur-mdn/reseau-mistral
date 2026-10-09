@@ -319,19 +319,43 @@ function Menu() {
             )}
 
             <Modal isOpen={servicesOpen} onClose={() => setServicesOpen(false)} title={"Services"}>
-                {userDetails?.userRole === 'superadmin' ? (
-                    <div className={"fc g1"}>
+                <div className="services-panel">
+                    <section className="services-unlinked">
+                        <h3 className="services-unlinked__title">Mes services non liés</h3>
+                        <p className="services-unlinked__desc">
+                            Pour un accès direct dans l&apos;application, liez votre compte en vous connectant au service.
+                        </p>
+                        <div className="services-unlinked__item">
+                            <div className="services-unlinked__identity">
+                                <img
+                                    className="services-unlinked__logo"
+                                    src="/elements/favicon.png"
+                                    alt=""
+                                    aria-hidden="true"
+                                />
+                                <span className="services-unlinked__name">Appel Bus (TAD)</span>
+                            </div>
+                            <div className="services-unlinked__actions">
+                                <button type="button" className="services-unlinked__btn services-unlinked__btn--secondary">
+                                    À propos
+                                </button>
+                                <button type="button" className="services-unlinked__btn services-unlinked__btn--primary">
+                                    Activer
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    {userDetails?.userRole === 'superadmin' && (
                         <button
                             type="button"
+                            className="services-panel__admin"
                             onClick={openAccounts}
-                            style={{ width: '100%', padding: '0.85rem 1rem' }}
                         >
                             Voir les comptes
                         </button>
-                    </div>
-                ) : (
-                    <p>Services à venir.</p>
-                )}
+                    )}
+                </div>
             </Modal>
 
             <Modal
