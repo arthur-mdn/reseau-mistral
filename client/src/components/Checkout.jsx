@@ -53,7 +53,7 @@ function Checkout({ onCheckoutConfirmed, panier }) {
             <div className={"checkout-cards-banner"}>
                 <p className={"checkout-cards-banner__title"}>Cartes</p>
                 <img
-                    src={"/elements/images/creditcards.jpg"}
+                    src={"/elements/images/creditcards.webp"}
                     alt={"CB, Mastercard, Maestro, Visa"}
                     className={"checkout-cards-banner__img"}
                 />

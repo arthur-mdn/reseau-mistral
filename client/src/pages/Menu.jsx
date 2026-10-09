@@ -263,7 +263,7 @@ function Menu() {
                 </div>
 
                 <div className="row-card" style={{ backgroundColor: 'transparent', position: 'absolute', bottom: '10px', right: 0, width: '220px', zIndex: 1 }}>
-                    <img src="/elements/images/transports.jpg" style={{ width: '100%' }} alt={"transports"} />
+                    <img src="/elements/images/transports.webp" style={{ width: '100%' }} alt={"transports"} />
                 </div>
                 <div style={{ backgroundColor: '#1E21A4', height: '75%', position: 'absolute', width: '100%', zIndex: 0, bottom: 0 }} />
             </div>

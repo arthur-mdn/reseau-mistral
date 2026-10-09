@@ -283,7 +283,7 @@ function Home() {
                                     <div className={"fr jc-sb ai-c"}>
                                         <h4 style={{ fontWeight: 'bold' }}>Titre(s) en cours</h4>
                                         <img
-                                            src={"/elements/images/reseau_mistral.jpg"}
+                                            src={"/elements/images/reseau_mistral.webp"}
                                             alt={"logo"}
                                             onClick={handleLogoClick}
                                             style={{ width: '170px', cursor: 'default', userSelect: 'none' }}
@@ -319,7 +319,7 @@ function Home() {
                                 <h4 style={{ fontWeight: 'bold' }}>On y va ?</h4>
                                 {ticketsEnCours.length <= 0 && (
                                     <img
-                                        src={"/elements/images/reseau_mistral.jpg"}
+                                        src={"/elements/images/reseau_mistral.webp"}
                                         alt={"logo"}
                                         onClick={handleLogoClick}
                                         draggable={false}

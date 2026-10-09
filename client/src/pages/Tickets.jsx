@@ -281,7 +281,7 @@ function Tickets() {
 
             <Modal isOpen={paymentSuccessOpen} onClose={() => setPaymentSuccessOpen(false)} title={"Paiement validé"} bgColor={"white"}>
                 <div className={"fc ai-c jc-c g1"} style={{ textAlign: 'center', padding: '2rem 0', height: '100%' }}>
-                    <img src={"/elements/images/pay_success.PNG"} alt={"paiement réussi"} style={{ width: '160px' }} />
+                    <img src={"/elements/images/pay_success.webp"} alt={"paiement réussi"} style={{ width: '160px' }} />
                     <h1 style={{ fontWeight: 'bold' }}>Paiement validé</h1>
                     <p>Retrouvez vos titres dans votre espace de voyage et utilisez-les pour vous déplacer facilement</p>
                     <button type={"button"} style={{ width: '100%', marginTop: 'auto' }} onClick={() => setPaymentSuccessOpen(false)}>

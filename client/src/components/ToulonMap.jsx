@@ -45,7 +45,6 @@ const ToulonMap = forwardRef(function ToulonMap({ onUserInteract }, ref) {
     const metaRef = useRef(null);
     const onUserInteractRef = useRef(onUserInteract);
     const [status, setStatus] = useState('loading');
-    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         onUserInteractRef.current = onUserInteract;
@@ -138,10 +137,9 @@ const ToulonMap = forwardRef(function ToulonMap({ onUserInteract }, ref) {
                     map?.resize();
                 });
                 resizeObserver.observe(containerRef.current);
-            } catch (error) {
+            } catch {
                 if (!cancelled) {
                     setStatus('error');
-                    setErrorMessage(error.message || 'Carte indisponible');
                 }
             }
         }
@@ -160,14 +158,21 @@ const ToulonMap = forwardRef(function ToulonMap({ onUserInteract }, ref) {
         };
     }, []);
 
+    if (status === 'error') {
+        return (
+            <div className="toulon-map toulon-map--fallback" aria-label="Plan du réseau">
+                <img
+                    className="toulon-map__fallback"
+                    src="/elements/images/plan.webp"
+                    alt="Plan du réseau"
+                />
+            </div>
+        );
+    }
+
     return (
         <div className="toulon-map" aria-label="Carte de Toulon">
             <div ref={containerRef} className="toulon-map__canvas" />
-            {status === 'error' && (
-                <div className="toulon-map__error">
-                    <p>{errorMessage || 'Carte indisponible'}</p>
-                </div>
-            )}
         </div>
     );
 });
