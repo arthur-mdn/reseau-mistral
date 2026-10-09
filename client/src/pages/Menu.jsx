@@ -167,8 +167,14 @@ function Menu() {
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                 {loadError && <p style={{ color: 'red', textAlign: 'center', padding: '1rem' }}>{loadError}</p>}
 
-                <div style={{ width: '100%', display: 'flex', alignItems: 'center', padding: '1rem 0 1rem', justifyContent: 'center' }}>
-                    <img src="/elements/favicon.png" alt="Réseau Mistral" style={{ width: '65px', borderRadius: '25px' }} />
+                <div style={{ width: '100%', display: 'flex', alignItems: 'center', padding: '1rem 0 1rem', justifyContent: 'center', minHeight: 'calc(2rem + 65px)' }}>
+                    <img
+                        src="/elements/favicon.png"
+                        alt="Réseau Mistral"
+                        width={65}
+                        height={65}
+                        style={{ width: '65px', height: '65px', borderRadius: '25px', objectFit: 'contain', display: 'block', flexShrink: 0 }}
+                    />
                 </div>
 
                 <div className="menu-settings" style={{ padding: 0, margin: '0 1rem', borderRadius: '10px', backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.56) 0px 22px 70px 4px', position: 'relative', zIndex: 1 }}>
