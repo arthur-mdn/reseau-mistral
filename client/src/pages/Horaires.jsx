@@ -152,7 +152,7 @@ function Horaires() {
                     </div>
                 )}
             </div>
-            <PullToRefresh className="page-scroll__body" style={{ padding: '0.5rem', backgroundColor: '#ebebeb' }}>
+            <PullToRefresh className="page-scroll__body" style={{ padding: '0.5rem', backgroundColor: '#F1F3F4' }}>
                 {activeTab === 'favoris' && (
                     <div className="horaires-empty horaires-empty--favoris">
                         <img

@@ -33,7 +33,7 @@ function Trafic() {
 
     return (
         <div className="page-scroll">
-            <div className="page-scroll__header" style={{ backgroundColor: '#ebebeb', padding: '0.5rem 0.5rem 0' }}>
+            <div className="page-scroll__header" style={{ backgroundColor: '#F1F3F4', padding: '0.5rem 0.5rem 0' }}>
                 <div className="trafic-tabs" role="tablist" aria-label="Infos trafic">
                     <button
                         type="button"
@@ -56,7 +56,7 @@ function Trafic() {
                 </div>
                 <h4 style={{ padding: '0.5rem 0.5rem 0.5rem 0.8rem' }}>Toutes les lignes concernées</h4>
             </div>
-            <PullToRefresh className="page-scroll__body" style={{ padding: '0 0.5rem 0.5rem', backgroundColor: '#ebebeb' }}>
+            <PullToRefresh className="page-scroll__body" style={{ padding: '0 0.5rem 0.5rem', backgroundColor: '#F1F3F4' }}>
                 <div
                     style={{
                         display: 'flex',
