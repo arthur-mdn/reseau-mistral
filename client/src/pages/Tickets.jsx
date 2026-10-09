@@ -152,11 +152,14 @@ function Tickets() {
                     {showTicketsSkeleton && (
                         <div className="tickets-page__content bg-grey" aria-busy="true" aria-label="Chargement des titres">
                             <h4 className="tickets-page__section-title">SUR MON TÉLÉPHONE</h4>
-                            <div className="tickets-skeleton">
-                                <div className="tickets-skeleton__card" />
-                                <div className="tickets-skeleton__lines">
-                                    <div className="tickets-skeleton__line tickets-skeleton__line--short" />
-                                    <div className="tickets-skeleton__line tickets-skeleton__line--long" />
+                            <div className="tickets">
+                                <div className="tickets-skeleton">
+                                    <div className="tickets-skeleton__time" aria-hidden="true" />
+                                    <div className="tickets-skeleton__card" />
+                                    <div className="tickets-skeleton__lines">
+                                        <div className="tickets-skeleton__line tickets-skeleton__line--short" />
+                                        <div className="tickets-skeleton__line tickets-skeleton__line--long" />
+                                    </div>
                                 </div>
                             </div>
                             <button type="button" className="tickets-buy-btn tickets-buy-btn--disabled" disabled>
