@@ -190,6 +190,41 @@ body {
   pointer-events: none;
 }
 
+.orientation-lock {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10060;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  background-color: #1E21A4;
+  color: #fff;
+}
+
+.orientation-lock__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.orientation-lock__text {
+  margin: 0;
+  max-width: 20rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .orientation-lock {
+    display: flex;
+  }
+}
+
 .app-shell {
   flex: 1;
   min-height: 0;

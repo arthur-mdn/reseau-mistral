@@ -7,6 +7,7 @@ import { TopBarProvider } from './TopBarContext';
 import TopBar from './components/TopBar';
 import Loading from './components/Loading.jsx';
 import DemoBanner from './components/DemoBanner.jsx';
+import OrientationLock from './components/OrientationLock.jsx';
 
 const Login = lazy(() => import('./pages/Login.jsx'));
 const Register = lazy(() => import('./pages/Register.jsx'));
@@ -25,6 +26,7 @@ const AuthenticatedApp = () => {
     return (
         <Router>
             <div className="ios-status-fill" aria-hidden="true" />
+            <OrientationLock />
             <DemoBanner />
             {authStatus === 'loading' ? (
                 <Loading />

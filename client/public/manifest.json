@@ -3,7 +3,7 @@
   "short_name": "Réseau Mistral",
   "start_url": "https://reseau-mistral.mondon.pro/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "background_color": "#1E21A4",
   "theme_color": "#1E21A4",
   "icons": [
